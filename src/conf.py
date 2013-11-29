@@ -14,6 +14,9 @@
 import os
 import json
 import re
+from  logbook import Logger
+
+log=Logger('ursa')
 
 _last_read_time=0
 _manifest_file='manifest.json'

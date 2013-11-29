@@ -19,7 +19,7 @@ from setuptools import setup, find_packages
 setup(
     name = "ursa2",
     version = "0.0.1",
-    packages = ['src','bin'],
+    packages = ['src','src.jinja2','3rd.logbook'],
     install_requires = [],
 
     package_data = {
@@ -32,7 +32,7 @@ setup(
     url = "http://github.com/yanni4night/ursa2",
     entry_points = {
         'console_scripts':[
-            'ursa2=bin.main:run'
+            'ursa2=src.main:run'
             ]
         }
 )

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 #
-# setup.py
+# __init__.py
 #
 # changelog
 # 2013-11-30[00:09:04]:created
@@ -11,3 +11,5 @@
 # @version 0.0.1
 # @since 0.0.1
 #
+
+__version__='0.0.1'
