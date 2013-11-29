@@ -1,0 +1,6 @@
+[submodule "3rd/logbook"]
+	path = 3rd/logbook
+	url = https://github.com/mitsuhiko/logbook.git
+[submodule "3rd/jinja2"]
+	path = 3rd/jinja2
+	url = https://github.com/mitsuhiko/jinja2.git
