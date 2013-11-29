@@ -4,3 +4,6 @@
 [submodule "3rd/jinja2"]
 	path = 3rd/jinja2
 	url = https://github.com/mitsuhiko/jinja2.git
+[submodule "3rd/docopt"]
+	path = 3rd/docopt
+	url = https://github.com/docopt/docopt.git

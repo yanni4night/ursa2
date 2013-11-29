@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-#
-# conf.py
-#
-# changelog
-# 2013-11-29[14:38:24]:created
-#
-# @info yinyong,osx-x64,UTF-8,10.129.164.117,py,/Users/yinyong/work/ursa2
-# @author yinyong#sogou-inc.com
-# @version 0.0.1
-# @since 0.0.1
-#
+'''
+ conf.py
+
+ changelog
+ 2013-11-29[14:38:24]:created
+
+ @info yinyong,osx-x64,UTF-8,10.129.164.117,py,/Users/yinyong/work/ursa2
+ @author yinyong#sogou-inc.com
+ @version 0.0.1
+ @since 0.0.1
+'''
 import os
 import json
 import re
