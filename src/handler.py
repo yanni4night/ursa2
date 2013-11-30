@@ -18,11 +18,23 @@ from urlparse import urlparse
 import os
 import sys
 import re
+import json
 from conf import C,log
 from render import render,render_file
 
 mimetypes.init()
 path=os.getcwd()
+
+
+def _token(path):
+    '''
+    去除后缀，取得相对于模板目录的相对无扩展名路径
+    '''
+    tpl_token=re.sub(r'\.(%s|%s|%s)$'%(C('preview_ext'),'m',C('template_ext')),'',path)
+    if tpl_token.startswith(os.path.sep):
+        tpl_token=tpl_token[1:]
+    return tpl_token
+
 
 def index(req,res):
     '''
@@ -42,10 +54,23 @@ def tpl(req,res):
     '''
     模板
     '''
-    tpl_token=re.sub(r'\.%s$'%C('preview_ext'),'',req.path)
-    if tpl_token.startswith(os.path.sep):
-        tpl_token=tpl_token[1:]
+    tpl_token=_token(req.path)
     html=render(tpl_token)
+    res.send(html)
+
+def m(req,res):
+    '''
+    输出对应json数据
+    '''
+    tpl_token=_token(req.path)
+    data=''
+    json_path=os.path.join(C('data_dir'),tpl_token+".json")
+    try:
+        data=utils.readfile(json_path)
+    except Exception, e:
+        log.error('%s:%s'%(json_path,e))
+    mgr_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','mgr.html'))
+    html=render_file(mgr_path,{"name":tpl_token,"data":data},noEnvironment=True)
     res.send(html)
 
 def so(req,res):
@@ -53,7 +78,19 @@ def so(req,res):
     保存json数据
     todo
     '''
-    res.redirect('/')
+    tpl_token=_token(req.param('tpl'))
+    json_str=req.param('data')
+    try:
+        json_obj = json.loads(json_str)
+        json_path = os.path.join(C('data_dir'),tpl_token+".json")
+        utils.writeJSON(json_path,json_obj)
+        res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
+    except ValueError, e:
+        res.send('<html><head>Error</head><body><pre>%s</pre><br/>is not a JSON,<a href="%s.m">rewrite</a></body></html>'%(json_str,tpl_token))
+    except Exception,e:
+        log.error('%s'%e)
+        res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
+    
 
 def static(req,res):
     '''

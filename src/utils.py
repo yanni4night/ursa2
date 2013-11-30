@@ -15,6 +15,7 @@
 
 import time
 import os
+import json
 import re
 import codecs
 from conf import C,log
@@ -81,6 +82,29 @@ def writefile(filename , content):
     except:
         log.error("write to %s failed" % filename)
         raise
+
+def writeJSON(filename,data):
+    '''
+    写入JSON格式
+    '''
+    writefile(filename, json.dumps(data , sort_keys = True , indent = 4, separators = ( ',' , ': ')) )
+
+def dorepeat(data):
+    '''
+    todo
+    '''
+    if type(data)==type({}):
+        for item in data.keys():
+            dorepeat(data[item])
+            if re.search( '@\d+$' , item ):
+                name = item.split('@')[0]
+                times = item.split('@')[1]
+                
+                if int(times):
+                    for time in range(int(times)):
+                        if not data.get(name):
+                            data[name] = []
+                        data[name].append(data[item])
 
 class FileSearcher(object):
     '''

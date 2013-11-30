@@ -18,11 +18,6 @@ class Request(object):
     '''
     HTTP请求
     '''
-    path='/'
-    method='GET'
-    body={}
-    client_host=None
-    client_port=None
 
     @classmethod
     def __init__(self,http_req_handler):
@@ -41,15 +36,18 @@ class Request(object):
             q=parse_qs(o.query)
             self.body=q
         elif 'POST' == self.method:
-            #todo,post解析
-            noop()
+            #todo,post复杂解析
+            content_len=int(http_req_handler.headers.get('Content-Length'))
+            content=http_req_handler.rfile.read(content_len)
+            q=parse_qs(content)
+            self.body=q
 
     @classmethod
     def param(self,key):
         '''
         获取参数
         '''
-        o=body.get(key)
+        o=self.body.get(key)
         if o is None:
             return None
 
@@ -62,7 +60,6 @@ class Response(object):
     '''
     HTTP响应
     '''
-    http_req_handler=None
 
     @classmethod
     def __init__(self,http_req_handler):
@@ -75,8 +72,9 @@ class Response(object):
         '''
         302重定向
         '''
-        self.http_req_handler.send_header('Location',location)
         self.http_req_handler.send_response(302)
+        self.http_req_handler.send_header('Location',location)
+        self.http_req_handler.end_headers()
         self.http_req_handler.wfile.close()
 
     @classmethod

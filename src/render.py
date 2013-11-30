@@ -25,6 +25,7 @@ build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd()
 
 def render_file(filename,data=None,noEnvironment=False):
     '''
+    渲染文件
     '''
     if noEnvironment:
         body=Template(utils.readfile(filename))#这里应为绝对路径
@@ -34,6 +35,7 @@ def render_file(filename,data=None,noEnvironment=False):
 
 def render(token):
     '''
+    查找数据文件依赖并渲染模板
     '''
     if token.startswith(os.path.sep):
         token = token[1:]
