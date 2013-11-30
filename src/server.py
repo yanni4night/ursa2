@@ -10,50 +10,31 @@
 # @author yinyong@sogou-inc.com
 # @version 0.0.1
 # @since 0.0.1
+# @todo https support,proxy support
 #
 
 from  BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
-from urlparse import urlparse
-import os
-import mimetypes
-
+from http import Request,Response
+from route import Route
 from utils import log
+from conf import C
+from handler import static,index,tpl
 
-mimetypes.init()
-path=os.getcwd()
+ursa_router=Route()
+ursa_router.get(r'^/$',index)
+ursa_router.get(r'\.%s$'%C('preview_ext'),tpl)
+ursa_router.get(r'.*',static)
 
 class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
     '''
     HTTP请求处理器
     '''
+
     def do_GET(self):
         '''
         处理GET请求
         '''
-        o=urlparse(self.path)
-        fd=os.path.join(path,o.path[1:])
-
-        if os.path.isfile(fd):
-            mime=mimetypes.guess_type(fd,False)
-            mode='rb'
-            if mime[1] is not None or 'text' in mime[0]:
-                mode='r'
-            try:
-                f=open(fd,mode)
-                content=f.read()
-                self.send_response(200)
-                if mime[0] is not None:
-                    self.send_header('Content-Type',mime[0])
-                if mime[1] is not None:
-                    self.send_header('Encoding',mime[1])
-                self.end_headers()
-
-                self.wfile.write(content)
-                self.wfile.close()
-            except Exception, e:
-                self.send_response(500)
-        else:
-            self.send_response(404,"%s"%fd)
+        ursa_router.distribute_request(self)
 
     def do_POST(self):
         '''
@@ -74,9 +55,17 @@ def run(port=8000):
     服务器启动入口
     '''
     server_addr=('',port);
-    s=HTTPServer(server_addr,UrsaHTTPRequestHandler)
-    log.info("Server listen on %d" %  port)
-    s.serve_forever()
+    try:
+        httpd=HTTPServer(server_addr,UrsaHTTPRequestHandler)
+        log.info("Server listen on %d" %  port)
+        httpd.serve_forever()
+    except (KeyboardInterrupt , SystemExit):
+        log.info("^C received, shutting down")
+        httpd.socket.close()
+    except socket.error:
+        log.error('Maybe port ' + str(port) + ' already in use')
+        log.error('You can try another port by use "ursa start 8234"')
+        sys.exit(1)
 
 
 if __name__ == '__main__':

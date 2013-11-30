@@ -30,7 +30,11 @@ _DEFAULT_PROJ='local'
 
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
-    'template':'./template'
+    'template_dir':'./template',
+    'module_dir':'_module',
+    'common_dir':'_common',
+    'template_ext':'tpl',
+    'preview_ext':'ut'
 };
 
 

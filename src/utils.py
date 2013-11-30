@@ -14,9 +14,11 @@
 '''
 import  logbook
 import time
+import os
+import re
 
 logbook.set_datetime_format('local')
-log=logbook.Logger('ursa')
+log=logbook.Logger('ursa2')
 
 def isInt(v):
     '''
@@ -47,3 +49,56 @@ def getTimeStamp():
     stupid python
     '''
     return time.time()
+
+def abspath(path):
+    '''
+    返回相对于当前目录的目录文件的绝对路径
+    '''
+    return os.path.abspath(os.path.join(os.getcwd(),path))
+
+class FileSearcher(object):
+    '''
+    搜索一个目录下所有符合规定文件名的文件,
+    默认返回相对于初始目录的相对路径
+    '''
+    @classmethod
+    def __init__(self, pattern=r'.+', start_dir='.',relative=True,traverse=True):
+        '''
+        pattern:文件名的正则过滤表达式;
+        start_dir:搜索目录;
+        relative:是否输出相对目录;
+        traverse:是否遍历目录搜索
+        '''
+        self.regexp = re.compile(pattern)
+        self.start_dir = start_dir
+        self.result=[]
+        self.relative=relative
+        self.traverse=traverse
+    @classmethod
+    def search(self):
+        '''
+        执行搜索输出
+        '''
+        if os.path.isdir(self.start_dir):
+            os.path.walk(self.start_dir,self._visit,None)
+        else:
+            log.warn('you are walking a non-dir %s'%self.start_dir)
+
+        return self.result
+
+    @classmethod
+    def _visit(self,argv, directoryName,filesInDirectory):
+        '''
+        '''
+        for fname in filesInDirectory:                   
+            fpath = os.path.join(directoryName, fname)
+            if os.path.isfile(fpath) and self.regexp.findall(fpath):
+                if self.relative:
+                    fpath=os.path.relpath(fpath,self.start_dir)
+                self.result.append(fpath)
+            elif os.path.isdir(fpath) and self.traverse:
+                os.path.walk(fpath,self._visit,None)
+
+if __name__ == '__main__':
+    fs=FileSearcher(r'java$','/Users/yinyong/work/src/main/java/')
+    print fs.search()
