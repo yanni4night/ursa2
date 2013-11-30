@@ -17,11 +17,12 @@ from  BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
 from http import Request,Response
 from route import Route
 from conf import C,log
-from handler import static,index,tpl
+from handler import static,index,tpl,so
 
 ursa_router=Route()
 ursa_router.get(r'^/$',index)
 ursa_router.get(r'\.%s$'%C('preview_ext'),tpl)
+ursa_router.post(r'\.so$',so)
 ursa_router.get(r'.*',static)
 
 class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -39,7 +40,7 @@ class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
         '''
         todo:处理POST请求
         '''
-        noop()
+        ursa_router.distribute_request(self)
 
     @classmethod
     def version_string(self):

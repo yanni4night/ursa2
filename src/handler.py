@@ -17,6 +17,7 @@ import mimetypes
 from urlparse import urlparse
 import os
 import sys
+import re
 from conf import C,log
 from render import render,render_file
 
@@ -29,14 +30,23 @@ def index(req,res):
     '''
     tpl_dir=C('template_dir')
     tpls=utils.FileSearcher(r'\.%s$'%C('template_ext'),tpl_dir).search()
+    _tpls=[];
+    for e in tpls:
+        if e.endswith('.'+C('template_ext')):
+            e=re.sub(r'\.%s'%C('template_ext'),'',e)
+        _tpls.append(e)
     index_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
-    html=render_file(index_path,{"tpls":tpls},noEnvironment=True)
+    html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)
     res.send(html)
 def tpl(req,res):
     '''
     模板
     '''
-    res.send('tpl')
+    tpl_token=re.sub(r'\.%s$'%C('preview_ext'),'',req.path)
+    if tpl_token.startswith(os.path.sep):
+        tpl_token=tpl_token[1:]
+    html=render(tpl_token)
+    res.send(html)
 
 def so(req,res):
     '''
