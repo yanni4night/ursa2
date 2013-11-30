@@ -16,25 +16,34 @@ import utils
 import mimetypes
 from urlparse import urlparse
 import os
-from conf import C
+import sys
+from conf import C,log
+from render import render,render_file
 
 mimetypes.init()
 path=os.getcwd()
-log=utils.log
 
 def index(req,res):
     '''
     模板列表
     '''
     tpl_dir=C('template_dir')
-    tpls=utils.FileSearcher(r'\.%s$'%C('template_ext'),tpl_dir)
-    print tpls
-    res.send('index')
+    tpls=utils.FileSearcher(r'\.%s$'%C('template_ext'),tpl_dir).search()
+    index_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
+    html=render_file(index_path,{"tpls":tpls},noEnvironment=True)
+    res.send(html)
 def tpl(req,res):
     '''
     模板
     '''
     res.send('tpl')
+
+def so(req,res):
+    '''
+    保存json数据
+    todo
+    '''
+    res.redirect('/')
 
 def static(req,res):
     '''

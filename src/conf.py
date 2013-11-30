@@ -15,10 +15,13 @@
 import os
 import json
 import re
+import  logbook
 from datetime import datetime
 import time
-import utils
-log=utils.log
+
+
+logbook.set_datetime_format('local')
+log=logbook.Logger('ursa2')
 
 _last_read_time=0
 _conf_cache={}
@@ -30,9 +33,11 @@ _DEFAULT_PROJ='local'
 
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
-    'template_dir':'./template',
-    'module_dir':'_module',
-    'common_dir':'_common',
+    'template_dir':'template',
+    'data_dir':'_data',
+    'module_dir':'_module',#under template_dir
+    'common_dir':'_common',#under template_dir
+    'build_dir':'build',
     'template_ext':'tpl',
     'preview_ext':'ut'
 };
@@ -44,7 +49,7 @@ def _getConf():
     '''
     #缓存
     global _last_read_time,_MIN_CACHE_INTERVAL,_conf_cache
-    now=utils.getTimeStamp()
+    now=time.time()
     if now-_last_read_time<_MIN_CACHE_INTERVAL:
         _last_read_time=now
         return _conf_cache
@@ -73,7 +78,7 @@ def C(key,proj=None,default_val=None):
     '''
     global _DEFAULT_ITEMS,_DEFAULT_PROJ
 
-    if not utils.isStr(key):
+    if type(key) not in (type(''),type(u'')):
         return None
     conf=_getConf()
     if conf is None:
@@ -85,7 +90,7 @@ def C(key,proj=None,default_val=None):
 
     dic=conf.get(k)
     #proj 或local存在
-    if utils.isDict(dic):
+    if type(dic)==type({}):
         if dic.get(key) is not None:
             return dic.get(key) or _DEFAULT_ITEMS.get(key) or default_val
     return conf.get(key) or _DEFAULT_ITEMS.get(key) or default_val

@@ -16,8 +16,7 @@
 from  BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
 from http import Request,Response
 from route import Route
-from utils import log
-from conf import C
+from conf import C,log
 from handler import static,index,tpl
 
 ursa_router=Route()

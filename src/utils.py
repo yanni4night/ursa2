@@ -12,13 +12,13 @@
  @version 0.0.1
  @since 0.0.1
 '''
-import  logbook
+
 import time
 import os
 import re
+import codecs
+from conf import C,log
 
-logbook.set_datetime_format('local')
-log=logbook.Logger('ursa2')
 
 def isInt(v):
     '''
@@ -55,6 +55,32 @@ def abspath(path):
     返回相对于当前目录的目录文件的绝对路径
     '''
     return os.path.abspath(os.path.join(os.getcwd(),path))
+
+def readfile(filename  , mode='r'):
+    '''
+    '''
+    try:
+        if 'b' in mode:#Binary file
+            f = open( filename , mode )
+        else:
+            f = codecs.open(filename , mode ,C('encoding'))
+    
+        body = f.read()
+        f.close()
+        return body
+    except Exception,e:
+        raise
+
+def writefile(filename , content):
+    '''
+    '''
+    try:
+        f = codecs.open(filename , 'w' , C('encoding'))
+        f.write(content)
+        f.close()
+    except:
+        log.error("write to %s failed" % filename)
+        raise
 
 class FileSearcher(object):
     '''

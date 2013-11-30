@@ -12,13 +12,41 @@
  @version 0.0.1
  @since 0.0.1
 '''
-from conf import C
+from conf import C,log
 import utils
+import os
+import json
 from jinja2 import Template,Environment,FileSystemLoader,TemplateNotFound,TemplateSyntaxError
 
-_template_dir=C('template_dir')
+_template_dir = C('template_dir')
 
-jinjaenv = Environment( loader=FileSystemLoader( utils.abspath(_template_dir),  C('encoding') , extensions=["jinja2.ext.do"] , autoescape=True )
-build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd() , 'build', C('template_dir')) ,  C('encoding') ))
+jinjaenv = Environment(loader=FileSystemLoader(utils.abspath(_template_dir),  C('encoding') ), extensions=["jinja2.ext.do"] , autoescape=True )
+build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd() , 'build', _template_dir) ,  C('encoding') ))
+
+def render_file(filename,data=None,noEnvironment=False):
+    '''
+    '''
+    if noEnvironment:
+        body=Template(utils.readfile(filename))#这里应为绝对路径
+    else:
+        body = jinjaenv.get_template(filename)
+    return body.render(data or {})
+
+def render(token):
+    '''
+    '''
+    if token.startswith(os.path.sep):
+        token = token[1:]
+    json_filepath = utils.abspath(os.path.join(C('data_dir'),token+".json"))
+    data = {}
+    try:
+        data = json.loads(utils.readfile(json_filepath))
+    except Exception, e:
+        log.warn('%s:%s'%(json_filepath,e))
+
+    tpl_path=token + "." + C('template_ext')
+    return render_file( tpl_path,data)
 
 
+if __name__ == '__main__':
+    print render('index')

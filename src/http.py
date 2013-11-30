@@ -12,6 +12,7 @@
  @since 0.0.1
 '''
 from urlparse import urlparse,parse_qs
+from conf import log,C
 
 class Request(object):
     '''

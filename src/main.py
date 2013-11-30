@@ -12,8 +12,7 @@
  @since 0.0.1
 '''
 
-from uitls  import log
-from conf  import $
+from conf  import log,C
 from docopt import docopt
 from __init__ import __version__ as version
 
