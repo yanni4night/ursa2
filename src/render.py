@@ -42,10 +42,16 @@ def render(token):
     json_filepath = utils.abspath(os.path.join(C('data_dir'),token+".json"))
     data = {}
     try:
-        data = json.loads(utils.readfile(json_filepath))
+        content = utils.readfile(json_filepath)
+        content=re.sub('\/\*[\s\S]*?\*\/','',content)
+        data = json.loads(content)
     except Exception, e:
         log.warn('%s:%s'%(json_filepath,e))
 
+    multoken = token.split('/')
+    data.update({'_token':token.replace('/','_')})
+    data.update({'_folder':multoken[0]})
+    data.update({'_subtoken':multoken[1] if len(multoken)>1 else ""})   
     tpl_path=token + "." + C('template_ext')
     return render_file( tpl_path,data)
 
