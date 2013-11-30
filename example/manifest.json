@@ -1,4 +1,4 @@
--{       
+{       
         /*全局配置区*/
         "always_add_timestamp": false,
         "server_add_timestamp":true,
@@ -25,15 +25,18 @@
         "num":10,
         "number":"{num}",
         "empty_prefix":"",
+        "proj":"top",
         "github":"https://github.com/yanni4night/node-ursa",
         "local":{
             "static_prefix": "/.",
-            "img_prefix": "../.."
+            "img_prefix": "../..",
+            "proj":"local"
             },
         /*发布文本替换关键字*/
         "online": {
             "static_prefix": ".",
-            "img_prefix": "../.."
+            "img_prefix": "../..",
+            "proj":"online"
         },
         /*代理只支持UTF-8*/
         "proxy":{

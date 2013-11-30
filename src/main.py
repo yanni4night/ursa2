@@ -12,9 +12,11 @@
  @since 0.0.1
 '''
 
-from conf  import log,get
+from uitls  import log
+from conf  import $
 from docopt import docopt
 from __init__ import __version__ as version
+
 def run():
     '''
     ursa2
