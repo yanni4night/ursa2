@@ -17,6 +17,7 @@ import time
 import os
 import json
 import re
+import hashlib
 import codecs
 from conf import C,log
 
@@ -105,6 +106,48 @@ def dorepeat(data):
                         if not data.get(name):
                             data[name] = []
                         data[name].append(data[item])
+def md5toInt(md5):
+    """将md5得到的字符串变化为6位数字传回。
+    基本算法是将得到的32位字符串切分成两部分，每部分按16进制得整数后除997，求得的余数相加
+    最终得到6位
+    
+    Arguments:
+    - `md5`:
+    """
+    md5 = [ md5[:16] , md5[16:] ]
+    result = ''
+    for item in md5:
+        num = str( int( item , 16 ) % 997 ).zfill(3)
+        result = result+num
+        
+    return result
+
+def getFileTimeStamp(fpath,parentpath=''):
+    """为文件加上时间戳并返回
+    
+    Arguments:
+    - `fpath`:
+    """
+    if fpath.startswith(os.path.sep):
+        fpath = fpath[1:]
+    fpath2 = os.path.join(os.getcwd(),'build', fpath)  
+    if not os.path.exists( fpath2 ) and parentpath:
+        parentpath = parentpath.split('/')
+        parentpath.pop()
+        fpath2 = '/'.join(parentpath) + '/' + fpath
+
+    if os.path.exists( fpath2 ):
+        f = readfile(fpath2 , 'rb')
+        m = hashlib.md5()
+        m.update(f)
+        md5 = md5toInt(m.hexdigest())
+        return md5
+    return ''
+
+def getDate():
+    '''
+    '''
+    return time.strftime("%Y%m%d%S", time.localtime())
 
 class FileSearcher(object):
     '''

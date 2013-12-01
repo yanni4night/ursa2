@@ -6,11 +6,9 @@
         "protocol":"both",/*http|https|both*/
         "http_port":8080,
         "https_port":8443,
-        "engine":"twig",
         "log_level":"info",
         "js_ascii_only":true,
         "enable_proxy":true,
-        "template_dir":"./template",
         "js_compressor":"yuicompressor",/*yuicompressor|uglify*/
         "css_compressor":"yui",/*not used*/
         "require_js_modules": ["main"],
@@ -22,21 +20,18 @@
         "require_config_file":"app-build.js",
 
         /*本地文本替换关键字*/
-        "num":10,
         "number":"{num}",
         "empty_prefix":"",
-        "proj":"top",
-        "github":"https://github.com/yanni4night/node-ursa",
+        "github":"https://github.com/yanni4night/ursa2",
         "local":{
             "static_prefix": "/.",
-            "img_prefix": "../..",
-            "proj":"local"
+            "img_prefix": "../.."
             },
         /*发布文本替换关键字*/
         "online": {
-            "static_prefix": ".",
-            "img_prefix": "../..",
-            "proj":"online"
+            "static_prefix": "http://p{num}.cdn.com/proj",
+            "img_prefix": "http://p{num}.imgcdn.com/proj",
+            "num":5
         },
         /*代理只支持UTF-8*/
         "proxy":{

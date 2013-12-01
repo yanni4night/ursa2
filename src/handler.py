@@ -21,6 +21,7 @@ import re
 import json
 from conf import C,log
 from render import render,render_file
+from replace import replace
 
 mimetypes.init()
 path=os.getcwd()
@@ -56,6 +57,7 @@ def tpl(req,res):
     '''
     tpl_token=_token(req.path)
     html=render(tpl_token)
+    html=replace(html)
     res.send(html)
 
 def m(req,res):

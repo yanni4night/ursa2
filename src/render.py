@@ -15,6 +15,7 @@
 from conf import C,log
 import utils
 import os
+import re
 import json
 from jinja2 import Template,Environment,FileSystemLoader,TemplateNotFound,TemplateSyntaxError
 
