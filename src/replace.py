@@ -27,8 +27,11 @@ def replace(content,proj=None):
 
     iters = re.finditer( TM_TOKEN , content )
     for i in reversed(list(iters)):
-        #todo
-        content = content[0:i.start(0)] + utils.getFileTimeStamp(utils.abspath(i.group(1))) + content[i.end(0):]
+        file_path = i.group(1)
+        if file_path.startswith('/'):
+            file_path=file_path[1:]
+        file_path=utils.abspath(file_path)
+        content = content[0:i.start(0)] + utils.getFileTimeStamp(file_path) + content[i.end(0):]
 
     iters = re.finditer( DATE_TOKEN , content )
     for i in reversed(list(iters)):
