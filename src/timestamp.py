@@ -30,24 +30,26 @@ def _addtimestamp(content,reg,base_dir):
         local_url = replace(url)
         parsed_url = urlparse(local_url,False)
         parsed_query = parse_qs(parsed_url.query)
+
         #已经有时间戳的不再添加
         #带协议的不再添加
         if not local_url or not parsed_url.path:
             continue
-        elif re.match(r'^\s+$',local_url):
-            continue
-        elif local_url.startswith('about:') or local_url.startswith('data:'):
+        elif re.match(r'^\s*(about|data):',local_url):
+            log.warn('%s is an invalid url'%local_url)
             continue
         elif parsed_query.get(t):
             log.warn("%s has a timestamp"%local_url)
             continue
         elif parsed_url.scheme  or local_url.startswith('//'):
-            log.warn("%s has a scheme"%local_url)
-            continue
+                log.warn("%s has a scheme"%local_url)
+                continue
 
         if os.path.isabs(parsed_url.path):
+            #绝对路径，则以当前工程根目录为root
             timestamp=utils.getFileTimeStamp(utils.abspath(parsed_url.path))
         else:
+            #相对目录，则此当前文件目录为root
             timestamp=utils.getFileTimeStamp(os.path.join(base_dir,parsed_url.path))
 
         new_query=parsed_url.query
