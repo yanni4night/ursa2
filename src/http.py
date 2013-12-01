@@ -13,6 +13,7 @@
 '''
 from urlparse import urlparse,parse_qs
 from conf import log,C
+import utils
 
 class Request(object):
     '''
@@ -86,6 +87,12 @@ class Response(object):
         for k in headers.keys():
             self.http_req_handler.send_header(k,headers.get(k))
 
+        if content is not None and utils.isStr(content):
+            try:
+                content=content.encode(C('encoding'))
+            except Exception, e:
+                log.error('%s'%e)
+
         #填充Content-Length头
         if headers.get('Content-Length') is None and content_len is None and content is not None:
             content_len=len(content)
@@ -94,7 +101,7 @@ class Response(object):
 
         self.http_req_handler.end_headers()
 
-        if content is not None:
+        if content is not None and utils.isStr(content):
             self.http_req_handler.wfile.write(content)
 
         self.http_req_handler.wfile.close()

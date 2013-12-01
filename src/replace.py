@@ -27,7 +27,8 @@ def replace(content,proj=None):
 
     iters = re.finditer( TM_TOKEN , content )
     for i in reversed(list(iters)):
-        content = content[0:i.start(0)] + utils.getFileTimeStamp(i.group(1) , filepath) + content[i.end(0):]
+        #todo
+        content = content[0:i.start(0)] + utils.getFileTimeStamp(utils.abspath(i.group(1))) + content[i.end(0):]
 
     iters = re.finditer( DATE_TOKEN , content )
     for i in reversed(list(iters)):
@@ -39,25 +40,25 @@ def replace(content,proj=None):
         #config = conf.getConfig()
         name = i.group(1)
         value = C(name,proj)
-        if value:
-            if value.find('{num}') != -1:
-                num = C('num',proj) or '10'
-                num = range(num+1)
-                substr100 = content[i.end(0):i.end(0)+100]
-                istimestamp = substr100.find('t=')
-                if istimestamp != -1:#has timestamp
-                    try:
-                        tm = int(substr100[istimestamp+2:istimestamp+3])
-                    except ValueError:
-                        continue
-                    if tm >= len(num):
-                        tm = tm - len(num)
-                    value = value.replace( '{num}' , str(tm) )
-                else:
-                    global range_item
-                    value = value.replace( '{num}' , str(num[range_item]) )
-                    range_item = range_item + 1
-                    if range_item >= len(num):
-                        range_item = 0
-            content = content[0:i.start(0)] + value + content[i.end(0):]
+        if value is not None:
+            # if utils.isStr(value) and value.find('{num}') != -1:
+                # num = int(C('num',proj) or '10')
+                # num = range(num+1)
+                # substr100 = content[i.end(0):i.end(0)+100]#what
+                # istimestamp = substr100.find('t=')
+                # if istimestamp != -1:#has timestamp
+                    # try:
+                        # tm = int(substr100[istimestamp+2:istimestamp+3])
+                    # except ValueError:
+                        # continue
+                    # if tm >= len(num):
+                        # tm = tm - len(num)
+                    # value = value.replace( '{num}' , str(tm) )
+                # else:
+                    # global range_item
+                    # value = value.replace( '{num}' , str(num[range_item]) )
+                    # range_item = range_item + 1
+                    # if range_item >= len(num):
+                        # range_item = 0
+            content = content[0:i.start(0)] + str(value) + content[i.end(0):]
     return content

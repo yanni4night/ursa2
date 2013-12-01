@@ -6,6 +6,7 @@
  changelog
  2013-11-29[14:38:24]:created
  2013-11-30[15:39:31]:finished
+ 2013-12-01[19:23:17]:empty string supported
 
  @info yinyong,osx-x64,UTF-8,10.129.164.117,py,/Users/yinyong/work/ursa2
  @author yinyong@sogou-inc.com
@@ -93,8 +94,11 @@ def C(key,proj=None,default_val=None):
     #proj 或local存在
     if type(dic)==type({}):
         if dic.get(key) is not None:
-            return dic.get(key) or _DEFAULT_ITEMS.get(key) or default_val
-    return conf.get(key) or _DEFAULT_ITEMS.get(key) or default_val
+            return dic.get(key)
+    if conf.get(key) is not None:
+        return conf.get(key)
+    else:
+        return _DEFAULT_ITEMS.get(key) or default_val
 
 if __name__=='__main__':
-    print C('encoding','online');
+    print C('empty_prefix');

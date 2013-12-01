@@ -32,7 +32,13 @@ def _addtimestamp(content,reg,base_dir):
         parsed_query = parse_qs(parsed_url.query)
         #已经有时间戳的不再添加
         #带协议的不再添加
-        if parsed_query.get(t):
+        if not local_url or not parsed_url.path:
+            continue
+        elif re.match(r'^\s+$',local_url):
+            continue
+        elif local_url.startswith('about:') or local_url.startswith('data:'):
+            continue
+        elif parsed_query.get(t):
             log.warn("%s has a timestamp"%local_url)
             continue
         elif parsed_url.scheme  or local_url.startswith('//'):
@@ -75,4 +81,4 @@ def html_script(content,base_dir):
 def all_url(content,base_dir):
     '''
     '''
-    return _addtimestamp(content,r'url\((([\'"])?(.*?)\2?)\)',base_dir)
+    return _addtimestamp(content,r'url\((([\'"])?([\S]+?)\2?)\)',base_dir)
