@@ -20,18 +20,18 @@
         "require_config_file":"app-build.js",
 
         /*本地文本替换关键字*/
+        "num":10,
         "number":"{num}",
         "empty_prefix":"",
-        "github":"https://github.com/yanni4night/ursa2",
+        "github":"https://github.com/yanni4night/node-ursa",
         "local":{
             "static_prefix": "/.",
             "img_prefix": "../.."
             },
         /*发布文本替换关键字*/
         "online": {
-            "static_prefix": "http://p{num}.cdn.com/proj",
-            "img_prefix": "http://p{num}.imgcdn.com/proj",
-            "num":5
+            "static_prefix": ".",
+            "img_prefix": "../.."
         },
         /*代理只支持UTF-8*/
         "proxy":{

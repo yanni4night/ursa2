@@ -56,6 +56,8 @@ def abspath(path):
     '''
     返回相对于当前目录的目录文件的绝对路径
     '''
+    if os.path.isabs(path):
+        path=path[1:]
     return os.path.abspath(os.path.join(os.getcwd(),path))
 
 def readfile(filename  , mode='r'):
@@ -126,12 +128,14 @@ def getFileTimeStamp(fpath):
     '''
     绝对路径
     '''
-    if os.path.isfile( fpath ):
+    try:
         f = readfile(fpath , 'rb')
         m = hashlib.md5()
         m.update(f)
         md5 = md5toInt(m.hexdigest())
         return md5
+    except Exception,e:
+        log.error(e)
     return ''
 
 def getDate():

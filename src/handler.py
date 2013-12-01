@@ -25,7 +25,6 @@ from replace import replace
 from timestamp import html_link,html_script,all_url
 
 mimetypes.init()
-path=os.getcwd()
 
 
 def _token(path):
@@ -45,10 +44,13 @@ def index(req,res):
     tpl_dir=C('template_dir')
     tpls=utils.FileSearcher(r'\.%s$'%C('template_ext'),tpl_dir).search()
     _tpls=[];
+    #下面循环用于去除扩展名
+    #todo优化
     for e in tpls:
         if e.endswith('.'+C('template_ext')):
             e=re.sub(r'\.%s'%C('template_ext'),'',e)
         _tpls.append(e)
+
     index_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
     html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)
     res.send(html)
@@ -59,9 +61,11 @@ def tpl(req,res):
     tpl_token=_token(req.path)
     html=render(tpl_token)
     html=replace(html)
-    html=html_script(html,'.')
-    html=html_link(html,'.')
-    html=all_url(html,'.')
+    if C('server_add_timestamp'):
+        base_dir=os.path.join('.',os.path.dirname(req.path))
+        html=html_script(html,base_dir)
+        html=html_link(html,base_dir)
+        html=all_url(html,base_dir)
     res.send(html)
 
 def m(req,res):
@@ -103,25 +107,38 @@ def static(req,res):
     静态资源
     '''
     o=urlparse(req.path)
-    fd=os.path.join(path,o.path[1:])
+    #取得绝对路径
+    fd=utils.abspath(o.path)
     if os.path.isfile(fd):
         mime=mimetypes.guess_type(fd,False)
-        content_type=mime[0] or 'application/octet-stream'
+        content_type=mime[0] or 'text/plain'#默认文本
         try:
             headers={}
             #todo 自定义文本二进制
             if not re.match(r'(image|video|flash|audio|powerpoint|msword)',content_type,re.IGNORECASE):
-                #文本
-                content=utils.readfile(utils.abspath(fd))
+                #文本文件需要替换变量
+                content=utils.readfile(fd)
                 content=replace(content)
-
-                headers['Encoding']=mime[1] or C('encoding')
+                if C('server_add_timestamp'):
+                    base_dir=os.path.dirname(fd)
+                    content=html_link(content,base_dir)
+                    content=html_script(content,base_dir)
+                    content=all_url(content,base_dir)
+                #文本文件加encoding头，统一强制为工程公共编码
+                headers['Encoding']=C('encoding')
             else:
                 #二进制
-                content=utils.readfile(utils.abspath(fd),'rb')
+                content=utils.readfile(fd,'rb')
+
             headers['Content-Type']=content_type
             res.send(content=content,headers=headers)
         except Exception, e:
             res.send(code=500,content='Server Failed')
+            log.error(e)
     else:
-        res.send(code=404,content="%s not found"%req.path)
+        #不是文件
+        if os.path.exists(fd):
+            #禁止访问非文件
+            res.send(code=403,content='Access %s is forbidden'%req.path)
+        else:
+            res.send(code=404,content="%s not found"%req.path)

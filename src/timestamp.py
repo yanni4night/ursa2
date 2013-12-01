@@ -45,7 +45,10 @@ def _addtimestamp(content,reg,base_dir):
             log.warn("%s has a scheme"%local_url)
             continue
 
-        timestamp=utils.getFileTimeStamp(os.path.join(base_dir,parsed_url.path[1:]))
+        if os.path.isabs(parsed_url.path):
+            timestamp=utils.getFileTimeStamp(utils.abspath(parsed_url.path))
+        else:
+            timestamp=utils.getFileTimeStamp(os.path.join(base_dir,parsed_url.path))
 
         new_query=parsed_url.query
         if '' == new_query:
@@ -75,7 +78,6 @@ def html_link(content,base_dir):
 def html_script(content,base_dir):
     '''
     '''
-    #return re.sub(r'<script.* src=([\'"])(.*?\.js.*?)\1',_addtimestamp,content)
     return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir)
 
 def all_url(content,base_dir):
