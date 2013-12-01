@@ -14,6 +14,7 @@
 from urlparse import urlparse,parse_qs
 from conf import log,C
 import utils
+import re
 
 class Request(object):
     '''
@@ -86,12 +87,14 @@ class Response(object):
 
         for k in headers.keys():
             self.http_req_handler.send_header(k,headers.get(k))
+        if not headers.get('Content-Type'):
+            headers['Content-Type']='text/html'
 
-        if content is not None and utils.isStr(content):
+        if content is not None and not re.match(r'(image|video|flash|audio|powerpoint|msword)',headers['Content-Type'],re.IGNORECASE):
             try:
                 content=content.encode(C('encoding'))
             except Exception, e:
-                log.error('%s'%e)
+                log.error('%s'%(e))
 
         #填充Content-Length头
         if headers.get('Content-Length') is None and content_len is None and content is not None:
@@ -101,7 +104,7 @@ class Response(object):
 
         self.http_req_handler.end_headers()
 
-        if content is not None and utils.isStr(content):
-            self.http_req_handler.wfile.write(content)
+        if content is not None:
+                self.http_req_handler.wfile.write(content)
 
         self.http_req_handler.wfile.close()

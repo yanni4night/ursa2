@@ -106,15 +106,20 @@ def static(req,res):
     fd=os.path.join(path,o.path[1:])
     if os.path.isfile(fd):
         mime=mimetypes.guess_type(fd,False)
+        content_type=mime[0] or 'application/octet-stream'
         try:
-            #静态资源一律使用rb读取
-            f=open(fd,'rb')
-            content=f.read()
             headers={}
-            if mime[0] is not None:
-                headers['Content-Type']=mime[0]
-            if mime[1] is not None:
-                headers['Encoding']=mime[1]
+            #todo 自定义文本二进制
+            if not re.match(r'(image|video|flash|audio|powerpoint|msword)',content_type,re.IGNORECASE):
+                #文本
+                content=utils.readfile(utils.abspath(fd))
+                content=replace(content)
+
+                headers['Encoding']=mime[1] or C('encoding')
+            else:
+                #二进制
+                content=utils.readfile(utils.abspath(fd),'rb')
+            headers['Content-Type']=content_type
             res.send(content=content,headers=headers)
         except Exception, e:
             res.send(code=500,content='Server Failed')
