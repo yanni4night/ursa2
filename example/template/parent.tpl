@@ -4,12 +4,14 @@
         <meta charset="utf-8" />
         <title>{% block page_title %}{% endblock %}</title>
         <link rel="stylesheet" href="@static_prefix@/static/css/main.css" type="text/css" />
+        <style>
+        .p{background: url('/static/img/winter.png')}
+        </style>
     </head>
     <body {% block body_class %}{% endblock %}>
         {% block content %}{% endblock %}
     </body>
-    <script type="text/javascript" src="http://p0.123.sogou.com/u/js/ursa.js"></script>
-    <!--script type="text/javascript" src="@static_prefix@/static/js/main.js"></script-->
+    <script type="text/javascript" src="http://p0.123.sogou.com/u/js/ursa.js?y=2013"></script>
     {% block script_module %}{% endblock %}
     <script type="text/javascript">
         

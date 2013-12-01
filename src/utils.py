@@ -122,22 +122,12 @@ def md5toInt(md5):
         
     return result
 
-def getFileTimeStamp(fpath,parentpath=''):
-    """为文件加上时间戳并返回
-    
-    Arguments:
-    - `fpath`:
-    """
-    if fpath.startswith(os.path.sep):
-        fpath = fpath[1:]
-    fpath2 = os.path.join(os.getcwd(),'build', fpath)  
-    if not os.path.exists( fpath2 ) and parentpath:
-        parentpath = parentpath.split('/')
-        parentpath.pop()
-        fpath2 = '/'.join(parentpath) + '/' + fpath
-
-    if os.path.exists( fpath2 ):
-        f = readfile(fpath2 , 'rb')
+def getFileTimeStamp(fpath):
+    '''
+    绝对路径
+    '''
+    if os.path.isfile( fpath ):
+        f = readfile(fpath , 'rb')
         m = hashlib.md5()
         m.update(f)
         md5 = md5toInt(m.hexdigest())

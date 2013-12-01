@@ -33,6 +33,7 @@ _DEFAULT_PROJ='local'
 
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
+    'timestamp_name':'t',
     'template_dir':'template',
     'data_dir':'_data',
     'module_dir':'_module',#under template_dir

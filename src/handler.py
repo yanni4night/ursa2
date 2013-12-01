@@ -22,6 +22,7 @@ import json
 from conf import C,log
 from render import render,render_file
 from replace import replace
+from timestamp import html_link,html_script,all_url
 
 mimetypes.init()
 path=os.getcwd()
@@ -58,6 +59,9 @@ def tpl(req,res):
     tpl_token=_token(req.path)
     html=render(tpl_token)
     html=replace(html)
+    html=html_script(html,'.')
+    html=html_link(html,'.')
+    html=all_url(html,'.')
     res.send(html)
 
 def m(req,res):
