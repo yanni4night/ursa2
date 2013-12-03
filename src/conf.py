@@ -41,7 +41,8 @@ _DEFAULT_ITEMS={
     'common_dir':'_common',#under template_dir
     'build_dir':'build',
     'template_ext':'tpl',
-    'preview_ext':'ut'
+    'preview_ext':'ut',
+    'num':10
 };
 
 

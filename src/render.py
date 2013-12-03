@@ -17,6 +17,7 @@ import utils
 import os
 import re
 import json
+from deps import DepsFinder
 from jinja2 import Template,Environment,FileSystemLoader,TemplateNotFound,TemplateSyntaxError
 
 _template_dir = C('template_dir')
@@ -38,16 +39,23 @@ def render(token):
     '''
     查找数据文件依赖并渲染模板
     '''
-    if token.startswith(os.path.sep):
+    if token.startswith('/'):
         token = token[1:]
-    json_filepath = utils.abspath(os.path.join(C('data_dir'),token+".json"))
+    
     data = {}
-    try:
-        content = utils.readfile(json_filepath)
-        content=re.sub('\/\*[\s\S]*?\*\/','',content)
-        data = json.loads(content)
-    except Exception, e:
-        log.warn('%s:%s'%(json_filepath,e))
+
+    df=DepsFinder(token)
+    deps=df.find()
+    for dep in deps:
+        try:
+            json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'tpl$','json',dep)))
+            content = utils.readfile(json_filepath)
+            content=re.sub('\/\*[\s\S]*?\*\/','',content)
+            json_data = json.loads(content)
+            #todo
+            data.update(json_data)
+        except Exception, e:
+            log.warn('%s:%s'%(json_filepath,e))
 
     multoken = token.split('/')
     data.update({'_token':token.replace('/','_')})

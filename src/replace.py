@@ -47,7 +47,7 @@ def replace(content,proj=None):
         value = C(name,proj)
         if value is not None:
             if utils.isStr(value) and value.find('{num}') != -1:
-                num = int(C('num',proj) or '10')
+                num = int(C('num',proj))
                 num = range(num+1)
                 substr100 = content[i.end(0):i.end(0)+100]#what
                 istimestamp = substr100.find('%s='%C('timestamp_name'))

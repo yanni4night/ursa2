@@ -26,7 +26,6 @@ from timestamp import html_link,html_script,all_url
 
 mimetypes.init()
 
-
 def _token(path):
     '''
     去除后缀，取得相对于模板目录的相对无扩展名路径
