@@ -50,7 +50,7 @@ def index(req,res):
             e=re.sub(r'\.%s'%C('template_ext'),'',e)
         _tpls.append(e)
 
-    index_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
+    index_path=os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
     html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)
     res.send(html)
 def tpl(req,res):

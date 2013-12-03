@@ -46,6 +46,7 @@ def render(token):
 
     df=DepsFinder(token)
     deps=df.find()
+    deps.insert(0,C('data_dir')+"/_ursa.json")
     for dep in deps:
         try:
             json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'tpl$','json',dep)))
