@@ -102,4 +102,4 @@ def C(key,proj=None,default_val=None):
         return _DEFAULT_ITEMS.get(key) or default_val
 
 if __name__=='__main__':
-    print C('empty_prefix');
+    print C('data_dir');
