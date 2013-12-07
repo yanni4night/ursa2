@@ -54,7 +54,6 @@ class DepsFinder(object):
             iters=re.finditer(self._pattern,content)
 
             for i in reversed(list(iters)):
-                log.info(i.group(3))
                 self._search(i.group(3))
 
 

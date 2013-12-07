@@ -15,9 +15,11 @@
 from conf import C,log
 import shutil
 import os
+import re
 import sys
 import subprocess
 import utils
+from render import render
 from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,all_url
@@ -35,7 +37,7 @@ class UrsaBuilder(object):
         '''
         '''
         self._compress=compress
-        self._html=html
+        self._generate_html=html
         self._target=target
         self._tpl_dir=C('template_dir')
         self._build_dir=C('build_dir')
@@ -54,6 +56,8 @@ class UrsaBuilder(object):
         self._build_js_dir=os.path.join(self._build_static_dir,self._js_dir)
         self._build_tpl_dir=os.path.join(self._build_dir,self._tpl_dir)
 
+        self._build_html_dir=os.path.join(self._build_dir,C('html_dir'))
+
     @classmethod
     def build(self):
         '''
@@ -65,6 +69,8 @@ class UrsaBuilder(object):
         self._css();
         self._js();
         self._tpl();
+        if self._generate_html:
+            self._html();
 
     @classmethod
     def _check(self):
@@ -144,20 +150,31 @@ class UrsaBuilder(object):
     @classmethod
     def _tpl(self):
         '''
+        handle tempaltes
         '''
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
         tpls=fs.search()
         for tpl in tpls:
-            content=utils.readfile(tpl)
-            content=html_link(content,'.')#模板的相对目录应该写死为cwd
-            content=html_script(content,'.')
-            content=all_url(content,'.')
-            content=replace(content,self._target)
+            content = utils.readfile(tpl)
+            content = html_link(content,'.')#模板的静态资源相对目录应该写死为cwd
+            content = html_script(content,'.')
+            content = all_url(content,'.')
+            content = replace(content,self._target)
             utils.writefile(tpl,content)
     @classmethod
     def _html(self):
         '''
+        generate html
         '''
+        fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
+        tpls=fs.search()
+        for tpl in tpls:
+            html = render(tpl[0:-4])
+            target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            dst_file=re.sub(r'\.tpl$','.html',os.path.join(self._build_html_dir,tpl))
+            utils.writefile(dst_file,html)
 
 if __name__ == '__main__':
     builder=UrsaBuilder(True,True,'online')

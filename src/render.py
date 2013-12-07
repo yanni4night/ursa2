@@ -25,17 +25,20 @@ _template_dir = C('template_dir')
 jinjaenv = Environment(loader=FileSystemLoader(utils.abspath(_template_dir),  C('encoding') ), extensions=["jinja2.ext.do"] , autoescape=True )
 build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd() , C('build_dir'), _template_dir) ,  C('encoding') ))
 
-def render_file(filename,data=None,noEnvironment=False):
+def render_file(filename,data=None,noEnvironment=False,build=False):
     '''
     渲染文件
     '''
     if noEnvironment:
         body=Template(utils.readfile(filename))#这里应为绝对路径
     else:
-        body = jinjaenv.get_template(filename)
+        if build:
+            body=build_jinjaenv.get_template(filename)
+        else:
+            body = jinjaenv.get_template(filename)
     return body.render(data or {})
 
-def render(token):
+def render(token,build=False):
     '''
     查找数据文件依赖并渲染模板
     '''
@@ -63,7 +66,7 @@ def render(token):
     data.update({'_folder':multoken[0]})
     data.update({'_subtoken':multoken[1] if len(multoken)>1 else ""})   
     tpl_path=token + "." + C('template_ext')
-    return render_file( tpl_path,data)
+    return render_file( tpl_path,data,False,build)
 
 
 if __name__ == '__main__':

@@ -43,6 +43,7 @@ _DEFAULT_ITEMS={
     'css_dir':"css",#under static_dir
     'js_dir':"js",#under static_dir
     'build_dir':'build',
+    'html_dir':'html',#under build_dir
     'template_ext':'tpl',
     'preview_ext':'ut',
     'num':10
