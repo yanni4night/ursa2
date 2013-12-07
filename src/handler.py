@@ -41,14 +41,26 @@ def index(req,res):
     模板列表
     '''
     tpl_dir=C('template_dir')
-    tpls=utils.FileSearcher(r'\.%s$'%C('template_ext'),tpl_dir).search()
+    tpl_ext=C('template_ext')
+    tpls=utils.FileSearcher(r'\.%s$'%tpl_ext,tpl_dir).search()
     _tpls=[];
+
+    try:
+        visible_prog=re.compile(r"%s"%C('visible_tpls'))
+    except Exception, e:
+        log.error('[visible_tpls]%s'%e)
+        visible_prog=None
+
     #下面循环用于去除扩展名
     #todo优化
     for e in tpls:
-        if e.endswith('.'+C('template_ext')):
-            e=re.sub(r'\.%s'%C('template_ext'),'',e)
-        _tpls.append(e)
+        if e.endswith('.'+tpl_ext):
+            e=re.sub(r'\.%s'%tpl_ext,'',e)
+        if visible_prog:
+            if visible_prog.match(e):
+                _tpls.append(e)
+        else:
+            _tpls.append(e);
 
     index_path=os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
     html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)

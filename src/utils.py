@@ -56,6 +56,8 @@ def abspath(path):
     '''
     返回相对于当前目录的目录文件的绝对路径
     '''
+    if not isStr(path):
+        raise TypeError('path must be a string')
     if os.path.isabs(path):
         path=path[1:]
     return os.path.abspath(os.path.join(os.getcwd(),path))
