@@ -3,6 +3,7 @@
         "server_add_timestamp":true,
         "timestamp_name":"x",
         "visible_tpls":"",
+        "server_mode":true,
         "protocol":"both",/*http|https|both*/
         "http_port":8080,
         "https_port":8443,

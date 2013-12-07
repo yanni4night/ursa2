@@ -20,35 +20,40 @@ import  logbook
 from datetime import datetime
 import time
 
-
+#log settings
 logbook.set_datetime_format('local')
 log=logbook.Logger('ursa2')
 
+#for configuration cache
 _last_read_time=0
 _conf_cache={}
+
 _MANIFEST_FILE='manifest.json'
 #配置文件的缓存间隔，读取文件后此事件内不再读取,单位s
 _MIN_CACHE_INTERVAL=1
 
-_DEFAULT_PROJ='local'
+_DEFAULT_TARGET='local'
 
+#These are the default configurations,if any item not defined in {_MANIFEST_FILE},it will work
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
     'timestamp_name':'t',
     'template_dir':'template',
-    'data_dir':'_data',
+    'data_dir':'_data',#json data dir
     'module_dir':'_module',#under template_dir
     'common_dir':'_common',#under template_dir
-    'static_dir':"static",
+    'static_dir':"static",#static resource dir,like images,js and css
     'css_dir':"css",#under static_dir
     'js_dir':"js",#under static_dir
     'build_dir':'build',
     'html_dir':'html',#under build_dir
     'template_ext':'tpl',
-    'preview_ext':'ut',
+    'preview_ext':'ut',#access /index.ut,you are reading {template_dir}/index.{template_ext} in fact
     'num':10,
     'yuicompressor':'yuicompressor-2.4.8.jar',
-    'js_ascii_only':False
+    'js_ascii_only':False,#encode multi-bytes chars in ASCII encoding,like \u4E2D\u56FD
+    'server_mode':False,#In server mode,css&js will be merge.This will more time.
+    'server_mode_compress':False#compress or not in server mode
 };
 
 
@@ -85,7 +90,7 @@ def C(key,target=None,default_val=None):
     '''
     获取指定key的配置值，顺序为{target:{}},{local:{}},{},_DEFAULT_ITEMS,_default_val
     '''
-    global _DEFAULT_ITEMS,_DEFAULT_PROJ
+    global _DEFAULT_ITEMS,_DEFAULT_TARGET
 
     if type(key) not in (type(''),type(u'')):
         return None
@@ -95,7 +100,7 @@ def C(key,target=None,default_val=None):
 
     k=target
     if target is None:
-        k=_DEFAULT_PROJ
+        k=_DEFAULT_TARGET
 
     dic=conf.get(k)
     #target 或local存在

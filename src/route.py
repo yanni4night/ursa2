@@ -27,14 +27,20 @@ class Route(object):
         根据URL匹配规则路由请求到相应地处理器
         '''
         path=urlparse(http_req_handler.path).path
+        handled=False
         for h in self.handlers:
             if 'ALL' == h.get('method') or h.get('method') == http_req_handler.command and re.findall(h.get('pattern'),path):
+                handled=True
                 ret=(h.get('handler'))(Request(http_req_handler),Response(http_req_handler))
                 if True == ret:
                     continue
                 else:
                     break
-
+        #if not handled by any handlers,405
+        if not handled:
+            log.error('%s is not handled'%path)
+            http_req_handler.end_headers()
+            self.http_req_handler.wfile.close()
 
     @classmethod
     def get(self,pattern,handler):

@@ -24,7 +24,7 @@ ursa_router.get(r'^/$',index)
 ursa_router.get(r'\.%s$'%C('preview_ext'),tpl)
 ursa_router.post(r'\.so$',so)
 ursa_router.get(r'\.m$',m)
-ursa_router.get(r'.*',static)
+ursa_router.get(r'^/.+',static)
 
 class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
     '''

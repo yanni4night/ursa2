@@ -23,6 +23,7 @@ from conf import C,log
 from render import render,render_file
 from replace import replace
 from timestamp import html_link,html_script,all_url
+from build import UrsaBuilder
 
 mimetypes.init()
 
@@ -107,7 +108,7 @@ def so(req,res):
         utils.writeJSON(json_path,json_obj)
         res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
     except ValueError, e:
-        res.send('<html><head>Error</head><body><pre>%s</pre><br/>is not a JSON,<a href="%s.m">rewrite</a></body></html>'%(json_str,tpl_token))
+        res.send('<html><head><meta charset="'+C('encoding')+'"/><title>JSON Error</title></head><body><pre>%s</pre><br/>is not a JSON,<a href="%s.m">rewrite</a></body></html>'%(json_str,tpl_token))
     except Exception,e:
         log.error('%s'%e)
         res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
@@ -115,41 +116,61 @@ def so(req,res):
 
 def static(req,res):
     '''
-    静态资源
+    static resource
     '''
     o=urlparse(req.path)
     #取得绝对路径
     fd=utils.abspath(o.path)
     if os.path.isfile(fd):
         mime=mimetypes.guess_type(fd,False)
-        content_type=mime[0] or 'text/plain'#默认文本
+        content_type=mime[0] or 'text/plain'#default text
         try:
             headers={}
-            #todo 自定义文本二进制
+            #todo  custom defined
             if not re.match(r'(image|video|flash|audio|powerpoint|msword)',content_type,re.IGNORECASE):
-                #文本文件需要替换变量
                 content=utils.readfile(fd)
                 content=replace(content)
-                if C('server_add_timestamp'):
+                #server_mode build css files in {static_dir}
+                if C('server_mode') and fd.endswith('.css') and req.path.startswith('/'+C('static_dir')):
+                    tmpfile=os.path.dirname(fd)+"/%s-%s"%(utils.getDate(),os.path.basename(fd))
+                    try:
+                        builder=UrsaBuilder(C('server_mode_compress'),False)
+                        builder.build_css(fd,tmpfile)
+                        content=utils.readfile(tmpfile)
+                    except Exception, e:
+                        log.error('[server_mode]%s'%e)
+                    finally:
+                        os.unlink(tmpfile)
+                 #server_mode build js files in {static_dir}
+                elif C('server_mode') and fd.endswith('.js') and req.path.startswith('/'+C('static_dir')):
+                    tmpfile=os.path.dirname(fd)+"/%s-%s"%(utils.getDate(),os.path.basename(fd))
+                    try:
+                        builder=UrsaBuilder(C('server_mode_compress'),False)
+                        builder.build_js(fd,tmpfile,os.path.join(C('static_dir'),C('js_dir')))
+                        content=utils.readfile(tmpfile)
+                    except Exception, e:
+                        log.error('[server_mode]%s'%e)
+                    finally:
+                        os.unlink(tmpfile)
+                elif C('server_add_timestamp') :
                     base_dir=os.path.dirname(fd)
                     content=html_link(content,base_dir)
                     content=html_script(content,base_dir)
                     content=all_url(content,base_dir)
-                #文本文件加encoding头，统一强制为工程公共编码
+                #http encoding header
                 headers['Encoding']=C('encoding')
+                headers['Cache-Control']='nocache'
             else:
-                #二进制
+                #binary files
                 content=utils.readfile(fd,'rb')
 
             headers['Content-Type']=content_type
             res.send(content=content,headers=headers)
         except Exception, e:
-            res.send(code=500,content='Server Failed')
+            res.send(code=500,content='%s'%e)
             log.error(e)
     else:
-        #不是文件
         if os.path.exists(fd):
-            #禁止访问非文件
             res.send(code=403,content='Access %s is forbidden'%req.path)
         else:
             res.send(code=404,content="%s not found"%req.path)

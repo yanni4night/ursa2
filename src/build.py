@@ -118,15 +118,23 @@ class UrsaBuilder(object):
             if not css.endswith('.css'):
                 css+='.css'
             css_realpath=os.path.join(self._build_css_dir,css)
-            subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,css_realpath,css_realpath),shell=True)
-            #repalce
-            content=utils.readfile(css_realpath)
-            #timestamp
-            content=all_url(content,os.path.dirname(css_realpath))
-            content=replace(content,self._target)
-            utils.writefile(css_realpath,content)
-            if self._compress:
-                subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + css_realpath + ' -o ' + css_realpath , shell=True )
+            self.build_css(css_realpath,css_realpath)
+            continue
+
+    @classmethod
+    def build_css(self,src,dst):
+        '''
+        handle one css src to dst
+        '''
+        subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell=True)
+        #repalce
+        content=utils.readfile(dst)
+        #timestamp
+        content=all_url(content,os.path.dirname(dst))
+        content=replace(content,self._target)
+        utils.writefile(dst,content)
+        if self._compress:
+            subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
 
     @classmethod
     def _js(self):
@@ -145,6 +153,8 @@ class UrsaBuilder(object):
             if not js.endswith('.js'):
                 js+='.js'
             js_realpath=os.path.join(self._build_js_dir,js)
+            self.build_js(js_realpath,js_realpath,self._build_js_dir)
+            continue
             subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ js_realpath + ' optimize=none baseUrl='\
              + self._build_js_dir , shell=True)
             #repalce
@@ -155,6 +165,26 @@ class UrsaBuilder(object):
                 subprocess.call( 'node ' + RPL_PATH +' '+js_realpath+' '+js_realpath,shell=True)
             if self._compress:
                 subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + js_realpath + ' -o ' + js_realpath , shell=True )
+
+    @classmethod
+    def build_js(self,src,dst,base_dir):
+        '''
+        handle one js src to dst
+        '''
+        js=os.path.relpath(src,base_dir)
+        subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ dst + ' optimize=none baseUrl='\
+            + base_dir , shell=True)
+        #repalce
+        content=utils.readfile(dst)
+        content=replace(content,self._target)
+        utils.writefile(dst,content)
+        if C('js_ascii_only'):
+            subprocess.call( 'node ' + RPL_PATH +' '+dst+' '+dst,shell=True)
+        if self._compress:
+            subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
+
+
+                
     @classmethod
     def _tpl(self):
         '''
@@ -185,5 +215,5 @@ class UrsaBuilder(object):
             utils.writefile(dst_file,html)
 
 if __name__ == '__main__':
-    builder=UrsaBuilder(True,True,'online')
+    builder=UrsaBuilder(True,False,'online')
     builder.build();
