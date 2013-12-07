@@ -46,7 +46,8 @@ _DEFAULT_ITEMS={
     'html_dir':'html',#under build_dir
     'template_ext':'tpl',
     'preview_ext':'ut',
-    'num':10
+    'num':10,
+    'yuicompressor':'yuicompressor-2.4.8.jar'
 };
 
 
