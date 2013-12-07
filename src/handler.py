@@ -71,12 +71,12 @@ def tpl(req,res):
     '''
     tpl_token=_token(req.path)
     html=render(tpl_token)
-    html=replace(html)
     if C('server_add_timestamp'):
         base_dir=os.path.join('.',os.path.dirname(req.path))
         html=html_script(html,base_dir)
         html=html_link(html,base_dir)
         html=all_url(html,base_dir)
+    html=replace(html)
     res.send(html)
 
 def m(req,res):

@@ -42,16 +42,22 @@ def _addtimestamp(content,reg,base_dir):
             log.warn("%s has a timestamp"%local_url)
             continue
         elif parsed_url.scheme  or local_url.startswith('//'):
-                log.warn("%s has a scheme"%local_url)
-                continue
+            log.warn("%s has a scheme"%local_url)
+            continue
 
+        #problems
+        #HTML <link>,<script>,url() relative to html => should be absolute path
+        #JS <link>,<script>,url() as above
+        #CSS 
         if os.path.isabs(parsed_url.path):
             #绝对路径，则以当前工程根目录为root
             timestamp=utils.getFileTimeStamp(utils.abspath(parsed_url.path))
         else:
             #相对目录，则此当前文件目录为root
+            #应该仅在CSS内使用相对路径
             timestamp=utils.getFileTimeStamp(os.path.join(base_dir,parsed_url.path))
 
+        parsed_url=urlparse(url,False)
         new_query=parsed_url.query
         if '' == new_query:
             new_query=t+"="+timestamp
@@ -68,21 +74,26 @@ def _addtimestamp(content,reg,base_dir):
             new_scheme=parsed_url.scheme+"://"
 
         new_url=new_scheme+parsed_url.netloc+parsed_url.path+'?'+new_query+new_fragment
-        content=start+'"'+new_url+'"'+end
+        content=start+(it.group(2) or '')+new_url+(it.group(2) or '')+end
 
     return content
 
-def html_link(content,base_dir):
+def html_link(content,base_dir="."):
     '''
     '''
     return _addtimestamp(content,r'<link.* href=(([\'"])(.*?\.css.*?)\2)',base_dir)
 
-def html_script(content,base_dir):
+def html_script(content,base_dir="."):
     '''
     '''
     return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir)
 
-def all_url(content,base_dir):
+def all_url(content,base_dir="."):
     '''
     '''
     return _addtimestamp(content,r'url\((([\'"])?([\S]+?)\2?)\)',base_dir)
+
+if __name__ == '__main__':
+    sample="url(@static_prefix@/www/js/main/ls.css?t=*&ty=09&bn==56#hjk)"
+    print sample
+    print all_url(sample)

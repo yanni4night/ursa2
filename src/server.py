@@ -61,7 +61,7 @@ def run(port=8000):
         log.info("Server listen on %d" %  port)
         httpd.serve_forever()
     except (KeyboardInterrupt , SystemExit):
-        log.info("^C received, shutting down")
+        log.info("Shutting down.Goodbye!")
         httpd.socket.close()
     except socket.error:
         log.error('Maybe port ' + str(port) + ' already in use')

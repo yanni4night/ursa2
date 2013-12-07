@@ -92,7 +92,7 @@ Node-ursa Test Suit
 <div class="row">
 	<div class="caption">_ursa.json公共数据</div>
 	<div class="content">
-		<var class="imp" data-expect="node-ursa">{{project}}</var>
+		<var class="imp" data-expect="ursa2">{{project}}</var>
 		没有定义在 _data/index.json 中，而是 _data/_ursa.json.点击
 		<a href="/_ursa.m">这里</a>
 		修改数据.

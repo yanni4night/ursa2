@@ -23,7 +23,7 @@ from jinja2 import Template,Environment,FileSystemLoader,TemplateNotFound,Templa
 _template_dir = C('template_dir')
 
 jinjaenv = Environment(loader=FileSystemLoader(utils.abspath(_template_dir),  C('encoding') ), extensions=["jinja2.ext.do"] , autoescape=True )
-build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd() , 'build', _template_dir) ,  C('encoding') ))
+build_jinjaenv = Environment( loader=FileSystemLoader( os.path.join( os.getcwd() , C('build_dir'), _template_dir) ,  C('encoding') ))
 
 def render_file(filename,data=None,noEnvironment=False):
     '''

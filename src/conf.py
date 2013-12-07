@@ -39,6 +39,9 @@ _DEFAULT_ITEMS={
     'data_dir':'_data',
     'module_dir':'_module',#under template_dir
     'common_dir':'_common',#under template_dir
+    'static_dir':"static",
+    'css_dir':"css",#under static_dir
+    'js_dir':"js",#under static_dir
     'build_dir':'build',
     'template_ext':'tpl',
     'preview_ext':'ut',
@@ -69,15 +72,15 @@ def _getConf():
             #todo，字符串中应该予以保留
             ret=json.loads(re.sub('\/\*[\s\S]*?\*\/','',body))
         else:
-            log.error("%s is required" % _manifest_file)
+            log.error("%s is required" % _MANIFEST_FILE)
     except Exception, e:
         log.error("%s" % e)
     _conf_cache=ret
     return ret
 
-def C(key,proj=None,default_val=None):
+def C(key,target=None,default_val=None):
     '''
-    获取指定key的配置值，顺序为{proj:{}},{local:{}},{},_DEFAULT_ITEMS,_default_val
+    获取指定key的配置值，顺序为{target:{}},{local:{}},{},_DEFAULT_ITEMS,_default_val
     '''
     global _DEFAULT_ITEMS,_DEFAULT_PROJ
 
@@ -87,12 +90,12 @@ def C(key,proj=None,default_val=None):
     if conf is None:
         return None
 
-    k=proj
-    if proj is None:
+    k=target
+    if target is None:
         k=_DEFAULT_PROJ
 
     dic=conf.get(k)
-    #proj 或local存在
+    #target 或local存在
     if type(dic)==type({}):
         if dic.get(key) is not None:
             return dic.get(key)

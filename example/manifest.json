@@ -30,8 +30,9 @@
             },
         /*发布文本替换关键字*/
         "online": {
-            "static_prefix": ".",
-            "img_prefix": "../.."
+            "static_prefix": "//p{num}.cdn.sogou.com",
+            "img_prefix": "//p{num}.img.cdn.sogou.com",
+            "num":5
         },
         /*代理只支持UTF-8*/
         "proxy":{

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-
 '''
  utils.py
 
@@ -24,24 +23,31 @@ from conf import C,log
 
 def isInt(v):
     '''
-    判断是否是整型
+    type int
     '''
     return type(v) == type(1)
 
 def isStr(s):
     '''
-    判断是否是字符串
+    type string
     '''
     return type(s) in (type(u''),type(''))
 
 def isDict(d):
     '''
-    判断是否是字典
+    type dict
     '''
     return type(d) == type({})
 
+def isList(d):
+    '''
+    type list
+    '''
+    return type(d) == type([])
+
 def isTuple(t):
     '''
+    type tuple
     '''
     return type(t) == type(())
 
@@ -54,7 +60,7 @@ def getTimeStamp():
 
 def abspath(path):
     '''
-    返回相对于当前目录的目录文件的绝对路径
+    get the absolute path of a file/directory in the current working directory
     '''
     if not isStr(path):
         raise TypeError('path must be a string')
@@ -64,6 +70,7 @@ def abspath(path):
 
 def readfile(filename  , mode='r'):
     '''
+    get the content of a file
     '''
     try:
         if 'b' in mode:#Binary file
@@ -79,6 +86,7 @@ def readfile(filename  , mode='r'):
 
 def writefile(filename , content):
     '''
+    write conent to a file
     '''
     try:
         f = codecs.open(filename , 'w' , C('encoding'))
@@ -90,13 +98,13 @@ def writefile(filename , content):
 
 def writeJSON(filename,data):
     '''
-    写入JSON格式
+    write file in JSON
     '''
     writefile(filename, json.dumps(data , sort_keys = True , indent = 4, separators = ( ',' , ': ')) )
 
 def dorepeat(data):
     '''
-    todo
+    to be checked
     '''
     if type(data)==type({}):
         for item in data.keys():
@@ -142,8 +150,9 @@ def getFileTimeStamp(fpath):
 
 def getDate():
     '''
+    to be checked
     '''
-    return time.strftime("%Y%m%d%S", time.localtime())
+    return time.strftime("%Y%m%d%H%M%S", time.localtime())
 
 class FileSearcher(object):
     '''
@@ -189,5 +198,4 @@ class FileSearcher(object):
                 os.path.walk(fpath,self._visit,None)
 
 if __name__ == '__main__':
-    fs=FileSearcher(r'java$','/Users/yinyong/work/src/main/java/')
-    print fs.search()
+    print getDate()
