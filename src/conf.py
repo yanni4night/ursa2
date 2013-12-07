@@ -96,7 +96,7 @@ def C(key,target=None,default_val=None):
         return None
     conf=_getConf()
     if conf is None:
-        return None
+        return _DEFAULT_ITEMS.get(key) or default_val
 
     k=target
     if target is None:
@@ -113,4 +113,4 @@ def C(key,target=None,default_val=None):
         return _DEFAULT_ITEMS.get(key) or default_val
 
 if __name__=='__main__':
-    print C('data_dir');
+    print C('template_dir');

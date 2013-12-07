@@ -17,6 +17,8 @@ from  BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
 from http import Request,Response
 from route import Route
 from conf import C,log
+import utils
+import socket
 from handler import static,index,tpl,so,m
 
 ursa_router=Route()
@@ -55,6 +57,12 @@ def run(port=8000):
     '''
     服务器启动入口
     '''
+    try:
+        port=int(port)
+    except Exception, e:
+        log.error(e)
+        port=8000
+
     server_addr=('',port);
     try:
         httpd=HTTPServer(server_addr,UrsaHTTPRequestHandler)

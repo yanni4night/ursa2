@@ -15,17 +15,23 @@
 '''
 class ConfigurationError(Exception):
     '''
+    ConfigurationError
     '''
     @classmethod
     def __init__(self, msg):
-        super(ConfigurationError, self).__init__()
         self.msg=msg
+    @classmethod
+    def __str__(self):
+        return self.msg
 
 class DirectoryError(Exception):
     '''
+    DirectoryError
     '''
     @classmethod
     def __init__(self,msg):
-        super(DirectoryError,self).__init__()
         self.msg=msg
+    @classmethod
+    def __str__(self):
+        return self.msg
         

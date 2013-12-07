@@ -15,14 +15,18 @@
 from conf  import log,C
 from docopt import docopt
 from __init__ import __version__ as version
+import sys,os
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 def run():
     '''
     ursa2
 
     Usage:
+        ursa2 init
         ursa2 start [<port>]
-        ursa2 build [<proj>] [-ch]
+        ursa2 build [<target>] [-ch]
         ursa2 help
         ursa2 (-v | --version)
     
@@ -31,9 +35,19 @@ def run():
         -h --html            creating HTML when building.
         -v --version        show version.
     '''
-    log.info('Hello World from logbook')
     argv=docopt(run.__doc__,version=version)
-    print argv
+    if argv.get('init'):
+        #todo
+        print 'coming'
+    elif argv.get('start'):
+        server=__import__('server')
+        server.run(argv.get('<port>'))
+    elif argv.get('build'):
+        build=__import__('build')
+        builder=build.UrsaBuilder(argv.get('--compress'),argv.get('--html'),argv.get('<target>'))
+        builder.build();
+    elif argv.get('help'):
+        print 'https://github.com/yanni4night/ursa2/wiki'
 
 
 if __name__=='__main__':
