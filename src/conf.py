@@ -47,7 +47,8 @@ _DEFAULT_ITEMS={
     'template_ext':'tpl',
     'preview_ext':'ut',
     'num':10,
-    'yuicompressor':'yuicompressor-2.4.8.jar'
+    'yuicompressor':'yuicompressor-2.4.8.jar',
+    'js_ascii_only':False
 };
 
 

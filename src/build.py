@@ -25,6 +25,7 @@ from replace import replace
 from timestamp import html_link,html_script,all_url
 
 RJS_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','r.js'))
+RPL_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','rpl.js'))
 YC_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets',C('yuicompressor')))
 
 class UrsaBuilder(object):
@@ -150,6 +151,8 @@ class UrsaBuilder(object):
             content=utils.readfile(js_realpath)
             content=replace(content,self._target)
             utils.writefile(js_realpath,content)
+            if C('js_ascii_only'):
+                subprocess.call( 'node ' + RPL_PATH +' '+js_realpath+' '+js_realpath,shell=True)
             if self._compress:
                 subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + js_realpath + ' -o ' + js_realpath , shell=True )
     @classmethod
