@@ -120,7 +120,7 @@ Node-ursa Test Suit
 	<div class="caption">url() 格式时间戳</div>
 	<div class="content">
 		你可以再下面的url格式路径中看到带有
-		<var class="imp" data-expect="t">@timestamp_name@</var>
+		<var class="imp" data-expect="@timestamp_name@">@timestamp_name@</var>
 		标记的时间戳追加到URL末尾：
 		<pre>
             background: <span data-expect="regex:^url\(\s*?\)$">url()</span>;
@@ -129,10 +129,10 @@ Node-ursa Test Suit
             background: <span data-expect="url(about:blank)">url(about:blank)</span>;
             background: <span data-expect='url("about:blank")'>url("about:blank")</span>;
             background: <span data-expect='url("data:image/png;base64:")'>url("data:image/png;base64:")</span>;
-            background: <span data-expect="regex:^url\(.+?t=\d+\)$">url(@static_prefix@/static/img/p.gif)</span>;
+            background: <span data-expect="regex:^url\(.+?@timestamp_name@=\d+\)$">url(@static_prefix@/static/img/p.gif)</span>;
             background: url(//account.sogou.com/static/img/index/loginbtn.png?u=index);
-            background: url("/static/img/index/loginbtn.png?t=2013");
-            background: url("//account.sogou.com/static/img/index/loginbtn.png");
+            background: url("/static/img/index/loginbtn.png?@timestamp_name@=2013");
+            background: url("/static/img/winter.png");
 		</pre>
 		<p>可以看见，无效的URL不会追加时间戳，已经有时间戳的也不会再追加</p>
 		点击

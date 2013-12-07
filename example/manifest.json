@@ -23,7 +23,7 @@
         "num":10,
         "number":"{num}",
         "empty_prefix":"",
-        "github":"https://github.com/yanni4night/node-ursa",
+        "github":"https://github.com/yanni4night/ursa2",
         "local":{
             "static_prefix": "/.",
             "img_prefix": "../.."

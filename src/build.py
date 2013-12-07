@@ -63,6 +63,8 @@ class UrsaBuilder(object):
         self._dir();
         self._less();
         self._css();
+        self._js();
+        self._tpl();
 
     @classmethod
     def _check(self):
@@ -111,22 +113,47 @@ class UrsaBuilder(object):
             subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,css_realpath,css_realpath),shell=True)
             #repalce
             content=utils.readfile(css_realpath)
-            
-
             #timestamp
             content=all_url(content,os.path.dirname(css_realpath))
             content=replace(content,self._target)
-
             utils.writefile(css_realpath,content)
 
     @classmethod
     def _js(self):
         '''
+        handle js
         '''
+        js_modules=C('require_modules') or C('require_js_modules')
+        if not utils.isList(js_modules):
+            js_modules=['main']
+
+        for js in js_modules:
+            if not utils.isStr(js):
+                continue;
+            if js.startswith('/'):
+                js=js[1:]
+            if not js.endswith('.js'):
+                js+='.js'
+            js_realpath=os.path.join(self._build_js_dir,js)
+            subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ js_realpath + ' optimize=none baseUrl='\
+             + self._build_js_dir , shell=True)
+            #repalce
+            content=utils.readfile(js_realpath)
+            content=replace(content,self._target)
+            utils.writefile(js_realpath,content)
     @classmethod
     def _tpl(self):
         '''
         '''
+        fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
+        tpls=fs.search()
+        for tpl in tpls:
+            content=utils.readfile(tpl)
+            content=html_link(content,'.')#模板的相对目录应该写死为cwd
+            content=html_script(content,'.')
+            content=all_url(content,'.')
+            content=replace(content,self._target)
+            utils.writefile(tpl,content)
     @classmethod
     def _html(self):
         '''

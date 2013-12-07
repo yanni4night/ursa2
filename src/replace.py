@@ -18,11 +18,11 @@ import utils
 
 range_item=0
 
-def replace(content,proj=None):
+def replace(content,target=None):
     '''
     替换@@变量
     '''
-    TM_TOKEN = '@tm:(.*?)@'
+    TM_TOKEN = '@tm:(.+?)@'
     DATE_TOKEN = '@date@';
     COMMON_TOKEN = r'@([\w\-\/\\]+?)@'
     
@@ -44,10 +44,10 @@ def replace(content,proj=None):
     for i in reversed(list(iters)):
         #config = conf.getConfig()
         name = i.group(1)
-        value = C(name,proj)
+        value = C(name,target)
         if value is not None:
             if utils.isStr(value) and value.find('{num}') != -1:
-                num = int(C('num',proj))
+                num = int(C('num',target))
                 num = range(num+1)
                 substr100 = content[i.end(0):i.end(0)+100]#what
                 istimestamp = substr100.find('%s='%C('timestamp_name'))
