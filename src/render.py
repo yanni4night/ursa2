@@ -38,15 +38,10 @@ def render_file(filename,data=None,noEnvironment=False,build=False):
             body = jinjaenv.get_template(filename)
     return body.render(data or {})
 
-def render(token,build=False):
+def getData(token):
     '''
-    查找数据文件依赖并渲染模板
     '''
-    if token.startswith('/'):
-        token = token[1:]
-    
-    data = {}
-
+    data={}
     df=DepsFinder(token)
     deps=df.find()
     deps.insert(0,"_ursa.json")
@@ -56,10 +51,32 @@ def render(token,build=False):
             content = utils.readfile(json_filepath)
             content=re.sub('\/\*[\s\S]*?\*\/','',content)
             json_data = json.loads(content)
-            #todo
             data.update(json_data)
         except Exception, e:
             log.warn('%s:%s'%(json_filepath,e))
+    return data
+
+def render(token,build=False):
+    '''
+    查找数据文件依赖并渲染模板
+    '''
+    if token.startswith('/'):
+        token = token[1:]
+    
+    data = getData(token)
+    #df=DepsFinder(token)
+    #deps=df.find()
+    #deps.insert(0,"_ursa.json")
+    #for dep in deps:
+        #try:
+            #json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'tpl$','json',dep)))
+            #content = utils.readfile(json_filepath)
+            #content=re.sub('\/\*[\s\S]*?\*\/','',content)
+            #json_data = json.loads(content)
+            ##todo
+            #data.update(json_data)
+        #except Exception, e:
+            #log.warn('%s:%s'%(json_filepath,e))
 
     multoken = token.split('/')
     data.update({'_token':token.replace('/','_')})

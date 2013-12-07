@@ -7,14 +7,12 @@
         "protocol":"both",/*http|https|both*/
         "http_port":8080,
         "https_port":8443,
-        "log_level":"info",
         "js_ascii_only":true,
         "enable_proxy":true,
         "js_compressor":"yuicompressor",/*yuicompressor|uglify*/
         "css_compressor":"yui",/*not used*/
-        "require_js_modules": ["main"],
+        "require_js_modules": ["main","common/testsuit"],
         "require_css_modules": ["main"],
-        "require_html_modules": ["test/index"],
 
         /*r.js项目优化选项*/
         "require_optimize_project":true,
@@ -45,10 +43,5 @@
             "bing":"www.bing.com",
             "ursa":"127.0.0.1/ursa.php"
         },
-        "serverplugins":["./plugin/plugin.insight"],
-        "less":{
-            "src":"./static/less",
-            "dest":"./static/css",
-            "files":["flex"]
-         }
+        "serverplugins":["./plugin/plugin.insight"]
 }

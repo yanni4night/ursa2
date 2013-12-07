@@ -22983,7 +22983,7 @@ function (lang,   logger,   envOptimize,        file,           parse,
     }
 
     function fixCssUrlPaths(fileName, path, contents, cssPrefix) {
-        return contents.replace(cssUrlRegExp, function (fullMatch, urlMatch) {
+        return contents||contents.replace(cssUrlRegExp, function (fullMatch, urlMatch) {
             var colonIndex, parts, i,
                 fixedUrlMatch = cleanCssUrlQuotes(urlMatch);
 

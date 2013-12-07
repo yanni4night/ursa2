@@ -24,9 +24,9 @@ from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,all_url
 
-RJS_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','r.js'))
-RPL_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','rpl.js'))
-YC_PATH = utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets',C('yuicompressor')))
+RJS_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','r.js'))
+RPL_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','rpl.js'))
+YC_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets',C('yuicompressor')))
 
 class UrsaBuilder(object):
     '''
@@ -154,17 +154,17 @@ class UrsaBuilder(object):
                 js+='.js'
             js_realpath=os.path.join(self._build_js_dir,js)
             self.build_js(js_realpath,js_realpath,self._build_js_dir)
-            continue
-            subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ js_realpath + ' optimize=none baseUrl='\
-             + self._build_js_dir , shell=True)
-            #repalce
-            content=utils.readfile(js_realpath)
-            content=replace(content,self._target)
-            utils.writefile(js_realpath,content)
-            if C('js_ascii_only'):
-                subprocess.call( 'node ' + RPL_PATH +' '+js_realpath+' '+js_realpath,shell=True)
-            if self._compress:
-                subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + js_realpath + ' -o ' + js_realpath , shell=True )
+            #continue
+            #subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ js_realpath + ' optimize=none baseUrl='\
+             #+ self._build_js_dir , shell=True)
+            ##repalce
+            #content=utils.readfile(js_realpath)
+            #content=replace(content,self._target)
+            #utils.writefile(js_realpath,content)
+            #if C('js_ascii_only'):
+                #subprocess.call( 'node ' + RPL_PATH +' '+js_realpath+' '+js_realpath,shell=True)
+            #if self._compress:
+                #subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + js_realpath + ' -o ' + js_realpath , shell=True )
 
     @classmethod
     def build_js(self,src,dst,base_dir):
@@ -215,5 +215,5 @@ class UrsaBuilder(object):
             utils.writefile(dst_file,html)
 
 if __name__ == '__main__':
-    builder=UrsaBuilder(True,False,'online')
+    builder=UrsaBuilder(True,False,'local')
     builder.build();
