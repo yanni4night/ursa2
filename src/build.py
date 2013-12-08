@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import subprocess
+import mimetypes
 import utils
 from render import render
 from exception import ConfigurationError,DirectoryError
@@ -46,17 +47,25 @@ class UrsaBuilder(object):
         self._static_dir=C('static_dir')
         self._js_dir=C('js_dir')
         self._css_dir=C('css_dir')
+        self._compile_dir=C('compile_folder') or ''#copy and repalce
 
         #check dunplicated
         if os.path.relpath(self._build_dir,self._tpl_dir) == '.':
             raise ConfigurationError('template_dir and build_dir are dumplicated')
         elif os.path.relpath(self._build_dir,self._static_dir)=='.':
-            raise ConfigurationError('template_dir and static_dir are dumplicated');
+            raise ConfigurationError('template_dir and static_dir are dumplicated')
+        elif self._compile_dir and os.path.relpath(self._compile_dir,self._static_dir) == '.':
+            raise ConfigurationError('compile_dir and static_dir are dunplicated')
+        elif self._compile_dir and os.path.relpath(self._compile_dir,self._build_dir) == '.':
+            raise ConfigurationError('compile_dir and build_dir are dunplicated')
+        elif self._compile_dir and os.path.relpath(self._compile_dir,self._tpl_dir) == '.':
+            raise ConfigurationError('compile_dir and tpl_dir are dunplicated')
 
         self._build_static_dir=os.path.join(self._build_dir,self._static_dir)
-        self._build_css_dir=os.path.join(self._build_static_dir,self._css_dir)
-        self._build_js_dir=os.path.join(self._build_static_dir,self._js_dir)
+        self._build_css_dir=os.path.join(self._build_static_dir,self._css_dir,C('css_folder') or '')
+        self._build_js_dir=os.path.join(self._build_static_dir,self._js_dir,C('js_folder') or '')
         self._build_tpl_dir=os.path.join(self._build_dir,self._tpl_dir)
+        self._build_compile_dir=os.path.join(self._build_dir,self._compile_dir)
 
         self._build_html_dir=os.path.join(self._build_dir,C('html_dir'))
 
@@ -92,6 +101,9 @@ class UrsaBuilder(object):
         shutil.copytree(self._static_dir,self._build_static_dir)
         shutil.copytree(self._tpl_dir,self._build_tpl_dir)
 
+        if self._compile_dir:
+            shutil.copytree(self._compile_dir,self._build_compile_dir)
+
     @classmethod
     def _less(self):
         '''
@@ -106,6 +118,17 @@ class UrsaBuilder(object):
         '''
         handle css
         '''
+        all_css_files=utils.FileSearcher(r'\.css$',self._build_css_dir,relative=False).search()
+
+        #replace and timsstamp all css files
+        for dst in all_css_files:
+            content=utils.readfile(dst)
+            #timestamp
+            content=all_url(content,os.path.dirname(dst))
+            content=replace(content,self._target)
+            utils.writefile(dst,content)
+
+
         css_modules=C('require_css_modules')
         if not utils.isList(css_modules):
             css_modules=['main']
@@ -128,11 +151,11 @@ class UrsaBuilder(object):
         '''
         subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell=True)
         #repalce
-        content=utils.readfile(dst)
+        #content=utils.readfile(dst)
         #timestamp
-        content=all_url(content,os.path.dirname(dst))
-        content=replace(content,self._target)
-        utils.writefile(dst,content)
+        #content=all_url(content,os.path.dirname(dst))
+        #content=replace(content,self._target)
+       # utils.writefile(dst,content)
         if self._compress:
             subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
 
@@ -154,17 +177,6 @@ class UrsaBuilder(object):
                 js+='.js'
             js_realpath=os.path.join(self._build_js_dir,js)
             self.build_js(js_realpath,js_realpath,self._build_js_dir)
-            #continue
-            #subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ js_realpath + ' optimize=none baseUrl='\
-             #+ self._build_js_dir , shell=True)
-            ##repalce
-            #content=utils.readfile(js_realpath)
-            #content=replace(content,self._target)
-            #utils.writefile(js_realpath,content)
-            #if C('js_ascii_only'):
-                #subprocess.call( 'node ' + RPL_PATH +' '+js_realpath+' '+js_realpath,shell=True)
-            #if self._compress:
-                #subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + js_realpath + ' -o ' + js_realpath , shell=True )
 
     @classmethod
     def build_js(self,src,dst,base_dir):
@@ -182,8 +194,6 @@ class UrsaBuilder(object):
             subprocess.call( 'node ' + RPL_PATH +' '+dst+' '+dst,shell=True)
         if self._compress:
             subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
-
-
                 
     @classmethod
     def _tpl(self):
@@ -192,6 +202,16 @@ class UrsaBuilder(object):
         '''
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
         tpls=fs.search()
+        nfs=utils.FileSearcher(r'.+',self._build_compile_dir,relative=False)
+        compile_files=nfs.search()
+       # print tpls
+        #print compile_files
+        for f in compile_files:
+            mime=mimetypes.guess_type(f,False)
+            content_type=mime[0] or 'text/plain'
+            if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I):
+                tpls.insert(0,f)
+        print tpls
         for tpl in tpls:
             content = utils.readfile(tpl)
             content = html_link(content,'.')#模板的静态资源相对目录应该写死为cwd
@@ -215,5 +235,6 @@ class UrsaBuilder(object):
             utils.writefile(dst_file,html)
 
 if __name__ == '__main__':
-    builder=UrsaBuilder(True,False,'local')
-    builder.build();
+    builder=UrsaBuilder(True,False,'online')
+    builder._dir();
+    builder._css();

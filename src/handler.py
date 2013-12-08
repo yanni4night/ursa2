@@ -127,7 +127,7 @@ def static(req,res):
         try:
             headers={}
             #todo  custom defined
-            if not re.match(r'(image|video|flash|audio|powerpoint|msword)',content_type,re.IGNORECASE):
+            if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.IGNORECASE):
                 content=utils.readfile(fd)
                 content=replace(content)
                 #server_mode build css files in {static_dir}
@@ -137,6 +137,7 @@ def static(req,res):
                         builder=UrsaBuilder(C('server_mode_compress'),False)
                         builder.build_css(fd,tmpfile)
                         content=utils.readfile(tmpfile)
+                        content=replace(content)
                     except Exception, e:
                         log.error('[server_mode]%s'%e)
                     finally:

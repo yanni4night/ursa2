@@ -4,6 +4,9 @@
         "timestamp_name":"x",
         "visible_tpls":"",
         "server_mode":true,
+        "compile_folder":"server",
+        "css_folder":"subfolder",
+
         "protocol":"both",/*http|https|both*/
         "http_port":8080,
         "https_port":8443,

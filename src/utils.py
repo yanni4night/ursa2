@@ -20,6 +20,7 @@ import hashlib
 import codecs
 from conf import C,log
 
+BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword)'
 
 def isInt(v):
     '''
@@ -198,4 +199,4 @@ class FileSearcher(object):
                 os.path.walk(fpath,self._visit,None)
 
 if __name__ == '__main__':
-    print getDate()
+    print FileSearcher(r'.+','build/server',relative=False).search()
