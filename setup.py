@@ -14,12 +14,20 @@
 
 from setuptools import setup, find_packages
 from src.__init__ import __version__ as version
+import os
 
+dirs = ['assets','tpl']
+
+data_files = []
+for d in dirs:
+    for dirpath, dirnames , filenames in os.walk(d):
+        data_files.append( [ dirpath , [ os.path.join(dirpath , f) for f in filenames ] ] )
 
 setup(
     name = "ursa2",
     version = version,
     packages = ['src'],
+    data_files = data_files,
     install_requires = ['docopt>=0.6.1'],
 
     package_data = {
