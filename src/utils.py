@@ -146,7 +146,7 @@ def getFileTimeStamp(fpath):
         md5 = md5toInt(m.hexdigest())
         return md5
     except Exception,e:
-        log.error(e)
+        log.error('[TimeStamp]%s'%e)
     return ''
 
 def getDate():
@@ -160,6 +160,7 @@ class FileSearcher(object):
     搜索一个目录下所有符合规定文件名的文件,
     默认返回相对于初始目录的相对路径
     '''
+    result=[]
     @classmethod
     def __init__(self, pattern=r'.+', start_dir='.',relative=True,traverse=True):
         '''

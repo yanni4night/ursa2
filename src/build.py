@@ -65,7 +65,9 @@ class UrsaBuilder(object):
         self._build_css_dir=os.path.join(self._build_static_dir,self._css_dir,C('css_folder') or '')
         self._build_js_dir=os.path.join(self._build_static_dir,self._js_dir,C('js_folder') or '')
         self._build_tpl_dir=os.path.join(self._build_dir,self._tpl_dir)
-        self._build_compile_dir=os.path.join(self._build_dir,self._compile_dir)
+        
+        if self._compile_dir:
+            self._build_compile_dir=os.path.join(self._build_dir,self._compile_dir)
 
         self._build_html_dir=os.path.join(self._build_dir,C('html_dir'))
 
@@ -195,13 +197,14 @@ class UrsaBuilder(object):
         '''
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
         tpls=fs.search()
-        nfs=utils.FileSearcher(r'.+',self._build_compile_dir,relative=False)
-        compile_files=nfs.search()
-        for f in compile_files:
-            mime=mimetypes.guess_type(f,False)
-            content_type=mime[0] or 'text/plain'
-            if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I):
-                tpls.insert(0,f)
+        if self._compile_dir:
+            nfs=utils.FileSearcher(r'.+',self._build_compile_dir,relative=False)
+            compile_files=nfs.search()
+            for f in compile_files:
+                mime=mimetypes.guess_type(f,False)
+                content_type=mime[0] or 'text/plain'
+                if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I):
+                    tpls.insert(0,f)
 
         for tpl in tpls:
             content = utils.readfile(tpl)
@@ -210,6 +213,7 @@ class UrsaBuilder(object):
             content = all_url(content,'.')
             content = replace(content,self._target)
             utils.writefile(tpl,content)
+
     @classmethod
     def _html(self):
         '''
@@ -234,5 +238,5 @@ class UrsaBuilder(object):
 
 if __name__ == '__main__':
     builder=UrsaBuilder(True,True,'online')
-    builder._dir();
-    builder._css();
+    builder._dir()
+    builder._tpl()
