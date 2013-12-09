@@ -118,6 +118,7 @@ def static(req,res):
     '''
     static resource
     '''
+    req.path=re.sub(r'^/+','/',req.path)
     o=urlparse(req.path)
     #取得绝对路径
     fd=utils.abspath(o.path)

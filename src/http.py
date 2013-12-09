@@ -27,14 +27,14 @@ class Request(object):
         构造Request对象，
         拷贝HTTPRequestHandler的相关值
         '''
-        self.path=http_req_handler.path
+        self.path=urlparse(http_req_handler.path).path
         self.method=http_req_handler.command
         self.client_port=http_req_handler.client_address[1]
         self.client_host=http_req_handler.client_address[0]
 
         if 'GET' == self.method:
             #get请求解析url
-            o=urlparse(self.path)
+            o=urlparse(http_req_handler.path)
             q=parse_qs(o.query)
             self.body=q
         elif 'POST' == self.method:

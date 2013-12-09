@@ -136,8 +136,7 @@ class UrsaBuilder(object):
         for css in css_modules:
             if not utils.isStr(css):
                 continue;
-            if css.startswith('/'):
-                css=css[1:]
+            css = re.sub(r'\/*','',css)
             if not css.endswith('.css'):
                 css+='.css'
             css_realpath=os.path.join(self._build_css_dir,css)
@@ -150,12 +149,6 @@ class UrsaBuilder(object):
         handle one css src to dst
         '''
         subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell=True)
-        #repalce
-        #content=utils.readfile(dst)
-        #timestamp
-        #content=all_url(content,os.path.dirname(dst))
-        #content=replace(content,self._target)
-       # utils.writefile(dst,content)
         if self._compress:
             subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
 
@@ -204,14 +197,12 @@ class UrsaBuilder(object):
         tpls=fs.search()
         nfs=utils.FileSearcher(r'.+',self._build_compile_dir,relative=False)
         compile_files=nfs.search()
-       # print tpls
-        #print compile_files
         for f in compile_files:
             mime=mimetypes.guess_type(f,False)
             content_type=mime[0] or 'text/plain'
             if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I):
                 tpls.insert(0,f)
-        print tpls
+
         for tpl in tpls:
             content = utils.readfile(tpl)
             content = html_link(content,'.')#模板的静态资源相对目录应该写死为cwd
@@ -227,14 +218,20 @@ class UrsaBuilder(object):
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
         tpls=fs.search()
         for tpl in tpls:
-            html = render(tpl[0:-4])
-            target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
-            if not os.path.exists(target_dir):
-                os.makedirs(target_dir)
-            dst_file=re.sub(r'\.tpl$','.html',os.path.join(self._build_html_dir,tpl))
-            utils.writefile(dst_file,html)
+            try:
+                html = render(re.sub(r'\.%s$'%C('template_ext'),'',tpl),build=True)
+                target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
+                if not os.path.exists(target_dir):
+                    os.makedirs(target_dir)
+                dst_file=re.sub(r'\.tpl$','.html',os.path.join(self._build_html_dir,tpl))
+                utils.writefile(dst_file,html)
+            except Exception,e:
+                if not C('html_force_output'):
+                    raise e
+                else:
+                    log.error(e)
+
 
 if __name__ == '__main__':
-    builder=UrsaBuilder(True,False,'online')
-    builder._dir();
-    builder._css();
+    builder=UrsaBuilder(True,True,'online')
+    builder.build()

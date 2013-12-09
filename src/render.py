@@ -44,6 +44,7 @@ def getData(token):
     data={}
     df=DepsFinder(token)
     deps=df.find()
+    deps.reverse()
     deps.insert(0,"_ursa.json")
     for dep in deps:
         try:
