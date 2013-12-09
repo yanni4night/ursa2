@@ -234,4 +234,5 @@ class UrsaBuilder(object):
 
 if __name__ == '__main__':
     builder=UrsaBuilder(True,True,'online')
-    builder.build()
+    builder._dir();
+    builder._css();

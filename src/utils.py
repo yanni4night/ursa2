@@ -6,7 +6,7 @@
  changelog
  2013-11-30[14:36:11]:created
 
- @info yinyong,osx-x64,Undefined,192.168.1.101,py,/Users/yinyong/work/ursa2/src
+ @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
  @version 0.0.1
  @since 0.0.1
@@ -191,12 +191,10 @@ class FileSearcher(object):
         '''
         for fname in filesInDirectory:                   
             fpath = os.path.join(directoryName, fname)
-            if os.path.isfile(fpath) and self.regexp.findall(fpath):
+            if os.path.isfile(fpath) and self.regexp.findall(fname):
                 if self.relative:
                     fpath=os.path.relpath(fpath,self.start_dir)
                 self.result.append(fpath)
-            elif os.path.isdir(fpath) and self.traverse:
-                os.path.walk(fpath,self._visit,None)
 
 if __name__ == '__main__':
     print FileSearcher(r'.+','build/server',relative=False).search()

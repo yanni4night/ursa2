@@ -35,10 +35,10 @@ def _addtimestamp(content,reg,base_dir):
         #带协议的不再添加
         if not local_url or not parsed_url.path:
             continue
-        elif re.match(r'^\s*(about|data):',local_url):
+        elif re.match(r'^\s*(about:|data:|#)',local_url):
             log.warn('%s is an invalid url'%local_url)
             continue
-        elif parsed_query.get(t):
+        elif parsed_query.get(t) is not None:
             log.warn("%s has a timestamp"%local_url)
             continue
         elif parsed_url.scheme  or local_url.startswith('//'):
