@@ -12,7 +12,7 @@
  @since 0.0.1
 '''
 
-from conf import C,log
+from conf import C,log,BASE_DIR
 import shutil
 import os
 import re
@@ -25,9 +25,9 @@ from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,all_url
 
-RJS_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','r.js'))
-RPL_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets','rpl.js'))
-YC_PATH = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../assets',C('yuicompressor')))
+RJS_PATH = os.path.join(BASE_DIR,'../assets','r.js')
+RPL_PATH = os.path.join(BASE_DIR,'../assets','rpl.js')
+YC_PATH = os.path.join(BASE_DIR,'../assets',C('yuicompressor'))
 
 class UrsaBuilder(object):
     '''

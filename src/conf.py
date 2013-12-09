@@ -34,6 +34,8 @@ _MIN_CACHE_INTERVAL=1
 
 _DEFAULT_TARGET='local'
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__)) 
+
 #These are the default configurations,if any item not defined in {_MANIFEST_FILE},it will work
 _DEFAULT_ITEMS={
     'encoding':'utf-8',

@@ -19,7 +19,7 @@ import os
 import sys
 import re
 import json
-from conf import C,log
+from conf import C,log,BASE_DIR
 from render import render,render_file,getData
 from replace import replace
 from timestamp import html_link,html_script,all_url
@@ -62,7 +62,7 @@ def index(req,res):
         else:
             _tpls.append(e);
 
-    index_path=os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
+    index_path=os.path.join(BASE_DIR,'../tpl','index.html')
     html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)
     res.send(html)
 
@@ -99,7 +99,7 @@ def m(req,res):
         data=utils.readfile(json_path)
     except Exception, e:
         log.error('%s:%s'%(json_path,e))
-    mgr_path=utils.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','mgr.html'))
+    mgr_path=os.path.join(BASE_DIR,'../tpl','mgr.html')
     html=render_file(mgr_path,{"name":tpl_token,"data":data},noEnvironment=True)
     res.send(html)
 
