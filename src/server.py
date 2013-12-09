@@ -19,13 +19,14 @@ from route import Route
 from conf import C,log
 import utils
 import socket
-from handler import static,index,tpl,so,m
+from handler import static,index,tpl,so,m,data
 
 ursa_router=Route()
 ursa_router.get(r'^/$',index)
 ursa_router.get(r'\.%s$'%C('preview_ext'),tpl)
 ursa_router.post(r'\.so$',so)
 ursa_router.get(r'\.m$',m)
+ursa_router.get(r'\.data$',data)
 ursa_router.get(r'^/.+',static)
 
 class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):

@@ -20,7 +20,7 @@ import sys
 import re
 import json
 from conf import C,log
-from render import render,render_file
+from render import render,render_file,getData
 from replace import replace
 from timestamp import html_link,html_script,all_url
 from build import UrsaBuilder
@@ -31,9 +31,8 @@ def _token(path):
     '''
     去除后缀，取得相对于模板目录的相对无扩展名路径
     '''
-    tpl_token=re.sub(r'\.(%s|%s|%s)$'%(C('preview_ext'),'m',C('template_ext')),'',path)
-    if tpl_token.startswith(os.path.sep):
-        tpl_token=tpl_token[1:]
+    tpl_token=re.sub(r'\.(%s|%s|%s|%s)$'%(C('preview_ext'),'m','data',C('template_ext')),'',path)
+    tpl_token=re.sub(r'^/*','',tpl_token)
     return tpl_token
 
 
@@ -66,6 +65,7 @@ def index(req,res):
     index_path=os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),'../tpl','index.html'))
     html=render_file(index_path,{"tpls":_tpls},noEnvironment=True)
     res.send(html)
+
 def tpl(req,res):
     '''
     模板
@@ -79,6 +79,14 @@ def tpl(req,res):
         html=all_url(html,base_dir)
     html=replace(html)
     res.send(html)
+
+def data(req,res):
+    '''
+    '''
+    tpl_token = _token(req.path)
+    data=getData(tpl_token)
+    print data
+    return res.send(json.dumps(data),headers={'Content-Type':'application/json'})
 
 def m(req,res):
     '''

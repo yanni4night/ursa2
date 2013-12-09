@@ -48,7 +48,7 @@ def getData(token):
     deps.insert(0,"_ursa.json")
     for dep in deps:
         try:
-            json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'tpl$','json',dep)))
+            json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'%s$'%C('template_ext'),'json',dep)))
             content = utils.readfile(json_filepath)
             content=re.sub('\/\*[\s\S]*?\*\/','',content)
             json_data = json.loads(content)
@@ -65,20 +65,6 @@ def render(token,build=False):
         token = token[1:]
     
     data = getData(token)
-    #df=DepsFinder(token)
-    #deps=df.find()
-    #deps.insert(0,"_ursa.json")
-    #for dep in deps:
-        #try:
-            #json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'tpl$','json',dep)))
-            #content = utils.readfile(json_filepath)
-            #content=re.sub('\/\*[\s\S]*?\*\/','',content)
-            #json_data = json.loads(content)
-            ##todo
-            #data.update(json_data)
-        #except Exception, e:
-            #log.warn('%s:%s'%(json_filepath,e))
-
     multoken = token.split('/')
     data.update({'_token':token.replace('/','_')})
     data.update({'_folder':multoken[0]})
