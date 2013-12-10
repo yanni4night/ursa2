@@ -23,7 +23,7 @@ import utils
 from render import render
 from exception import ConfigurationError,DirectoryError
 from replace import replace
-from timestamp import html_link,html_script,all_url
+from timestamp import html_link,html_script,html_img,all_url
 
 RJS_PATH = os.path.join(BASE_DIR,'../assets','r.js')
 RPL_PATH = os.path.join(BASE_DIR,'../assets','rpl.js')
@@ -119,18 +119,27 @@ class UrsaBuilder(object):
     def _css(self):
         '''
         handle css
+
+        r.js会对不同目录下CSS合并时的URL进行修正，因而对于@something@开头的路径会被认为是相对路径，
+        产生修正错误，解决方案是先对所有CSS文件进行变量替换，时间戳添加，再由r.js合并。这会降低处理速
+        度但可以解决该问题。
+
+        考虑到速度，此过程仅支持在build时进行，开发服务器访问时不能使用。
+
+        所有静态资源路径都应该使用绝对路径，避免在CSS中引用相对路径的图像资源。
         '''
+
+        #搜索所有CSS文件
         all_css_files=utils.FileSearcher(r'\.css$',self._build_css_dir,relative=False).search()
 
-        #replace and timsstamp all css files
+        #替换和加时间戳
         for dst in all_css_files:
             content=utils.readfile(dst)
-            #timestamp
             content=all_url(content,os.path.dirname(dst))
             content=replace(content,self._target)
             utils.writefile(dst,content)
 
-
+        #仅对指定的CSS进行r.js合并
         css_modules=C('require_css_modules')
         if not utils.isList(css_modules):
             css_modules=['main']
@@ -149,6 +158,8 @@ class UrsaBuilder(object):
     def build_css(self,src,dst):
         '''
         handle one css src to dst
+
+        合并和按需压缩
         '''
         subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell=True)
         if self._compress:
@@ -158,6 +169,9 @@ class UrsaBuilder(object):
     def _js(self):
         '''
         handle js
+
+        JS文件不同于CSS，其本身不能引用其它相对路径的静态资源，因此可以实现
+        先合并再替换、加时间戳，无需预先处理所有js文件。
         '''
         js_modules=C('require_modules') or C('require_js_modules')
         if not utils.isList(js_modules):
@@ -166,8 +180,7 @@ class UrsaBuilder(object):
         for js in js_modules:
             if not utils.isStr(js):
                 continue;
-            if js.startswith('/'):
-                js=js[1:]
+            js=re.sub(r'^\/+','',js)
             if not js.endswith('.js'):
                 js+='.js'
             js_realpath=os.path.join(self._build_js_dir,js)
@@ -177,6 +190,8 @@ class UrsaBuilder(object):
     def build_js(self,src,dst,base_dir):
         '''
         handle one js src to dst
+
+        合并、替换、加时间戳并按需压缩。
         '''
         js=os.path.relpath(src,base_dir)
         subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ dst + ' optimize=none baseUrl='\
@@ -194,6 +209,10 @@ class UrsaBuilder(object):
     def _tpl(self):
         '''
         handle tempaltes
+
+        模板仅需加时间戳和变量替换。
+
+        这里需要加入额外的{compile_dir}文件夹下的文本文件。
         '''
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
         tpls=fs.search()
@@ -208,8 +227,10 @@ class UrsaBuilder(object):
 
         for tpl in tpls:
             content = utils.readfile(tpl)
-            content = html_link(content,'.')#模板的静态资源相对目录应该写死为cwd
+            #模板的静态资源相对目录应该写死为cwd，即资源路径应该始终是绝对路径
+            content = html_link(content,'.')
             content = html_script(content,'.')
+            content = html_img(content,'.')
             content = all_url(content,'.')
             content = replace(content,self._target)
             utils.writefile(tpl,content)
@@ -218,6 +239,13 @@ class UrsaBuilder(object):
     def _html(self):
         '''
         generate html
+
+        HTML直接以输出好的模板文件做渲染。
+
+        由于数据原因个别子模板单独渲染会失败，这里用{html_force_output}变量
+        可以跳过这类模板。
+
+        TODO：考虑支持require_html_modules
         '''
         fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
         tpls=fs.search()
@@ -227,7 +255,7 @@ class UrsaBuilder(object):
                 target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
                 if not os.path.exists(target_dir):
                     os.makedirs(target_dir)
-                dst_file=re.sub(r'\.tpl$','.html',os.path.join(self._build_html_dir,tpl))
+                dst_file=re.sub(r'\.%s$'%C('template_ext'),'.html',os.path.join(self._build_html_dir,tpl))
                 utils.writefile(dst_file,html)
             except Exception,e:
                 if not C('html_force_output'):
@@ -238,5 +266,4 @@ class UrsaBuilder(object):
 
 if __name__ == '__main__':
     builder=UrsaBuilder(True,True,'online')
-    builder._dir()
-    builder._tpl()
+    builder.build()

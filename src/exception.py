@@ -34,4 +34,15 @@ class DirectoryError(Exception):
     @classmethod
     def __str__(self):
         return self.msg
+
+class FileSizeOverflowError(Exception):
+    '''
+    File size overflow Error
+    '''
+    @classmethod
+    def __init__(self,msg):
+        self.msg=msg
+    @classmethod
+    def __str__(self):
+        return self.msg
         

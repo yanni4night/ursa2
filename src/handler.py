@@ -76,12 +76,14 @@ def tpl(req,res):
         base_dir=os.path.join('.',os.path.dirname(req.path))
         html=html_script(html,base_dir)
         html=html_link(html,base_dir)
+        html=html_img(html,base_dir)
         html=all_url(html,base_dir)
     html=replace(html)
     res.send(html)
 
 def data(req,res):
     '''
+    获取对应模板的依赖数据组合
     '''
     tpl_token = _token(req.path)
     data=getData(tpl_token)
@@ -126,7 +128,7 @@ def static(req,res):
     '''
     static resource
     '''
-    req.path=re.sub(r'^/+','/',req.path)
+    req.path=re.sub(r'/{2,}','/',req.path)
     o=urlparse(req.path)
     #取得绝对路径
     fd=utils.abspath(o.path)
@@ -139,33 +141,12 @@ def static(req,res):
             if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.IGNORECASE):
                 content=utils.readfile(fd)
                 content=replace(content)
-                #server_mode build css files in {static_dir}
-                if C('server_mode') and fd.endswith('.css') and req.path.startswith('/'+C('static_dir')):
-                    tmpfile=os.path.dirname(fd)+"/%s-%s"%(utils.getDate(),os.path.basename(fd))
-                    try:
-                        builder=UrsaBuilder(C('server_mode_compress'),False)
-                        builder.build_css(fd,tmpfile)
-                        content=utils.readfile(tmpfile)
-                        content=replace(content)
-                    except Exception, e:
-                        log.error('[server_mode]%s'%e)
-                    finally:
-                        os.unlink(tmpfile)
-                 #server_mode build js files in {static_dir}
-                elif C('server_mode') and fd.endswith('.js') and req.path.startswith('/'+C('static_dir')):
-                    tmpfile=os.path.dirname(fd)+"/%s-%s"%(utils.getDate(),os.path.basename(fd))
-                    try:
-                        builder=UrsaBuilder(C('server_mode_compress'),False)
-                        builder.build_js(fd,tmpfile,os.path.join(C('static_dir'),C('js_dir')))
-                        content=utils.readfile(tmpfile)
-                    except Exception, e:
-                        log.error('[server_mode]%s'%e)
-                    finally:
-                        os.unlink(tmpfile)
-                elif C('server_add_timestamp') :
+               
+                if C('server_add_timestamp') :
                     base_dir=os.path.dirname(fd)
                     content=html_link(content,base_dir)
                     content=html_script(content,base_dir)
+                    content=html_img(content,base_dir)
                     content=all_url(content,base_dir)
                 #http encoding header
                 headers['Encoding']=C('encoding')

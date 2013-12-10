@@ -18,6 +18,7 @@ from conf import C,log
 
 class DepsFinder(object):
     '''
+    递归搜索指定模板文件的依赖模板
     '''
     @classmethod
     def __init__(self,tpl):
@@ -30,7 +31,7 @@ class DepsFinder(object):
             tpl+='.%s'%C('template_ext')
         self._tpl=tpl
         self._history={};
-        self._pattern=re.compile(r'\{%\s*(include|extends)\s+([\'"])([\w\/\\\.-]+\.tpl)\2\s*%\}',re.I|re.M)
+        self._pattern=re.compile(r'\{%\s*(include|extends)\s+([\'"])([\w\/\\\.-]+\.'+C('template_ext')+r')\2\s*%\}',re.I|re.M)
 
     @classmethod
     def _search(self,tpl):
@@ -39,8 +40,7 @@ class DepsFinder(object):
         '''
         try:
             #/x.tpl=>x.tpl
-            if tpl.startswith('/'):
-                tpl=tpl[1:]
+            tpl=re.sub(r'^\/+','',tpl)
             abspath=utils.abspath(os.path.join(C('template_dir'),tpl))
             
             if self._history.get(abspath) is not None:
@@ -48,7 +48,6 @@ class DepsFinder(object):
             else:
                 self._result.append(tpl)
                 self._history[abspath]=1
-
 
             content=utils.readfile(abspath)
             iters=re.finditer(self._pattern,content)

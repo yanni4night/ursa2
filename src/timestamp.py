@@ -5,6 +5,7 @@
 
  changelog
  2013-12-01[15:59:50]:created
+ 2013-12-10[11:17:11]:clean
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -18,10 +19,14 @@ import os
 from replace import replace
 from urlparse import urlparse,parse_qs
 
-def _addtimestamp(content,reg,base_dir):
+def _addtimestamp(content,reg,base_dir,force_abspath=False):
     '''
+    以base_dir为基础目录，在content中搜寻匹配reg的URL并尝试追加时间戳
+    
+    reg:匹配URL的正则，其中\3为URL
+    force_abspath:强制路径为绝对路径，即以WD为base_dir
     '''
-    iters=re.finditer(reg,content)
+    iters=re.finditer(reg,content,re.I|re.M)
     t=C('timestamp_name')
     for it in reversed(list(iters)):
         start = content[0:it.start(1)]
@@ -45,17 +50,13 @@ def _addtimestamp(content,reg,base_dir):
             log.warn("%s has a scheme"%local_url)
             continue
 
-        #problems
-        #HTML <link>,<script>,url() relative to html => should be absolute path
-        #JS <link>,<script>,url() as above
-        #CSS 
-        if os.path.isabs(parsed_url.path):
+        if os.path.isabs(parsed_url.path) or force_abspath:
             #绝对路径，则以当前工程根目录为root
-            timestamp=utils.getFileTimeStamp(utils.abspath(parsed_url.path))
+            timestamp=utils.get_file_timestamp(utils.abspath(parsed_url.path))
         else:
             #相对目录，则此当前文件目录为root
             #应该仅在CSS内使用相对路径
-            timestamp=utils.getFileTimeStamp(os.path.join(base_dir,parsed_url.path))
+            timestamp=utils.get_file_timestamp(os.path.join(base_dir,parsed_url.path))
 
         parsed_url=urlparse(url,False)
         new_query=parsed_url.query
@@ -80,18 +81,38 @@ def _addtimestamp(content,reg,base_dir):
 
 def html_link(content,base_dir="."):
     '''
+    向<html>中<link>元素添加时间戳
     '''
-    return _addtimestamp(content,r'<link.* href=(([\'"])(.*?\.css.*?)\2)',base_dir)
+    return _addtimestamp(content,r'<link.* href=(([\'"])(.*?\.css.*?)\2)',base_dir,force_abspath=True)
 
 def html_script(content,base_dir="."):
     '''
+    向<html>中<script>元素添加时间戳
     '''
-    return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir)
+    return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir,force_abspath=True)
+
+def html_img(content,base_dir='.'):
+    '''
+    向<html>中<img>元素添加时间戳
+    '''
+    return _addtimestamp(content,r'<img.* src=(([\'"])(.*?\.(png|gif|jpe?g|bmp|ico).*?)\2)',base_dir,force_abspath=True)
 
 def all_url(content,base_dir="."):
     '''
+    向HTML、CSS中的url()添加时间戳
     '''
     return _addtimestamp(content,r'url\((([\'"])?([\S]+?)\2?)\)',base_dir)
+
+def all(content,base_dir='.'):
+    '''
+    添加所有类型的时间戳
+    '''
+    content=html_link(content,base_dir)
+    content=html_script(content,base_dir)
+    content=html_img(content,base_dir)
+    content=all_url(content,base_dir)
+
+    return content
 
 if __name__ == '__main__':
     sample="url(@static_prefix@/www/js/main/ls.css?t=*&ty=09&bn==56#hjk)"

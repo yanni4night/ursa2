@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-#
-# server.py
-#
-# changelog
-# 2013-11-30[17:37:42]:created
-#
-# @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
-# @author yinyong@sogou-inc.com
-# @version 0.0.1
-# @since 0.0.1
-# @todo https support,proxy support
-#
+'''
+ server.py
+
+ changelog
+ 2013-11-30[17:37:42]:created
+
+ @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
+ @author yinyong@sogou-inc.com
+ @version 0.0.1
+ @since 0.0.1
+ @todo https support,proxy support
+'''
 
 from  BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
 from http import Request,Response
@@ -52,7 +52,6 @@ class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
         服务器名字
         '''
         return 'Ursa2'
-
 
 def run(port=8000):
     '''

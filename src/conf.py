@@ -36,26 +36,25 @@ _DEFAULT_TARGET='local'
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__)) 
 
-#These are the default configurations,if any item not defined in {_MANIFEST_FILE},it will work
+#默认配置选项
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
     'timestamp_name':'t',
     'template_dir':'template',
-    'data_dir':'_data',#json data dir
+    'data_dir':'_data',#JSON数据目录
     'module_dir':'_module',#under template_dir
     'common_dir':'_common',#under template_dir
-    'static_dir':"static",#static resource dir,like images,js and css
+    'static_dir':"static",#静态资源目录
     'css_dir':"css",#under static_dir
     'js_dir':"js",#under static_dir
     'build_dir':'build',
     'html_dir':'html',#under build_dir
     'template_ext':'tpl',
-    'preview_ext':'ut',#access /index.ut,you are reading {template_dir}/index.{template_ext} in fact
-    'num':10,
-    'yuicompressor':'yuicompressor-2.4.8.jar',
-    'js_ascii_only':False,#encode multi-bytes chars in ASCII encoding,like \u4E2D\u56FD
-    'server_mode':False,#In server mode,css&js will be merge.This will more time.
-    'server_mode_compress':False#compress or not in server mode
+    'preview_ext':'ut',#实时访问渲染后模板的URL后缀
+    'num':10,#随机变量的最大值
+    'max_readable_filesize':1024*1024,
+    'yuicompressor':'yuicompressor-2.4.8.jar',#yuicompressor的文件名，方便升降级
+    'js_ascii_only':False#转义中文为ASCII
 };
 
 

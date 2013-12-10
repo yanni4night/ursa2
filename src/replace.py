@@ -33,7 +33,7 @@ def replace(content,target=None):
         if file_path.startswith('/'):
             file_path=file_path[1:]
         file_path=utils.abspath(file_path)
-        content = content[0:i.start(0)] + utils.getFileTimeStamp(file_path) + content[i.end(0):]
+        content = content[0:i.start(0)] + utils.get_file_timestamp(file_path) + content[i.end(0):]
 
     iters = re.finditer( DATE_TOKEN , content )
     for i in reversed(list(iters)):

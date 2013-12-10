@@ -19,6 +19,7 @@ import re
 import hashlib
 import codecs
 from conf import C,log
+from exception import FileSizeOverflowError
 
 BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword)'
 
@@ -52,28 +53,25 @@ def isTuple(t):
     '''
     return type(t) == type(())
 
-def getTimeStamp():
-    '''
-    todo,
-    stupid python
-    '''
-    return time.time()
-
 def abspath(path):
     '''
-    get the absolute path of a file/directory in the current working directory
+    取得WD下文件或目录的绝对路径
+    path：WD下文件或目录，会被强转成相对路径
     '''
     if not isStr(path):
         raise TypeError('path must be a string')
-    if os.path.isabs(path):
-        path=path[1:]
+    path=re.sub(r'^\/+','',path)
     return os.path.abspath(os.path.join(os.getcwd(),path))
 
 def readfile(filename  , mode='r'):
     '''
-    get the content of a file
+    默认以文本方式读取整个文件
     '''
     try:
+
+        if os.path.getsize(filename) > C('max_readable_filesize'):
+            raise FileSizeOverflowError('%s size overflow %d'%(filename,C('max_readable_filesize')))
+
         if 'b' in mode:#Binary file
             f = open( filename , mode )
         else:
@@ -135,9 +133,10 @@ def md5toInt(md5):
         
     return result
 
-def getFileTimeStamp(fpath):
+def get_file_timestamp(fpath):
     '''
-    绝对路径
+    取得文件时间戳
+    fpath:绝对路径
     '''
     try:
         f = readfile(fpath , 'rb')
@@ -149,18 +148,17 @@ def getFileTimeStamp(fpath):
         log.error('[TimeStamp]%s'%e)
     return ''
 
-def getDate():
+def getDate(fmt="%Y%m%d%H%M%S"):
     '''
-    to be checked
+    获取当前时间的格式化字符串
     '''
-    return time.strftime("%Y%m%d%H%M%S", time.localtime())
+    return time.strftime(fmt or '', time.localtime())
 
 class FileSearcher(object):
     '''
     搜索一个目录下所有符合规定文件名的文件,
     默认返回相对于初始目录的相对路径
     '''
-    result=[]
     @classmethod
     def __init__(self, pattern=r'.+', start_dir='.',relative=True,traverse=True):
         '''
