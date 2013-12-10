@@ -16,15 +16,13 @@
 import os
 import json
 import re
-import  logbook
+import logging
 from datetime import datetime
 import time
 
-#log settings
-logbook.set_datetime_format('local')
-log=logbook.Logger('ursa2')
+logger = log = logging
 
-#for configuration cache
+#配置缓存
 _last_read_time=0
 _conf_cache={}
 
@@ -33,13 +31,15 @@ _MANIFEST_FILE='manifest.json'
 _MIN_CACHE_INTERVAL=1
 
 _DEFAULT_TARGET='local'
-
+#ursa2 Python源文件目录
 BASE_DIR = os.path.abspath(os.path.dirname(__file__)) 
 
 #默认配置选项
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
-    'timestamp_name':'t',
+    'log_level':'debug',#日子级别
+    'timestamp_name':'t',#时间戳参数名
+    'log_http_request':False,#是否打印HTTP请求日志
     'template_dir':'template',
     'data_dir':'_data',#JSON数据目录
     'module_dir':'_module',#under template_dir
@@ -112,6 +112,14 @@ def C(key,target=None,default_val=None):
         return conf.get(key)
     else:
         return _DEFAULT_ITEMS.get(key) or default_val
+
+#日子级别设置
+__illegal_log_levels={'info':logger.INFO,'debug':logger.DEBUG,'warn':logger.WARNING,'error':logger.ERROR,'critical':logger.CRITICAL}
+__log_level = C('log_level')
+if __illegal_log_levels.get(__log_level) is not None:
+    log.basicConfig(level=__illegal_log_levels.get(__log_level))
+else:
+    log.basicConfig(level=__illegal_log_levels.get('info'))
 
 if __name__=='__main__':
     print C('template_dir');

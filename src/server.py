@@ -53,6 +53,22 @@ class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
         '''
         return 'Ursa2'
 
+    @classmethod
+    def log_date_time_string(self):
+        '''
+        服务器日志日期格式
+        '''
+        return utils.getDate(fmt="%Y/%m/%d %H:%M:%S")
+    
+    def log_request(self , code , message=''):
+        '''
+        服务器日志输出
+        '''
+        if C('log_http_request'):
+            return BaseHTTPRequestHandler.log_request(self,code,message)
+        else:
+            return ''
+
 def run(port=8000):
     '''
     服务器启动入口
@@ -67,14 +83,13 @@ def run(port=8000):
     server_addr=('',port);
     try:
         httpd=HTTPServer(server_addr,UrsaHTTPRequestHandler)
-        log.info("Server listen on %d" %  port)
+        print "Server listen on %d" %  port
         httpd.serve_forever()
     except (KeyboardInterrupt , SystemExit):
-        log.info("Shutting down.Goodbye!")
+        print "Shutting down.Goodbye!"
         httpd.socket.close()
-    except socket.error:
-        log.error('Maybe port ' + str(port) + ' already in use')
-        log.error('You can try another port by use "ursa start 8234"')
+    except socket.error,e:
+        log.error(e)
         sys.exit(1)
 
 
