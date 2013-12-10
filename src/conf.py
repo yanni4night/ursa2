@@ -17,10 +17,11 @@ import os
 import json
 import re
 import logging
+from  log import GMessageLog
 from datetime import datetime
 import time
 
-logger = log = logging
+log=GMessageLog()
 
 #配置缓存
 _last_read_time=0
@@ -37,6 +38,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 #默认配置选项
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
+    'enable_proxy':False,
     'http_port':8000,#http 端口
     'log_level':'debug',#日子级别
     'timestamp_name':'t',#时间戳参数名
@@ -115,12 +117,12 @@ def C(key,target=None,default_val=None):
         return _DEFAULT_ITEMS.get(key) or default_val
 
 #日子级别设置
-__illegal_log_levels={'info':logger.INFO,'debug':logger.DEBUG,'warn':logger.WARNING,'error':logger.ERROR,'critical':logger.CRITICAL}
+__illegal_log_levels={'info':logging.INFO,'debug':logging.DEBUG,'warn':logging.WARNING,'error':logging.ERROR,'critical':logging.CRITICAL}
 __log_level = C('log_level')
 if __illegal_log_levels.get(__log_level) is not None:
-    log.basicConfig(level=__illegal_log_levels.get(__log_level))
+    log.setLevel(__illegal_log_levels.get(__log_level))
 else:
-    log.basicConfig(level=__illegal_log_levels.get('info'))
+    log.setLevel(__illegal_log_levels.get('info'))
 
 if __name__=='__main__':
     print C('template_dir');

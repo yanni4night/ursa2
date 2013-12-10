@@ -13,7 +13,9 @@
 '''
 from http import Request,Response
 import re
+from conf import C,log
 from urlparse import urlparse
+import utils
 
 class Route(object):
     '''
@@ -28,6 +30,18 @@ class Route(object):
         '''
         path=urlparse(http_req_handler.path).path
         handled=False
+
+        #代理支持
+        if C('enable_proxy') and utils.isDict(C('proxy')):
+            for reg,target in C('proxy').items():
+                if not utils.isStr(reg) or not utils.isStr(target):
+                    log.warn('%s:%s is an illegal proxy pair'%(reg,target))
+                    continue
+                if re.match(r'%s'%reg,http_req_handler.path):
+                    target_path=re.sub(r'%s'%reg,r'%s'%target,http_req_handler.path)
+                    print target_path
+
+
         for h in self.handlers:
             if 'ALL' == h.get('method') or h.get('method') == http_req_handler.command and re.findall(h.get('pattern'),path):
                 handled=True
@@ -39,6 +53,7 @@ class Route(object):
         #if not handled by any handlers,405
         if not handled:
             log.error('%s is not handled'%path)
+            http_req_handler.send_header(405,'%s not supported'%path)
             http_req_handler.end_headers()
             self.http_req_handler.wfile.close()
 

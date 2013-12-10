@@ -5,6 +5,7 @@
 
  changelog
  2013-12-07[12:01:09]:created
+ 2013-12-10[22:40:30]:add build time show
 
  @info yinyong,osx-x64,UTF-8,192.168.1.104,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -13,6 +14,7 @@
 '''
 
 from conf import C,log,BASE_DIR
+import logging
 import shutil
 import os
 import re
@@ -20,6 +22,7 @@ import sys
 import subprocess
 import mimetypes
 import utils
+import time
 from render import render
 from exception import ConfigurationError,DirectoryError
 from replace import replace
@@ -38,7 +41,9 @@ class UrsaBuilder(object):
     @classmethod
     def __init__(self,compress,html,target=None):
         '''
+        预先计算一些基础路径
         '''
+        log.setLevel(logging.DEBUG)
         self._compress=compress
         self._generate_html=html
         self._target=target
@@ -76,23 +81,33 @@ class UrsaBuilder(object):
         '''
         do build
         '''
+        tmbegin = time.time()
         self._check();
+        log.info ('copying directories')
         self._dir();
+        log.info('handling less...');
         self._less();
+        log.info ('handling css...')
         self._css();
+        log.info ('handling  javascript...')
         self._js();
+        log.info ('handling template...')
         self._tpl();
         if self._generate_html:
+            log.info ('handling html...')
             self._html();
+        log.info ('Time cost %s s.' % (time.time()-tmbegin) )
 
     @classmethod
     def _check(self):
         '''
+        检查是否具备一个ursa2工程必备的文件和目录
         '''
         require_dirs=[self._tpl_dir,self._static_dir];
         for d in require_dirs:
             if not os.path.exists(d):
-                raise DirectoryError('Ursa project requires %s directory'%d)
+                raise DirectoryError('Ursas project requires %s directory'%d)
+
     @classmethod
     def _dir(self):
         '''

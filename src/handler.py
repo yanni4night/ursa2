@@ -23,7 +23,6 @@ from conf import C,log,BASE_DIR
 from render import render,render_file,getData
 from replace import replace
 from timestamp import html_link,html_script,all_url
-from build import UrsaBuilder
 
 mimetypes.init()
 
