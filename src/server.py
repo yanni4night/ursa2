@@ -73,12 +73,13 @@ def run(port=8000):
     '''
     服务器启动入口
     '''
-    port = port or 8000
     try:
         port=int(port)
     except Exception, e:
-        log.error(e)
-        port=8000
+        try:
+            port=int(C('http_port'))
+        except Exception, e:
+            port=8000
 
     server_addr=('',port);
     try:

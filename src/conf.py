@@ -37,6 +37,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 #默认配置选项
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
+    'http_port':8000,#http 端口
     'log_level':'debug',#日子级别
     'timestamp_name':'t',#时间戳参数名
     'log_http_request':False,#是否打印HTTP请求日志
