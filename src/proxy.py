@@ -25,13 +25,13 @@ def proxy(target_url,req,res):
     '''
     '''
     if not target_url:
-        return res.send(code=500,content='Empty url not supported')
+        return res.send(code = 500,content = 'Empty url not supported')
 
     #二进制资源直接重定向
     parsed_url = urlparse(target_url)
     mime = mimetypes.guess_type(parsed_url.path,False)
     content_type = mime[0] or 'text/plain'
-    if re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.IGNORECASE):
+    if re.match( utils.BINARY_CONTENT_TYPE_KEYWORDS , content_type,re.IGNORECASE ):
         return res.redirect(target_url)
 
     if 'GET' == req.method:
@@ -40,14 +40,22 @@ def proxy(target_url,req,res):
         request = R.post
 
     try:
-        r = request(target_url)
-        return res.send(code=r.status_code,content=r.content or '')
+        #通知远端服务器不要压缩
+        if req.headers.get('accept-encoding'):
+            del req.headers['accept-encoding']
+        r = request(target_url,headers=req.headers)
+        #本地服务器覆写Date和Server
+        if r.headers.get('date'):
+            del r.headers['date']
+        if r.headers.get('server'):
+            del r.headers['server']
+        return res.send(code = r.status_code,content = r.content or '',headers =  r.headers)
     except Exception, e:
         log.error('[proxy]%s'%e)
-        return res.send(code=500,content=str(e))
+        return res.send(code = 500,content = str(e))
 
 def main():
-    r=R.get('http://www.w3.org/TR/css3-color/')
+    r = R.get('http://www.w3.org/TR/css3-color/',data={'name':"yes"})
     print r.headers.get('Content-Type')
 
 

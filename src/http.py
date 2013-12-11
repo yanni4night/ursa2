@@ -31,6 +31,7 @@ class Request(object):
         self.method=http_req_handler.command
         self.client_port=http_req_handler.client_address[1]
         self.client_host=http_req_handler.client_address[0]
+        self.headers=http_req_handler.headers
 
         if 'GET' == self.method:
             #get请求解析url
@@ -88,7 +89,7 @@ class Response(object):
         for k in headers.keys():
             self.http_req_handler.send_header(k,headers.get(k))
         if not headers.get('Content-Type'):
-            headers['Content-Type']='text/html'
+            headers['Content-Type']='text/html;charset='+C('encoding')
 
         if content is not None and not re.match(r'(image|video|flash|audio|powerpoint|msword)',headers['Content-Type'],re.IGNORECASE):
             try:
