@@ -38,6 +38,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 #默认配置选项
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
+    'protocol':'http',
     'enable_proxy':False,
     'http_port':8000,#http 端口
     'log_level':'debug',#日子级别

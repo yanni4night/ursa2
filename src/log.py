@@ -1,3 +1,16 @@
+'''
+ log.py
+
+ changelog
+ 2013-12-11[10:19:52]:copyright
+
+ This is from the Internet.
+
+ @info yinyong,osx-x64,Undefined,10.129.164.77,py,/Volumes/yinyong/ursa2/src
+ @author yinyong@sogou-inc.com
+ @version 0.0.1
+ @since 0.0.1
+'''
 import logging
 import time
 import logging.handlers
