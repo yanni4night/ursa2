@@ -16,6 +16,7 @@ import re
 from conf import C,log
 from urlparse import urlparse
 import utils
+from proxy import proxy
 
 class Route(object):
     '''
@@ -39,7 +40,7 @@ class Route(object):
                     continue
                 if re.match(r'%s'%reg,http_req_handler.path):
                     target_path=re.sub(r'%s'%reg,r'%s'%target,http_req_handler.path)
-                    print target_path
+                    return proxy(target_path,Request(http_req_handler),Response(http_req_handler))
 
 
         for h in self.handlers:

@@ -32,6 +32,8 @@ RJS_PATH = os.path.join(BASE_DIR,'../assets','r.js')
 RPL_PATH = os.path.join(BASE_DIR,'../assets','rpl.js')
 YC_PATH = os.path.join(BASE_DIR,'../assets',C('yuicompressor'))
 
+mimetypes.init();
+
 class UrsaBuilder(object):
     '''
     build project:
