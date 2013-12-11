@@ -6,6 +6,7 @@
 
  changelog
  2013-11-30[22:32:36]:created
+ 2013-12-11[10:51:16]:better error report
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -23,6 +24,8 @@ from conf import C,log,BASE_DIR
 from render import render,render_file,getData
 from replace import replace
 from timestamp import html_link,html_script,all_url
+from jinja2 import TemplateNotFound,TemplateSyntaxError
+
 
 mimetypes.init()
 
@@ -70,7 +73,14 @@ def tpl(req,res):
     模板
     '''
     tpl_token=_token(req.path)
-    html=render(tpl_token)
+    try:
+        html=render(tpl_token)
+    except TemplateNotFound as e:
+        return res.send(code=500,content='Template %s not found' % (str(e) ,))
+    except TemplateSyntaxError as e:
+        return res.send(code=500,content='Template %s:%d Syntax Error:%s' % (e.filename,e.lineno,e.message))
+    except Exception, e:
+        return res.send(code=500,content='%s'%e)
     if C('server_add_timestamp'):
         base_dir=os.path.join('.',os.path.dirname(req.path))
         html=html_script(html,base_dir)

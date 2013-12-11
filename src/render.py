@@ -54,7 +54,7 @@ def getData(token):
             json_data = json.loads(content)
             data.update(json_data)
         except Exception, e:
-            log.warn('%s:%s'%(json_filepath,e))
+            log.warn('[getdata]%s:%s'%(json_filepath,e))
     return data
 
 def render(token,build=False):

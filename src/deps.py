@@ -55,9 +55,8 @@ class DepsFinder(object):
             for i in reversed(list(iters)):
                 self._search(i.group(3))
 
-
         except Exception, e:
-            log.error(e)
+            log.error('[deps]%s'%e)
 
     @classmethod
     def find(self):
