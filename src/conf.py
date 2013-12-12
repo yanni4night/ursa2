@@ -39,6 +39,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 _DEFAULT_ITEMS={
     'encoding':'utf-8',
     'protocol':'http',
+    'server_add_timestam':False,
     'enable_proxy':False,
     'http_port':8000,#http 端口
     'log_level':'debug',#日子级别
@@ -50,7 +51,10 @@ _DEFAULT_ITEMS={
     'common_dir':'_common',#under template_dir
     'static_dir':"static",#静态资源目录
     'css_dir':"css",#under static_dir
+    'css_folder':'',
     'js_dir':"js",#under static_dir
+    'js_folder':'',
+    'compile_folder':None,
     'build_dir':'build',
     'html_dir':'html',#under build_dir
     'template_ext':'tpl',
