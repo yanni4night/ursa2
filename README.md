@@ -2,6 +2,12 @@ ursa2
 =====
 2nd of [ursa](https://github.com/sogou-ufo/ursa)
 
+
+doc
+=====
+ - [manifest.json](https://github.com/yanni4night/ursa2/wiki/manifest.json)
+
+
 LICENCE
 =====
 The MIT License (MIT)
