@@ -64,8 +64,8 @@ def render(token,build=False):
     '''
     查找数据文件依赖并渲染模板
     '''
-    if token.startswith('/'):
-        token = token[1:]
+    #remove '/'s at start
+    token=re.sub(r'^/+','',token)
     
     data = getData(token)
     multoken = token.split('/')
