@@ -40,6 +40,7 @@ _DEFAULT_ITEMS={
     'encoding':'utf-8',
     'protocol':'http',
     'server_add_timestam':False,
+    'disable_deps_search':False,#禁止模拟数据搜索
     'enable_proxy':False,
     'http_port':8000,#http 端口
     'log_level':'debug',#日子级别

@@ -42,9 +42,12 @@ def getData(token):
     '''
     '''
     data={}
-    df=DepsFinder(token)
-    deps=df.find()
-    deps.reverse()
+    if C('disable_deps_search'):
+        deps=[token+'.'+C('template_ext')]
+    else:
+        df=DepsFinder(token)
+        deps=df.find()
+        deps.reverse()
     deps.insert(0,"_ursa.json")
     for dep in deps:
         try:
