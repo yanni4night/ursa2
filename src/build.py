@@ -30,7 +30,20 @@ from timestamp import html_link,html_script,html_img,all_url
 
 RJS_PATH = os.path.join(BASE_DIR,'../assets','r.js')
 RPL_PATH = os.path.join(BASE_DIR,'../assets','rpl.js')
-YC_PATH = os.path.join(BASE_DIR,'../assets',C('yuicompressor'))
+
+#custom defined yuicompressor
+__ycpath = C('yuicompressor')
+YC_PATH = None
+if __ycpath and utils.isStr( __ycpath ):
+    if not os.path.exists( __ycpath ):
+        log.warn('%s does not exist'%__ycpath )
+    elif not os.path.isfile( __ycpath ) or not __ycpath.endswith('.jar'):
+        log.warn('%s is not valid yuicompressor file')
+    else:
+        YC_PATH = __ycpath
+
+if not YC_PATH:
+    YC_PATH = os.path.join(BASE_DIR,'../assets','yuicompressor-2.4.8.jar')
 
 mimetypes.init();
 

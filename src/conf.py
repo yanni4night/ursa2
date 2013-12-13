@@ -41,7 +41,7 @@ _DEFAULT_ITEMS={
     'protocol':'http',
     'server_add_timestam':False,
     'disable_deps_search':False,#禁止模拟数据搜索
-    'enable_proxy':False,
+    'enable_proxy':False,#代理开关
     'http_port':8000,#http 端口
     'log_level':'debug',#日子级别
     'timestamp_name':'t',#时间戳参数名
@@ -52,9 +52,9 @@ _DEFAULT_ITEMS={
     'common_dir':'_common',#under template_dir
     'static_dir':"static",#静态资源目录
     'css_dir':"css",#under static_dir
-    'css_folder':'',
+    'css_folder':'',#{css_dir}下的子目录
     'js_dir':"js",#under static_dir
-    'js_folder':'',
+    'js_folder':'',#{js_dir}下的子目录
     'compile_folder':None,
     'build_dir':'build',
     'html_dir':'html',#under build_dir
@@ -62,7 +62,7 @@ _DEFAULT_ITEMS={
     'preview_ext':'ut',#实时访问渲染后模板的URL后缀
     'num':10,#随机变量的最大值
     'max_readable_filesize':1024*1024,
-    'yuicompressor':'yuicompressor-2.4.8.jar',#yuicompressor的文件名，方便升降级
+    'yuicompressor':None,#自定义yuicompressor的路径
     'js_ascii_only':False#转义中文为ASCII
 };
 
