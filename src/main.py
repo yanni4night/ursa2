@@ -12,21 +12,18 @@
  @since 0.0.1
 '''
 
-from conf  import log,C,BASE_DIR
 from docopt import docopt
 from __init__ import __version__ as version
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-
+BASE_DIR = os.path.abspath(os.path.dirname(__file__)) 
+sys.path.append(BASE_DIR)
 
 def copyfiles(sourceDir, targetDir):
-    """拷贝文件夹
-    
-    Arguments:
-    - `filename`:
-    """
+    '''
+    拷贝文件和目录
+    '''
     for file in os.listdir(sourceDir): 
         sourceFile = os.path.join(sourceDir,  file) 
         targetFile = os.path.join(targetDir,  file) 
@@ -58,14 +55,16 @@ def run():
     argv=docopt(run.__doc__,version=version)
     if argv.get('init'):
         if os.listdir( '.' ):
-            log.warn('Not an empty folder.\nContinue may change your exists files.\nStill Continue?')
+            print "It's not an empty folder.\nContinue may override your existing files.\nStill continue initializing?"
             iscontinue = raw_input('(y/n):').lower() in ['y' , 'yes','ok' ]
             if not iscontinue:
-                log.info('User cancel init.')
+                print ('Initializing canceled.')
                 sys.exit(1)
-        log.info('Begin to init current folder')
+        print ('Initializing project...')
         copyfiles(os.path.join(BASE_DIR,'../assets','clo'),'.')
-        log.info('Init success.')
+        print ('Initializing successfully.Usage:')
+        print ('       start serer:ursa2 start')
+        print ('       build project:ursa2 build')
     elif argv.get('start'):
         server=__import__('server')
         server.run(argv.get('<port>'))
