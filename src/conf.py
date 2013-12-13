@@ -37,16 +37,16 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 #默认配置选项
 _DEFAULT_ITEMS={
-    'encoding':'utf-8',
-    'protocol':'http',
-    'server_add_timestam':False,
+    'encoding':'utf-8',#项目编码，要求所有文件及输出均为此值
+    'protocol':'http',#使用协议，http或https
+    'server_add_timestamp':False,#是否在本地调试服务器上追加时间戳
     'disable_deps_search':False,#禁止模拟数据搜索
     'enable_proxy':False,#代理开关
-    'http_port':8000,#http 端口
-    'log_level':'debug',#日子级别
+    'server_port':8000,#http 或https端口
+    'log_level':'debug',#日志级别
     'timestamp_name':'t',#时间戳参数名
     'log_http_request':False,#是否打印HTTP请求日志
-    'template_dir':'template',
+    'template_dir':'template',#模板目录
     'data_dir':'_data',#JSON数据目录
     'module_dir':'_module',#under template_dir
     'common_dir':'_common',#under template_dir
@@ -55,15 +55,15 @@ _DEFAULT_ITEMS={
     'css_folder':'',#{css_dir}下的子目录
     'js_dir':"js",#under static_dir
     'js_folder':'',#{js_dir}下的子目录
-    'compile_folder':None,
-    'build_dir':'build',
+    'compile_folder':None,#额外的目录，文本文件仅做替换和时间戳处理
+    'build_dir':'build',#生成目录
     'html_dir':'html',#under build_dir
-    'template_ext':'tpl',
+    'template_ext':'tpl',#模板文件扩展名
     'preview_ext':'ut',#实时访问渲染后模板的URL后缀
     'num':10,#随机变量的最大值
-    'max_readable_filesize':1024*1024,
+    'max_readable_filesize':1024*1024,#可读取的最大文件，文件过大会严重迟缓并占用内存
     'yuicompressor':None,#自定义yuicompressor的路径
-    'js_ascii_only':False#转义中文为ASCII
+    'js_ascii_only':False#转义多字节为ASCII
 };
 
 
@@ -128,7 +128,7 @@ __log_level = C('log_level')
 if __illegal_log_levels.get(__log_level) is not None:
     log.setLevel(__illegal_log_levels.get(__log_level))
 else:
-    log.setLevel(__illegal_log_levels.get('info'))
+    log.setLevel(__illegal_log_levels.get('error'))
 
 if __name__=='__main__':
     print C('template_dir');

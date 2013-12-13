@@ -8,8 +8,7 @@
         "css_folder":"subfolder",
 
         "protocol":"both",/*http|https|both*/
-        "http_port":8080,
-        "https_port":8443,
+        "server_port":8080,
         "js_ascii_only":true,
         "enable_proxy":true,
         "js_compressor":"yuicompressor",/*yuicompressor|uglify*/

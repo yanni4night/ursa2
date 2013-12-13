@@ -122,7 +122,7 @@ def run(port=8000):
         port=int(port)
     except Exception, e:
         try:
-            port=int(C('http_port'))
+            port=int(C('server_port'))
         except Exception, e:
             port=8000
  
