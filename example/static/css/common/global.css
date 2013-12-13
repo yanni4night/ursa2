@@ -1,0 +1,36 @@
+/**
+  * global.css
+  *
+  * changelog
+  * 2013-12-14[00:47:14]:created
+  *
+  * @info yinyong,osx-x64,UTF-8,192.168.1.100,css,/Volumes/yinyong/ursa2/example/static/css/common
+  * @author yinyong#sogou-inc.com
+  * @version 0.0.1
+  * @since 0.0.1
+  */
+.w-fil{width: 100%;}
+.h-fil{height: 100%;}
+.w-cen{margin-left: auto;margin-right: auto;}
+.c-fot{color: #000;font-size: 14px;}
+.mt{margin-top: 10px;}
+.p24{font-size: 24px;}
+.p18{font-size: 18px;}
+.p16{font-size: 16px;}
+.p14{font-size: 14px;}
+.p12{font-size: 12px;}
+.p9{font-size: 9px;}
+.tc{text-align: center;}
+.hide{display: none !important;}
+.w-wbg { background-color: #fff; }
+.t-ell { overflow: hidden; text-overflow:ellipsis;white-space: nowrap;}
+.f-f { display: -webkit-box; display: -webkit-flex; display: -moz-box; display: -moz-flex; display: flex; }
+.f-vc { -webkit-box-align:center; -webkit-align-items:center; -moz-box-align:center; -moz-align-items:center; box-align:center; align-items:center; }
+.f-hc { -webkit-box-pack:center; -webkit-justify-content:center; -moz-box-pack:center; -moz-justify-content:center; box-pack:center; justify-content:center; }
+.f-hr { -webkit-box-pack:end; -webkit-justify-content:flex-end; -moz-box-pack:end; -moz-justify-content:flex-end; box-pack:end; justify-content:flex-end; }
+.f-hl { -webkit-box-pack:start; -webkit-justify-content:flex-start; -moz-box-pack:start; -moz-justify-content:flex-start; box-pack:start; justify-content:flex-start; }
+.f-j{ -webkit-box-pack: justify; -webkit-justify-content: space-between; -moz-box-pack: justify; -moz-justify-content: space-between; box-pack: justify; justify-content: space-between; }
+.f-1 { -webkit-box-flex: 1; -webkit-flex:1; -moz-box-flex: 1; -moz-flex:1; flex:1; }
+.c-fot { color:#000; }
+.c-fot:visited { color: #000; }
+.cf:after { display: block; visibility: hidden; clear: both; height: 0; content:""; font-size: 0; }

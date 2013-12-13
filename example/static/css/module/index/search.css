@@ -1,0 +1,14 @@
+/**
+  * search.css
+  *
+  * changelog
+  * 2013-12-14[00:57:27]:created
+  *
+  * @info yinyong,osx-x64,UTF-8,192.168.1.100,css,/Volumes/yinyong/ursa2/example/static/css/module/index
+  * @author yinyong#sogou-inc.com
+  * @version 0.0.1
+  * @since 0.0.1
+  */
+form.search{border:1px solid #eee;border-radius: 3px;}
+form.search input[type="search"]{height: 25px;font-size: 18px;background: none;border:none;padding: 3px 0 3px 1em;}
+form.search button[type="submit"]{padding: 5px 1em;}

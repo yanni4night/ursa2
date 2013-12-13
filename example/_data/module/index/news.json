@@ -1,0 +1,13 @@
+{
+    /*common type*/
+    "news": [{
+        "url": "#",
+        "title": "U.S. House approves bipartisan budget deal"
+    },{
+        "url": "#",
+        "title": "Austria big parties agree on grand coalition"
+    },{
+        "url": "#",
+        "title": "GMS ministers endorse decade-long regional investment framework"
+    }]
+}

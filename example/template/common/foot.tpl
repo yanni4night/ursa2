@@ -1,2 +1,2 @@
-<hr/>
-{{project}} &copy; All Rights Reserved.@engine@ support.
+<hr class="w-fil"/>
+<footer class="w-fil f-f f-hc f-vc">{{signature}} {{copyright}}</footer>

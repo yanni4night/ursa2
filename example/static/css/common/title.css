@@ -1,0 +1,21 @@
+/**
+  * title.css
+  *
+  * changelog
+  * 2013-12-14[01:27:06]:created
+  *
+  * @info yinyong,osx-x64,Undefined,192.168.1.100,css,/Volumes/yinyong/ursa2/example/static/css/common
+  * @author yinyong#sogou-inc.com
+  * @version 0.0.1
+  * @since 0.0.1
+  */
+.title{
+  height: 30px;
+  background: none;
+  font-size: 18px;
+  font-weight: bolder;
+  text-indent: 1em;
+  line-height: 30px;
+  background: -webkit-gradient(linear,left top,right top,from(#eee),to(#fff));
+  border-radius: 10px;
+}

@@ -1,0 +1,15 @@
+/**
+  * news.css
+  *
+  * changelog
+  * 2013-12-14[01:15:44]:created
+  *
+  * @info yinyong,osx-x64,UTF-8,192.168.1.100,css,/Volumes/yinyong/ursa2/example/static/css/module/index
+  * @author yinyong#sogou-inc.com
+  * @version 0.0.1
+  * @since 0.0.1
+  */
+.news{}
+.news li{height: 30px;border-bottom: 1px dashed #eee;line-height: 30px;}
+.news li:last-child{border-bottom: none;}
+.news li a{display: block;text-indent: 1em;}

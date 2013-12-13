@@ -1,6 +1,12 @@
 {% extends "parent.tpl" %}
 
-{% block page_title %}Test Suit{% endblock %}
+{% block page_title %}Ursa2 Example{% endblock %}
 {% block content %}
-Hello {{name}}!
+
+<div class="content w-cen">
+{% include "module/index/header.tpl" %}
+{% include "module/index/search.tpl" %}
+{% set title = "Top News" %}
+{% include "module/index/news.tpl" %}
+</div>
 {% endblock %}
