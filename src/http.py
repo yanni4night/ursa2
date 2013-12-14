@@ -95,7 +95,7 @@ class Response(object):
             try:
                 content=content.encode(C('encoding'))
             except Exception, e:
-                log.error('%s'%(e))
+                log.error('[send]%s'%(e))
 
         #填充Content-Length头
         if headers.get('Content-Length') is None and content_len is None and content is not None:

@@ -8,5 +8,8 @@
 {% include "module/index/search.tpl" %}
 {% set title = "Top News" %}
 {% include "module/index/news.tpl" %}
+
+{% set title = "Social News" %}
+{% include "module/index/news.tpl" %}
 </div>
 {% endblock %}

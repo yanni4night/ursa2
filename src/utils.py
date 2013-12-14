@@ -154,6 +154,20 @@ def getDate(fmt="%Y%m%d%H%M%S"):
     '''
     return time.strftime(fmt or '', time.localtime())
 
+def filterPath(path):
+    '''
+    路径中'//'变'/'
+    '''
+    return re.sub(r'/+','/',path)
+
+def filterRelPath(path):
+    '''
+    同filterPath,但去除开头的'/'
+    '''
+    path = filterPath(path)
+    return re.sub(r'^/+','',path)
+
+
 class FileSearcher(object):
     '''
     搜索一个目录下所有符合规定文件名的文件,

@@ -1,5 +1,5 @@
 <!--
-@reuqire common/global.css
+@require common/global.css
 -->
 <div class="w-fil mt news">
    {% include "common/title.tpl" %}
