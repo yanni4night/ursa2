@@ -18,6 +18,7 @@ import mimetypes
 from urlparse import urlparse
 import os
 import sys
+import subprocess
 import re
 import json
 from conf import C,log,BASE_DIR
@@ -148,6 +149,14 @@ def static(req,res):
     o = urlparse(req.path)
     #取得绝对路径
     fd = utils.abspath(o.path)
+    if fd.endswith('.css'):
+        less = re.sub(r"\.css",".less",fd)
+        if os.path.exists(less) and os.path.isfile(less):
+            try:
+                subprocess.call('lessc %s %s'%(less,fd),shell=True)
+            except Exception, e:
+                log.error('[less]%s'%e)
+            
     if os.path.isfile(fd):
         mime = mimetypes.guess_type(fd,False)
         content_type = mime[0] or 'text/plain'#default text
