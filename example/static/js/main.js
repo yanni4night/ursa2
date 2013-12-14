@@ -1,4 +1,4 @@
-define('main', ["text!./tpl/list.tpl", "./test/index", './common/testsuit'], function(tpl) {
+define('main', ["text!./tpl/list.tpl"], function(tpl) {
 	!window.console && (
 		window.console = {
 			log: function() {},

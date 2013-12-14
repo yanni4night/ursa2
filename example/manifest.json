@@ -12,7 +12,7 @@
         "enable_proxy":true,
         "js_compressor":"yuicompressor",/*yuicompressor|uglify*/
         "css_compressor":"yui",/*not used*/
-        "require_js_modules": ["main","common/testsuit"],
+        "require_js_modules": ["main"],
         "require_css_modules": ["main"],
 
         /*本地文本替换关键字*/

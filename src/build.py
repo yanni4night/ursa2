@@ -23,7 +23,7 @@ import subprocess
 import mimetypes
 import utils
 import time
-from render import render
+from render import TokenRender
 from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
@@ -281,7 +281,8 @@ class UrsaBuilder(object):
         tpls=fs.search()
         for tpl in tpls:
             try:
-                html = render(re.sub(r'\.%s$'%C('template_ext'),'',tpl),build=True)
+                tr = TokenRender(re.sub(r'\.%s$'%C('template_ext'),'',tpl))
+                html = tr.render(True)#render(re.sub(r'\.%s$'%C('template_ext'),'',tpl),build=True)
                 target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
                 if not os.path.exists(target_dir):
                     os.makedirs(target_dir)
