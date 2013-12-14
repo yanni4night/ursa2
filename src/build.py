@@ -6,6 +6,7 @@
  changelog
  2013-12-07[12:01:09]:created
  2013-12-10[22:40:30]:add build time show
+ 2013-12-15[01:04:04]:less supported
 
  @info yinyong,osx-x64,UTF-8,192.168.1.104,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -141,9 +142,11 @@ class UrsaBuilder(object):
         '''
         handle less files to css
 
-        @todo
-        to be supported
         '''
+        all_less_files=utils.FileSearcher(r'\.less$',self._build_css_dir,relative=False).search()
+        for less in all_less_files:
+            subprocess.call('lessc %s %s'%(less,re.sub(r"\.less",".css",less)),shell=True)
+            os.remove(less)
 
     @classmethod
     def _css(self):
