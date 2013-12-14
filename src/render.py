@@ -6,6 +6,7 @@
 
  changelog
  2013-12-01[00:32:46]:created
+ 2013-12-14[23:52:33]:define TokenRender
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -150,7 +151,7 @@ class TokenRender(object):
                 html = html_img(html)
                 html = all_url(html)
             html = replace(html)
-            if not re.match(r'<html[\s\S]+<body',html,re.I):
+            if not re.match(r'[\s\S]*?<html[\s\S]+?<body',html,re.I):
                 #sub template
                 css_deps = self.__getDepsCss(html)
 
