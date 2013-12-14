@@ -34,7 +34,7 @@ def _token(path):
     去除后缀，取得相对于模板目录的相对无扩展名路径
     '''
     tpl_token = re.sub(r'\.(%s|%s|%s|%s)$'%(C('preview_ext'),'m','data',C('template_ext')),'',path)
-    tpl_token = re.sub(r'^/*','',tpl_token)
+    tpl_token = utils.filterRelPath(tpl_token)#re.sub(r'^/*','',tpl_token)
     return tpl_token
 
 
@@ -56,8 +56,7 @@ def index(req,res):
     #下面循环用于去除扩展名
     #todo优化
     for e in tpls:
-        if e.endswith('.'+tpl_ext):
-            e = re.sub(r'\.%s'%tpl_ext,'',e)
+        e = re.sub(r'\.%s'%tpl_ext,'',e)
         if visible_prog:
             if visible_prog.match(e):
                 _tpls.append(e)
@@ -145,7 +144,7 @@ def static(req,res):
     '''
     static resource
     '''
-    req.path = re.sub(r'/{2,}','/',req.path)
+    req.path = utils.filterRelPath(req.path)#re.sub(r'/{2,}','/',req.path)
     o = urlparse(req.path)
     #取得绝对路径
     fd = utils.abspath(o.path)
