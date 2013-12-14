@@ -160,13 +160,16 @@ def static(req,res):
                 content = replace(content)
                
                 if C('server_add_timestamp') :
-                    base_dir = os.path.dirname(fd)
-                    content = html_link(content,base_dir)
-                    content = html_script(content,base_dir)
-                    content = html_img(content,base_dir)
-                    content = all_url(content,base_dir)
+                    if content_type.find('css') >= 0:
+                        base_dir = os.path.dirname(fd)
+                        content = all_url(content,base_dir)
+                    elif content_type.find('html') >= 0:
+                        content = html_link(content)
+                        content = html_script(content)
+                        content = html_img(content)
+                        content = all_url(content)
                 #http encoding header
-                headers['Encoding'] = C('encoding')
+                headers['Content-Encoding'] = C('encoding')
                 headers['Cache-Control'] = 'nocache'
             else:
                 #binary files
