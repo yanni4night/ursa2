@@ -1,6 +1,6 @@
 Ursa2
 =====
-Enhanced version of [ursa](https://github.com/sogou-ufo/ursa).
+Enhanced version of [ursa](https://github.com/sogou-ufo/ursa) with [JSON Auto Combining](https://github.com/yanni4night/ursa2/wiki/JSON-Auto-Combining) and [Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview).
 
 Install
 =====
@@ -43,6 +43,8 @@ Documents
 =====
  - [manifest.json](https://github.com/yanni4night/ursa2/wiki/manifest.json)
  - [Ursa2 Specification](https://github.com/yanni4night/ursa2/wiki/Ursa2-Specification)
+ - [JSON Auto Combining](https://github.com/yanni4night/ursa2/wiki/JSON-Auto-Combining)
+ - [Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview).
 
 LICENCE
 =====
