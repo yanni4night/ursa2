@@ -8,6 +8,10 @@ Checkout from [GitHub](https://github.com/yanni4night/ursa2) and run :
     
     $ python setup.py install
 
+or
+
+    $ pip install ursa2
+
 Super permission may be required.
 
 Usage
