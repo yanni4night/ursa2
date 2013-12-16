@@ -5,10 +5,11 @@
 
  changelog
  2013-11-30[00:06:29]:created
+ 2013-12-16[20:56:26]:upgrade to 0.0.2
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2
  @author yinyong@sogou-inc.com
- @version 0.0.1
+ @version 0.0.2
  @since 0.0.1
 '''
 
@@ -28,16 +29,14 @@ setup(
     version = version,
     packages = ['src'],
     data_files = data_files,
-    install_requires = ['docopt>=0.6.1'],
-
-    package_data = {
-    },
-    author = "yanni4night",
-    author_email = "yinyong@sogou-inc.com",
-    description = "2nd of ursa ,as a FE enviroment",
-    license = "PSF",
-    keywords = "ursa,fe",
-    url = "http://github.com/yanni4night/ursa2",
+    install_requires = ['docopt>=0.6.1','jinja2>2.6','requests>=2.0.0'],
+    package_data = {},
+    author = "Yanni Nightingale",
+    author_email = "yanni4night@gmail.com",
+    description = "Ursa2 is an enhanced version of ursa which is a powerful front web developing environment.",
+    license = "MIT",
+    keywords = "ursa,fe,develop,web,jinja2,build",
+    url = "https://github.com/yanni4night/ursa2",
     entry_points = {
         'console_scripts':[
             'ursa2=src.main:run'
