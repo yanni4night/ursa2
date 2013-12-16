@@ -58,7 +58,7 @@ def index(req,res):
     #todo优化
     for e in tpls:
         e = re.sub(r'\.%s'%tpl_ext,'',e)
-        if visible_prog:
+        if C('visible_tpls') and visible_prog:
             if visible_prog.match(e):
                 _tpls.append(e)
         else:
