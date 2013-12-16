@@ -1,12 +1,48 @@
-ursa2
+Ursa2
 =====
-2nd of [ursa](https://github.com/sogou-ufo/ursa)
+Enhanced version of [ursa](https://github.com/sogou-ufo/ursa).
+
+Install
+=====
+Checkout from [GitHub](https://github.com/yanni4night/ursa2) and run :
+    
+    $ python setup.py install
+
+Super permission may be required.
+
+Usage
+=====
+
+###initialize project
+
+    $ ursa2 init
+
+###start server
+    
+     
+     $ ursa2 start [port]
+     
+###build
+
+    $ ursa2 build [target][--compress][--html]
 
 
-doc
+Dependencies
+=====
+ - Unix
+ - Java 1.5+
+ - Python 2.x
+ - [node](https://github.com/joyent/node)
+ - [less](https://github.com/less/less.js)
+ - [docopt](https://github.com/docopt/docopt)
+ - [jinja2](https://github.com/mitsuhiko/jinja2)
+ - [requests](https://github.com/kennethreitz/requests)
+
+
+Documents
 =====
  - [manifest.json](https://github.com/yanni4night/ursa2/wiki/manifest.json)
-
+ - [Ursa2 Specification](https://github.com/yanni4night/ursa2/wiki/Ursa2-Specification)
 
 LICENCE
 =====
