@@ -7,6 +7,7 @@
  changelog
  2013-11-30[22:32:36]:created
  2013-12-11[10:51:16]:better error report
+ 2013-12-16[17:16:32]:category of tpls
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -46,26 +47,22 @@ def index(req,res):
     tpl_dir = C('template_dir')
     tpl_ext = C('template_ext')
     tpls = utils.FileSearcher(r'\.%s$'%tpl_ext,tpl_dir).search()
-    _tpls = [];
+    _tpls = []
+    _module_tpls = []
+    _common_tpls = []
 
-    try:
-        visible_prog = re.compile(r"%s"%C('visible_tpls'))
-    except Exception, e:
-        log.error('[visible_tpls]%s'%e)
-        visible_prog = None
-
-    #下面循环用于去除扩展名
-    #todo优化
     for e in tpls:
         e = re.sub(r'\.%s'%tpl_ext,'',e)
-        if C('visible_tpls') and visible_prog:
-            if visible_prog.match(e):
-                _tpls.append(e)
+        #分类输出
+        if e.startswith(C('module_dir')):
+            _module_tpls.append(e)
+        elif e.startswith(C('common_dir')):
+            _common_tpls.append(e)
         else:
             _tpls.append(e);
 
     index_path = os.path.join(BASE_DIR,'../tpl','index.html')
-    html = render_file(index_path,{"tpls":_tpls},noEnvironment = True)
+    html = render_file(index_path,{"tpls":_tpls,"module_tpls":_module_tpls,"common_tpls":_common_tpls},noEnvironment = True)
     res.send(html)
 
 def tpl(req,res):

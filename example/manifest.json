@@ -2,7 +2,6 @@
         /*全局配置区*/
         "server_add_timestamp":true,
         "timestamp_name":"x",
-        "visible_tpls":"",
         "compile_folder":"server",
         "css_folder":"",
 
