@@ -7,6 +7,7 @@
  changelog
  2013-12-01[00:32:46]:created
  2013-12-14[23:52:33]:define TokenRender
+ 2013-12-17[12:13:55]:move removeCssDepsDeclaration out of class
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yinyong@sogou-inc.com
@@ -41,61 +42,11 @@ def render_file(filename,data = None,noEnvironment = False,build = False):
             body = jinjaenv.get_template(filename)
     return body.render(data or {})
 
-# def getData(token):
-#     '''
-#     '''
-#     data = {}
-#     if C('disable_deps_search'):
-#         deps = [token+'.'+C('template_ext')]
-#     else:
-#         df = DepsFinder(token)
-#         deps = df.find()
-#         deps.reverse()
-#     deps.insert(0,"_ursa.json")
-#     for dep in deps:
-#         try:
-#             json_filepath = utils.abspath(os.path.join(C('data_dir'),re.sub(r'%s$'%C('template_ext'),'json',dep)))
-#             content = utils.readfile(json_filepath)
-#             content = re.sub('\/\*[\s\S]*?\*\/','',content)
-#             json_data = json.loads(content)
-#             data.update(json_data)
-#         except Exception, e:
-#             log.warn('[getdata]%s:%s'%(json_filepath,e))
-#     return data
-
-# def render(token,build = False):
-#     '''
-#     查找数据文件依赖并渲染模板
-#     '''
-#     #remove '/'s at start
-#     token = re.sub(r'^/+','',token)
-    
-#     data = getData(token)
-#     multoken = token.split('/')
-#     data.update({'_token':token.replace('/','_')})
-#     data.update({'_folder':multoken[0]})
-#     data.update({'_subtoken':multoken[1] if len(multoken)>1 else ""})
-#     tpl_path = token + "." + C('template_ext')
-#     return render_file( tpl_path,data,False,build)
-
-# def getDepsCss(html):
-#     '''
-#     分析@require xxx.css,获取依赖
-#     '''
-#     ret = []
-#     iters = re.finditer(r'@require\s+?([/\w\-]+?\.css)',html,re.I)
-#     for it in reversed(list(iters)):
-#         css = it.group(1)
-#         css = utils.filterRelPath(css)
-#         ret.append( os.path.join('.',C('static_dir'),C('css_dir'),css) )
-#     return ret
-
-# def removeCssDepsDeclaration(html):
-#     '''
-#     移除HTML中对CSS的依赖声明
-#     '''
-#     return re.sub(r'<!\-\-[\s\S]*?@require[\s\S]*?\-\->','',html)
-
+def removeCssDepsDeclaration(html):
+    '''
+    移除HTML中对CSS的依赖声明
+    '''
+    return re.sub(r'<!\-\-[\s\S]*?@require[\s\S]*?\-\->','',html)
 
 class TokenRender(object):
     '''
@@ -161,7 +112,7 @@ class TokenRender(object):
                 subparent = os.path.join(BASE_DIR,"../tpl",'subparent.tpl')
                 html = render_file(subparent,{'name': self.__token,'content': html,'required_css': css_deps},noEnvironment = True)
 
-            html = self.__removeCssDepsDeclaration(html)
+            html = removeCssDepsDeclaration(html)
             self.__html = html
         return self.__html
 
@@ -177,13 +128,6 @@ class TokenRender(object):
             css = utils.filterRelPath(css)
             ret.append( os.path.join('.',C('static_dir'),C('css_dir'),css) )
         return {}.fromkeys(ret).keys() 
-
-    @classmethod
-    def __removeCssDepsDeclaration(self,html):
-        '''
-        移除HTML中对CSS的依赖声明
-        '''
-        return re.sub(r'<!\-\-[\s\S]*?@require[\s\S]*?\-\->','',html)
 
 if __name__ == '__main__':
     tr = TokenRender('index')

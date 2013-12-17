@@ -24,7 +24,7 @@ import subprocess
 import mimetypes
 import utils
 import time
-from render import TokenRender
+from render import TokenRender,removeCssDepsDeclaration
 from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
@@ -266,6 +266,7 @@ class UrsaBuilder(object):
             content = html_img(content,'.')
             content = all_url(content,'.')
             content = replace(content,self._target)
+            content = removeCssDepsDeclaration(content)
             utils.writefile(tpl,content)
 
     @classmethod
