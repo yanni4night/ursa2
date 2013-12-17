@@ -8,7 +8,7 @@
  2013-12-11[10:22:12]：https supported
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
- @author yinyong@sogou-inc.com
+ @author yanni4night@gmail.com
  @version 0.0.2
  @since 0.0.1
  @todo https support,proxy support

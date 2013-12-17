@@ -9,7 +9,7 @@
  2013-12-15[01:04:04]:less supported
 
  @info yinyong,osx-x64,UTF-8,192.168.1.104,py,/Users/yinyong/work/ursa2/src
- @author yinyong@sogou-inc.com
+ @author yanni4night@gmail.com
  @version 0.0.1
  @since 0.0.1
 '''

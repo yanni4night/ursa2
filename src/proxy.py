@@ -7,7 +7,7 @@
  2013-12-11[17:23:52]:created
 
  @info yinyong,osx-x64,Undefined,10.129.164.77,py,/Volumes/yinyong/ursa2/src
- @author yinyong@sogou-inc.com
+ @author yanni4night@gmail.com
  @version 0.0.1
  @since 0.0.1
 '''

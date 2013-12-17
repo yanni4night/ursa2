@@ -10,7 +10,7 @@
  2013-12-16[17:16:32]:category of tpls
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
- @author yinyong@sogou-inc.com
+ @author yanni4night@gmail.com
  @version 0.0.1
  @since 0.0.1
 '''

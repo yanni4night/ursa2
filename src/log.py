@@ -7,7 +7,7 @@
  This is from the Internet.
 
  @info yinyong,osx-x64,Undefined,10.129.164.77,py,/Volumes/yinyong/ursa2/src
- @author yinyong@sogou-inc.com
+ @author yanni4night@gmail.com
  @version 0.0.1
  @since 0.0.1
 '''
