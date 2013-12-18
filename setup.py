@@ -39,7 +39,7 @@ setup(
     url = "https://github.com/yanni4night/ursa2",
     entry_points = {
         'console_scripts':[
-            'ursa2=src.main:run'
+            'ursa2=ursa2.main:run'
             ]
         }
 )
