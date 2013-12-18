@@ -6,6 +6,8 @@
  changelog
  2013-11-30[14:36:11]:created
 
+ 常用工具
+
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
  @version 0.0.1
@@ -21,6 +23,7 @@ import codecs
 from conf import C,log
 from exception import FileSizeOverflowError
 
+#根据MIME来判断是二进制文件的正则表达式
 BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword)'
 
 def isInt(v):
@@ -60,7 +63,7 @@ def abspath(path):
     '''
     if not isStr(path):
         raise TypeError('path must be a string')
-    path=re.sub(r'^\/+','',path)
+    path = filterRelPath(path)
     return os.path.abspath(os.path.join(os.getcwd(),path))
 
 def readfile(filename  , mode='r'):
