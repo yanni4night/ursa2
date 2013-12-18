@@ -15,14 +15,14 @@
 
 from setuptools import setup, find_packages
 from ursa2.__init__ import __version__ as version
-import os
+#import os
 
-dirs = ['assets','tpl']
+# dirs = ['assets','tpl']
 
-data_files = []
-for d in dirs:
-    for dirpath, dirnames , filenames in os.walk(d):
-        data_files.append( [ dirpath , [ os.path.join(dirpath , f) for f in filenames ] ] )
+# data_files = []
+# for d in dirs:
+#     for dirpath, dirnames , filenames in os.walk(d):
+#         data_files.append( [ dirpath , [ os.path.join(dirpath , f) for f in filenames ] ] )
 
 setup(
     name = "ursa2",
