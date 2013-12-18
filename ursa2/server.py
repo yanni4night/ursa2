@@ -90,8 +90,8 @@ class SecureHTTPServer(HTTPServer):
         BaseServer.__init__(self, server_address, HandlerClass)
         ctx = SSL.Context(SSL.SSLv23_METHOD)
 
-        ctx.use_privatekey_file( os.path.join(BASE_DIR,"../assets","privatekey.pem"))
-        ctx.use_certificate_file( os.path.join(BASE_DIR,"../assets","certificate.pem"))
+        ctx.use_privatekey_file( os.path.join(BASE_DIR,"assets","privatekey.pem"))
+        ctx.use_certificate_file( os.path.join(BASE_DIR,"assets","certificate.pem"))
 
         self.socket = SSL.Connection(ctx, socket.socket(self.address_family, self.socket_type))
 

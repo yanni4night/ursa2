@@ -61,7 +61,7 @@ def index(req,res):
         else:
             _tpls.append(e);
 
-    index_path = os.path.join(BASE_DIR,'../tpl','index.html')
+    index_path = os.path.join(BASE_DIR,'tpl','index.html')
     html = render_file(index_path,{"tpls":_tpls,"module_tpls":_module_tpls,"common_tpls":_common_tpls},noEnvironment = True)
     res.send(html)
 
@@ -90,7 +90,7 @@ def tpl(req,res):
     # #嗅探是否有HTML root标签，如果没有，认为是子模板，需要添加parent支持
     # if not re.match(r'<html[\s\S]+<body',html,re.I):
     #     css_deps = getDepsCss(html)
-    #     subparent = os.path.join(BASE_DIR,"../tpl",'subparent.tpl')
+    #     subparent = os.path.join(BASE_DIR,"tpl",'subparent.tpl')
     #     html = render_file(subparent,{'name': tpl_token,'content': html,'required_css': css_deps},noEnvironment = True)
 
     # res.send(html)
@@ -115,7 +115,7 @@ def m(req,res):
         data = utils.readfile(json_path)
     except Exception, e:
         log.error('[m]%s:%s'%(json_path,e))
-    mgr_path = os.path.join(BASE_DIR,'../tpl','mgr.html')
+    mgr_path = os.path.join(BASE_DIR,'tpl','mgr.html')
     html = render_file(mgr_path,{"name":tpl_token,"data":data},noEnvironment = True)
     res.send(html)
 

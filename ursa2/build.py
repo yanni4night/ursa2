@@ -29,8 +29,8 @@ from exception import ConfigurationError,DirectoryError
 from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
 
-RJS_PATH = os.path.join(BASE_DIR,'../assets','r.js')
-RPL_PATH = os.path.join(BASE_DIR,'../assets','rpl.js')
+RJS_PATH = os.path.join(BASE_DIR,'assets','r.js')
+RPL_PATH = os.path.join(BASE_DIR,'assets','rpl.js')
 
 #custom defined yuicompressor
 __ycpath = C('yuicompressor')
@@ -44,7 +44,7 @@ if __ycpath and utils.isStr( __ycpath ):
         YC_PATH = __ycpath
 
 if not YC_PATH:
-    YC_PATH = os.path.join(BASE_DIR,'../assets','yuicompressor-2.4.8.jar')
+    YC_PATH = os.path.join(BASE_DIR,'assets','yuicompressor-2.4.8.jar')
 
 mimetypes.init();
 

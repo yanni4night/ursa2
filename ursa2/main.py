@@ -61,7 +61,7 @@ def run():
                 print ('Initializing canceled.')
                 sys.exit(1)
         print ('Initializing project...')
-        copyfiles(os.path.join(BASE_DIR,'../assets','clo'),'.')
+        copyfiles(os.path.join(BASE_DIR,'assets','clo'),'.')
         print ('Initializing successfully.Usage:')
         print ('       start serer:ursa2 start')
         print ('       build project:ursa2 build')

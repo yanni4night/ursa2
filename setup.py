@@ -30,6 +30,7 @@ setup(
     packages = ['ursa2'],
     #data_files = data_files,
     install_requires = ['docopt>=0.6.1','jinja2>2.6','requests>=2.0.0'],
+    include_package_data = True,
     package_data = {},
     author = "Yanni Nightingale",
     author_email = "yanni4night@gmail.com",

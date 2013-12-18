@@ -109,7 +109,7 @@ class TokenRender(object):
                 for tpl in self.__include_deps:
                     css = os.path.join('.',C('static_dir'),C('css_dir'),re.sub(r"\.%s"%C('template_ext'),".css",tpl))
                     css_deps.append(css)
-                subparent = os.path.join(BASE_DIR,"../tpl",'subparent.tpl')
+                subparent = os.path.join(BASE_DIR,"tpl",'subparent.tpl')
                 html = render_file(subparent,{'name': self.__token,'content': html,'required_css': css_deps},noEnvironment = True)
 
             html = removeCssDepsDeclaration(html)
