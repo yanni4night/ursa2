@@ -4,7 +4,7 @@
 {
     "world":"world",
     "local":{
-        "static_dir":"/_c_static"
+        "static_dir":"_c_static"
         },
     "online":{
         "static_dir":"http://p{num}.cdn.g.com",
