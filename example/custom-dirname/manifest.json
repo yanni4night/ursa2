@@ -1,0 +1,40 @@
+/**
+  * @see https://github.com/yanni4night/ursa2/wiki/manifest.json
+  */
+{
+    "world":"world",
+    "local":{
+        "static_dir":"/_c_static"
+        },
+    "online":{
+        "static_dir":"http://p{num}.cdn.g.com",
+        "num":5
+        },
+    "template_dir": "_c_template",
+    "data_dir": "_c_data",
+    "static_dir": "_c_static",
+    "build_dir": "_c_build"
+    /*
+    "encoding": "utf-8",
+    "protocol": "http",
+    "server_add_timestamp": false,
+    "disable_deps_search": false,
+    "enable_proxy": false,
+    "server_port": 8000,
+    "log_level": "error",
+    "timestamp_name": "t",
+    "log_http_request": false,
+    
+    "css_dir": "css",
+    "css_folder": "",
+    "js_dir": "js",
+    "js_folder": "",
+    "compile_folder": "",
+    "html_dir": "html",
+    "template_ext": "tpl",
+    "preview_ext": "ut",
+    "num": 10,
+    "max_readable_filesize": 1048576,
+    "yuicompressor": null,
+    "js_ascii_only": false*/
+}
