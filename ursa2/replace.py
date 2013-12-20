@@ -42,7 +42,6 @@ def replace(content,target=None):
     iters = re.finditer( COMMON_TOKEN , content )
 
     for i in reversed(list(iters)):
-        #config = conf.getConfig()
         name = i.group(1)
         value = C(name,target)
         if value is not None:
