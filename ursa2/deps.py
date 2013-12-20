@@ -42,29 +42,19 @@ class DepsFinder(object):
         递归搜索
         '''
         try:
-            #/x.tpl=>x.tpl
-            # tpl=re.sub(r'^\/+','',tpl)
             abspath = utils.abspath(os.path.join(C('template_dir'),tpl))
-            
-            # if self._history.get(abspath) is not None:
-            #     return
-            # else:
-            #     self._result.append(tpl)
-            #     self._history[abspath]=1
 
             content = utils.readfile(abspath)
             iters = re.finditer(self._pattern,content)
 
             for i in reversed(list(iters)):
                 tpl = utils.filterRelPath(i.group(3))
-                #abspath=utils.abspath(os.path.join(C('template_dir'),tpl))
                 if self._history.get(tpl) is None:
                     self._result.append(tpl)
                     self._history[tpl] = 1
                     if 'include' == i.group(1):
                         self._include_result.append(tpl)
                     self._search(tpl)
-
         except Exception, e:
             log.error('[deps]%s'%e)
 

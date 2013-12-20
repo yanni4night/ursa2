@@ -23,7 +23,7 @@ import subprocess
 import re
 import json
 from conf import C,log,BASE_DIR
-from render import TokenRender,render_file#render,render_file,getData,getDepsCss,removeCssDepsDeclaration
+from render import TokenRender,render_file
 from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
 from jinja2 import TemplateNotFound,TemplateSyntaxError
@@ -36,7 +36,7 @@ def _token(path):
     去除后缀，取得相对于模板目录的相对无扩展名路径
     '''
     tpl_token = re.sub(r'\.(%s|%s|%s|%s)$'%(C('preview_ext'),'m','data',C('template_ext')),'',path)
-    tpl_token = utils.filterRelPath(tpl_token)#re.sub(r'^/*','',tpl_token)
+    tpl_token = utils.filterRelPath(tpl_token)
     return tpl_token
 
 
@@ -79,21 +79,6 @@ def tpl(req,res):
         return res.send(code = 500,content = 'Template %s:%d Syntax Error:%s' % (e.filename,e.lineno,e.message))
     except Exception, e:
         return res.send(code = 500,content = '%s'%e)
-    # if C('server_add_timestamp'):
-    #     base_dir = os.path.join('.',os.path.dirname(req.path))
-    #     html = html_script(html,base_dir)
-    #     html = html_link(html,base_dir)
-    #     html = html_img(html,base_dir)
-    #     html = all_url(html,base_dir)
-    # html = replace(html)
-
-    # #嗅探是否有HTML root标签，如果没有，认为是子模板，需要添加parent支持
-    # if not re.match(r'<html[\s\S]+<body',html,re.I):
-    #     css_deps = getDepsCss(html)
-    #     subparent = os.path.join(BASE_DIR,"tpl",'subparent.tpl')
-    #     html = render_file(subparent,{'name': tpl_token,'content': html,'required_css': css_deps},noEnvironment = True)
-
-    # res.send(html)
 
 def data(req,res):
     '''
@@ -101,7 +86,7 @@ def data(req,res):
     '''
     tpl_token = _token(req.path)
     tr = TokenRender(tpl_token)
-    data = tr.getData()#getData(tpl_token)
+    data = tr.getData()
     return res.send(json.dumps(data),headers = {'Content-Type':'application/json'})
 
 def m(req,res):
