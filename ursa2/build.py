@@ -21,7 +21,6 @@ import os
 import re
 import sys
 import subprocess
-import mimetypes
 import utils
 import time
 from render import TokenRender,removeCssDepsDeclaration
@@ -45,8 +44,6 @@ if __ycpath and utils.isStr( __ycpath ):
 
 if not YC_PATH:
     YC_PATH = os.path.join(BASE_DIR,'assets','yuicompressor-2.4.8.jar')
-
-mimetypes.init();
 
 class UrsaBuilder(object):
     '''

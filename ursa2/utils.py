@@ -5,12 +5,13 @@
 
  changelog
  2013-11-30[14:36:11]:created
+ 2013-12-22[21:14:45]:add isBinary function
 
  常用工具
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
- @version 0.0.1
+ @version 0.0.2
  @since 0.0.1
 '''
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-#
+
 '''
  handler.py
 
@@ -124,7 +124,7 @@ def static(req,res):
     '''
     static resource
     '''
-    req.path = utils.filterRelPath(req.path)#re.sub(r'/{2,}','/',req.path)
+    req.path = utils.filterRelPath(req.path)
     o = urlparse(req.path)
     #取得绝对路径
     fd = utils.abspath(o.path)
