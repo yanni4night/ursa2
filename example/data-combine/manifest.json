@@ -2,8 +2,12 @@
   * @see https://github.com/yanni4night/ursa2/wiki/manifest.json
   */
 {
-    "local":{},
-    "online":{}
+    "local":{
+        "static_prefix":"/."
+        },
+    "online":{
+        "static_prefix":"/."
+    }
     /*
     "encoding": "utf-8",
     "protocol": "http",
