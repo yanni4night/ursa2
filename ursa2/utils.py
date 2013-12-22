@@ -20,11 +20,23 @@ import json
 import re
 import hashlib
 import codecs
+import mimetypes
 from conf import C,log
 from exception import FileSizeOverflowError
 
 #根据MIME来判断是二进制文件的正则表达式
 BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword)'
+
+mimetypes.init()
+
+def isBinary(fname):
+    '''
+    判断文件是否是二进制文件
+    '''
+    mime = mimetypes.guess_type(fname,False)
+    content_type = mime[0] or 'text/plain'
+    return True if re.match(BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I) else False
+
 
 def isInt(v):
     '''

@@ -28,9 +28,6 @@ from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
 from jinja2 import TemplateNotFound,TemplateSyntaxError
 
-
-mimetypes.init()
-
 def _token(path):
     '''
     去除后缀，取得相对于模板目录的相对无扩展名路径
@@ -145,7 +142,7 @@ def static(req,res):
         try:
             headers = {}
             #todo  custom defined
-            if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.IGNORECASE):
+            if not utils.isBinary(fd):
                 content = utils.readfile(fd)
                 content = replace(content)
                
@@ -169,7 +166,7 @@ def static(req,res):
             res.send(content = content,headers = headers)
         except Exception, e:
             res.send(code = 500,content = '%s'%e)
-            log.error(e)
+            log.error("[static]%s"%e)
     else:
         if os.path.exists(fd):
             res.send(code = 403,content = 'Access %s is forbidden'%req.path)

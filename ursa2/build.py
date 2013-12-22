@@ -234,9 +234,9 @@ class UrsaBuilder(object):
         content=replace(content,self._target)
         utils.writefile(dst,content)
         if C('js_ascii_only'):
-            subprocess.call( 'node ' + RPL_PATH +' '+dst+' '+dst,shell=True)
+            subprocess.call( 'node ' + RPL_PATH +' '+dst+' '+dst,shell = True)
         if self._compress:
-            subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
+            subprocess.call( 'java -jar ' + YC_PATH + ' --type js --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell = True )
                 
     @classmethod
     def _tpl(self):
@@ -247,15 +247,13 @@ class UrsaBuilder(object):
 
         这里需要加入额外的{compile_dir}文件夹下的文本文件。
         '''
-        fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative=False)
-        tpls=fs.search()
+        fs = utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir,relative = False)
+        tpls = fs.search()
         if self._compile_dir:
-            nfs=utils.FileSearcher(r'.+',self._build_compile_dir,relative=False)
-            compile_files=nfs.search()
+            nfs = utils.FileSearcher(r'.+',self._build_compile_dir,relative = False)
+            compile_files = nfs.search()
             for f in compile_files:
-                mime=mimetypes.guess_type(f,False)
-                content_type=mime[0] or 'text/plain'
-                if not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I):
+                if not utils.isBinary(f):
                     tpls.insert(0,f)
 
         for tpl in tpls:
@@ -281,8 +279,8 @@ class UrsaBuilder(object):
 
         TODO：考虑支持require_html_modules
         '''
-        fs=utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
-        tpls=fs.search()
+        fs = utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
+        tpls = fs.search()
         for tpl in tpls:
             try:
                 tr = TokenRender(re.sub(r'\.%s$'%C('template_ext'),'',tpl))

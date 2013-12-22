@@ -14,12 +14,12 @@
 
 import requests as R
 from urlparse import urlparse
-import mimetypes
+#import mimetypes
 import utils
 import re
 from conf import C,log
 
-mimetypes.init()
+#mimetypes.init()
 
 def proxy(target_url,req,res):
     '''
@@ -29,9 +29,9 @@ def proxy(target_url,req,res):
 
     #二进制资源直接重定向
     parsed_url = urlparse(target_url)
-    mime = mimetypes.guess_type(parsed_url.path,False)
-    content_type = mime[0] or 'text/plain'
-    if re.match( utils.BINARY_CONTENT_TYPE_KEYWORDS , content_type,re.IGNORECASE ):
+    #mime = mimetypes.guess_type(parsed_url.path,False)
+    #content_type = mime[0] or 'text/plain'
+    if utils.isBinary(parsed_url.path):#re.match( utils.BINARY_CONTENT_TYPE_KEYWORDS , content_type,re.IGNORECASE ):
         return res.redirect(target_url)
 
     if 'GET' == req.method:
@@ -43,7 +43,7 @@ def proxy(target_url,req,res):
         #通知远端服务器不要压缩
         if req.headers.get('accept-encoding'):
             del req.headers['accept-encoding']
-        r = request(target_url,headers=req.headers)
+        r = request(target_url,headers = req.headers)
         #本地服务器覆写Date和Server
         if r.headers.get('date'):
             del r.headers['date']
