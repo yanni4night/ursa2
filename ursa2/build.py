@@ -52,25 +52,25 @@ class UrsaBuilder(object):
     generate html with json data
     '''
     @classmethod
-    def __init__(self,compress,html,target=None):
+    def __init__(self,compress,html,target = None):
         '''
         预先计算一些基础路径
         '''
         log.setLevel(logging.DEBUG)
-        self._compress=compress
-        self._generate_html=html
-        self._target=target
-        self._tpl_dir=C('template_dir')
-        self._build_dir=C('build_dir')
-        self._static_dir=C('static_dir')
-        self._js_dir=C('js_dir')
-        self._css_dir=C('css_dir')
-        self._compile_dir=C('compile_folder') or ''#copy and repalce
+        self._compress = compress
+        self._generate_html = html
+        self._target = target
+        self._tpl_dir = C('template_dir')
+        self._build_dir = C('build_dir')
+        self._static_dir = C('static_dir')
+        self._js_dir = C('js_dir')
+        self._css_dir = C('css_dir')
+        self._compile_dir = C('compile_folder') or ''#copy and repalce
 
         #check dunplicated
         if os.path.relpath(self._build_dir,self._tpl_dir) == '.':
             raise ConfigurationError('template_dir and build_dir are dumplicated')
-        elif os.path.relpath(self._build_dir,self._static_dir)=='.':
+        elif os.path.relpath(self._build_dir,self._static_dir) == '.':
             raise ConfigurationError('template_dir and static_dir are dumplicated')
         elif self._compile_dir and os.path.relpath(self._compile_dir,self._static_dir) == '.':
             raise ConfigurationError('compile_dir and static_dir are dunplicated')
@@ -79,15 +79,15 @@ class UrsaBuilder(object):
         elif self._compile_dir and os.path.relpath(self._compile_dir,self._tpl_dir) == '.':
             raise ConfigurationError('compile_dir and tpl_dir are dunplicated')
 
-        self._build_static_dir=os.path.join(self._build_dir,self._static_dir)
-        self._build_css_dir=os.path.join(self._build_static_dir,self._css_dir,C('css_folder') or '')
-        self._build_js_dir=os.path.join(self._build_static_dir,self._js_dir,C('js_folder') or '')
-        self._build_tpl_dir=os.path.join(self._build_dir,self._tpl_dir)
+        self._build_static_dir = os.path.join(self._build_dir,self._static_dir)
+        self._build_css_dir = os.path.join(self._build_static_dir,self._css_dir,C('css_folder') or '')
+        self._build_js_dir = os.path.join(self._build_static_dir,self._js_dir,C('js_folder') or '')
+        self._build_tpl_dir = os.path.join(self._build_dir,self._tpl_dir)
         
         if self._compile_dir:
-            self._build_compile_dir=os.path.join(self._build_dir,self._compile_dir)
+            self._build_compile_dir = os.path.join(self._build_dir,self._compile_dir)
 
-        self._build_html_dir=os.path.join(self._build_dir,C('html_dir'))
+        self._build_html_dir = os.path.join(self._build_dir,C('html_dir'))
 
     @classmethod
     def build(self):
@@ -116,7 +116,7 @@ class UrsaBuilder(object):
         '''
         检查是否具备一个ursa2工程必备的文件和目录
         '''
-        require_dirs=[self._tpl_dir,self._static_dir];
+        require_dirs = [self._tpl_dir,self._static_dir];
         for d in require_dirs:
             if not os.path.exists(d):
                 raise DirectoryError('Ursas project requires %s directory'%d)
@@ -140,9 +140,9 @@ class UrsaBuilder(object):
         handle less files to css
 
         '''
-        all_less_files=utils.FileSearcher(r'\.less$',self._build_css_dir,relative=False).search()
+        all_less_files = utils.FileSearcher(r'\.less$',self._build_css_dir,relative = False).search()
         for less in all_less_files:
-            subprocess.call('lessc %s %s'%(less,re.sub(r"\.less",".css",less)),shell=True)
+            subprocess.call('lessc %s %s'%(less,re.sub(r"\.less",".css",less)),shell = True)
             os.remove(less)
 
     @classmethod
@@ -160,27 +160,27 @@ class UrsaBuilder(object):
         '''
 
         #搜索所有CSS文件
-        all_css_files=utils.FileSearcher(r'\.css$',self._build_css_dir,relative=False).search()
+        all_css_files = utils.FileSearcher(r'\.css$',self._build_css_dir,relative = False).search()
 
         #替换和加时间戳
         for dst in all_css_files:
-            content=utils.readfile(dst)
-            content=all_url(content,os.path.dirname(dst))
-            content=replace(content,self._target)
+            content = utils.readfile(dst)
+            content = all_url(content,os.path.dirname(dst))
+            content = replace(content,self._target)
             utils.writefile(dst,content)
 
         #仅对指定的CSS进行r.js合并
-        css_modules=C('require_css_modules')
+        css_modules = C('require_css_modules')
         if not utils.isList(css_modules):
-            css_modules=['main']
+            css_modules = ['main']
 
         for css in css_modules:
             if not utils.isStr(css):
                 continue;
             css = re.sub(r'\/*','',css)
             if not css.endswith('.css'):
-                css+='.css'
-            css_realpath=os.path.join(self._build_css_dir,css)
+                css += '.css'
+            css_realpath = os.path.join(self._build_css_dir,css)
             self.build_css(css_realpath,css_realpath)
             continue
 
@@ -191,9 +191,9 @@ class UrsaBuilder(object):
 
         合并和按需压缩
         '''
-        subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell=True)
+        subprocess.call('node %s -o cssIn=%s out=%s'%(RJS_PATH,src,dst),shell = True)
         if self._compress:
-            subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell=True )
+            subprocess.call( 'java -jar ' + YC_PATH + ' --type css --charset ' + C('encoding') + ' ' + dst + ' -o ' + dst , shell = True )
 
     @classmethod
     def _js(self):
@@ -203,17 +203,17 @@ class UrsaBuilder(object):
         JS文件不同于CSS，其本身不能引用其它相对路径的静态资源，因此可以实现
         先合并再替换、加时间戳，无需预先处理所有js文件。
         '''
-        js_modules=C('require_js_modules') or C('require_modules')
+        js_modules = C('require_js_modules') or C('require_modules')
         if not utils.isList(js_modules):
-            js_modules=['main']
+            js_modules = ['main']
 
         for js in js_modules:
             if not utils.isStr(js):
                 continue;
-            js=re.sub(r'^\/+','',js)
+            js = re.sub(r'^\/+','',js)
             if not js.endswith('.js'):
-                js+='.js'
-            js_realpath=os.path.join(self._build_js_dir,js)
+                js += '.js'
+            js_realpath = os.path.join(self._build_js_dir,js)
             self.build_js(js_realpath,js_realpath,self._build_js_dir)
 
     @classmethod
@@ -223,12 +223,12 @@ class UrsaBuilder(object):
 
         合并、替换、加时间戳并按需压缩。
         '''
-        js=os.path.relpath(src,base_dir)
+        js = os.path.relpath(src,base_dir)
         subprocess.call( 'node ' + RJS_PATH +' -o name=' + js[0:-3] + ' out='+ dst + ' optimize=none baseUrl='\
-            + base_dir , shell=True)
+            + base_dir , shell = True)
         #repalce
-        content=utils.readfile(dst)
-        content=replace(content,self._target)
+        content = utils.readfile(dst)
+        content = replace(content,self._target)
         utils.writefile(dst,content)
         if C('js_ascii_only'):
             subprocess.call( 'node ' + RPL_PATH +' '+dst+' '+dst,shell = True)
@@ -281,11 +281,11 @@ class UrsaBuilder(object):
         for tpl in tpls:
             try:
                 tr = TokenRender(re.sub(r'\.%s$'%C('template_ext'),'',tpl))
-                html = tr.render(True)#render(re.sub(r'\.%s$'%C('template_ext'),'',tpl),build=True)
+                html = tr.render(True)
                 target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
                 if not os.path.exists(target_dir):
                     os.makedirs(target_dir)
-                dst_file=re.sub(r'\.%s$'%C('template_ext'),'.html',os.path.join(self._build_html_dir,tpl))
+                dst_file = re.sub(r'\.%s$'%C('template_ext'),'.html',os.path.join(self._build_html_dir,tpl))
                 utils.writefile(dst_file,html)
             except Exception,e:
                 if not C('html_force_output'):
@@ -295,5 +295,5 @@ class UrsaBuilder(object):
 
 
 if __name__ == '__main__':
-    builder=UrsaBuilder(True,True,'online')
+    builder = UrsaBuilder(True,True,'online')
     builder.build()
