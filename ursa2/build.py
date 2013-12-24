@@ -7,10 +7,11 @@
  2013-12-07[12:01:09]:created
  2013-12-10[22:40:30]:add build time show
  2013-12-15[01:04:04]:less supported
+ 2013-12-24[21:04:45]:'ignore_parents' setting
 
  @info yinyong,osx-x64,UTF-8,192.168.1.104,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
- @version 0.0.1
+ @version 0.0.2
  @since 0.0.1
 '''
 
@@ -279,6 +280,8 @@ class UrsaBuilder(object):
         fs = utils.FileSearcher(r'\.%s$'%C('template_ext'),self._build_tpl_dir)
         tpls = fs.search()
         for tpl in tpls:
+            if C('ignore_parents') and tpl.endswith('parent.'+C('template_ext')):
+                continue
             try:
                 tr = TokenRender(re.sub(r'\.%s$'%C('template_ext'),'',tpl))
                 html = tr.render(True)
