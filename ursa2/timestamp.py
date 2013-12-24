@@ -38,7 +38,10 @@ def _addtimestamp(content,reg,base_dir,force_abspath=False):
 
         #已经有时间戳的不再添加
         #带协议的不再添加
-        if not local_url or not parsed_url.path:
+        #具有模板语法的不予添加
+        if url.find('{{') >=0 or url.find('{%') >= 0:
+            continue
+        elif not local_url or not parsed_url.path:
             continue
         elif re.match(r'^\s*(about:|data:|#)',local_url):
             log.warn('%s is an invalid url'%local_url)
