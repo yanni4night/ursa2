@@ -29,5 +29,6 @@
     "num": 10,
     "max_readable_filesize": 1048576,
     "yuicompressor": null,
+    "ignore_parents":true,
     "js_ascii_only": false*/
 }

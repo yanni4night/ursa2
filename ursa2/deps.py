@@ -6,10 +6,11 @@
  changelog
  2013-12-02[15:48:27]:created
  2013-12-14[12:18:46]:include collection supported
+ 2013-12-24[21:00:03]:'ignore_parents' setting
 
  @info yinyong,osx-x64,UTF-8,10.129.173.95,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
- @version 0.0.1
+ @version 0.0.2
  @since 0.0.1
 '''
 import re
@@ -49,6 +50,8 @@ class DepsFinder(object):
 
             for i in reversed(list(iters)):
                 tpl = utils.filterRelPath(i.group(3))
+                if C('ignore_parents') and tpl.endswith('parent.'+C('template_ext')):
+                    continue
                 if self._history.get(tpl) is None:
                     self._result.append(tpl)
                     self._history[tpl] = 1
@@ -90,4 +93,4 @@ class DepsFinder(object):
 
 if __name__ == '__main__':
     df=DepsFinder(u'/template/index')
-    print df.findIncludes()
+    print df.find()

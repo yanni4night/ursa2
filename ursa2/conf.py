@@ -66,7 +66,8 @@ _DEFAULT_ITEMS = {
     'num' : 10,#随机变量的最大值
     'max_readable_filesize' : 1024*1024,#可读取的最大文件，文件过大会严重迟缓并占用内存
     'yuicompressor' : None,#自定义yuicompressor的路径
-    'js_ascii_only' : False#转义多字节为ASCII
+    'js_ascii_only' : False,#转义多字节为ASCII
+    'ignore_parents':True,#是否忽略对parent模板的处理
 };
 
 
