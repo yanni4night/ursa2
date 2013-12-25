@@ -58,6 +58,7 @@ _DEFAULT_ITEMS = {
     'css_folder' : '',#{css_dir}下的子目录
     'js_dir' : "js",#under static_dir
     'js_folder' : '',#{js_dir}下的子目录
+    'img_dir':'img',
     'compile_folder' : None,#额外的目录，文本文件仅做替换和时间戳处理
     'build_dir' : 'build',#生成目录
     'html_dir' : 'html',#under build_dir

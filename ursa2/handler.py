@@ -8,10 +8,11 @@
  2013-11-30[22:32:36]:created
  2013-12-11[10:51:16]:better error report
  2013-12-16[17:16:32]:category of tpls
+ 2013-12-25[15:17:46]:s function supported,showing static resource
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
- @version 0.0.1
+ @version 0.0.2
  @since 0.0.1
 '''
 import utils
@@ -63,6 +64,24 @@ def index(req,res):
     index_path = os.path.join(BASE_DIR,'tpl','index.html')
     html = render_file(index_path,{"tpls":_tpls,"module_tpls":_module_tpls,"common_tpls":_common_tpls},noEnvironment = True)
     res.send(html)
+
+def s(req,res):
+    '''
+    静态资源列表
+    '''
+    static_dir = C('static_dir')
+    img_dir = os.path.join(static_dir,C('img_dir'))
+    js_dir = os.path.join(static_dir,C('js_dir'))
+    css_dir = os.path.join(static_dir,C('css_dir'))
+
+    imgs = utils.FileSearcher(r'\.(png|bmp|gif|jpe?g|ico|cur)$',img_dir).search()
+    csses =  utils.FileSearcher(r'\.(css|less)$',css_dir).search()
+    jses =  utils.FileSearcher(r'\.js$',js_dir).search()
+
+    static_path = os.path.join(BASE_DIR,'tpl','static.html')
+    html = render_file(static_path,{"img":imgs,"css":csses,"js":jses,"img_dir":img_dir,"css_dir":css_dir,"js_dir":js_dir},noEnvironment = True)
+    res.send(html)
+
 
 def tpl(req,res):
     '''

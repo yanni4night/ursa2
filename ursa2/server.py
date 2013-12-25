@@ -5,7 +5,8 @@
 
  changelog
  2013-11-30[17:37:42]:created
- 2013-12-11[10:22:12]：https supported
+ 2013-12-11[10:22:12]:https supported
+ 2013-12-25[15:16:44]:static /s supported
 
  @info yinyong,osx-x64,UTF-8,192.168.1.101,py,/Users/yinyong/work/ursa2/src
  @author yanni4night@gmail.com
@@ -24,15 +25,16 @@ import os
 import socket
 from OpenSSL import SSL
 from SocketServer import BaseServer
-from handler import static,index,tpl,so,m,data
+from handler import static,index,tpl,so,m,data,s
 
-ursa_router=Route()
-ursa_router.get(r'^/$',index)
-ursa_router.get(r'\.%s$'%C('preview_ext'),tpl)
-ursa_router.post(r'\.so$',so)
-ursa_router.get(r'\.m$',m)
-ursa_router.get(r'\.data$',data)
-ursa_router.get(r'^/.+',static)
+ursa_router = Route()
+ursa_router.get(r'^/$' , index)
+ursa_router.get(r'^/s$' , s)
+ursa_router.get(r'\.%s$'%C('preview_ext') , tpl)
+ursa_router.post(r'\.so$' , so)
+ursa_router.get(r'\.m$' , m)
+ursa_router.get(r'\.data$' , data)
+ursa_router.get(r'^/.+' , static)
 
 class UrsaHTTPRequestHandler(BaseHTTPRequestHandler):
     '''
