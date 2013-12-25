@@ -53,9 +53,9 @@ def index(req,res):
         if C('ignore_parents') and e.endswith('parent'):
             continue
         #分类输出
-        if e.startswith(C('module_dir')):
+        if e.startswith(C('module_dir') + '/'):
             _module_tpls.append(e)
-        elif e.startswith(C('common_dir')):
+        elif e.startswith(C('common_dir') + '/'):
             _common_tpls.append(e)
         else:
             _tpls.append(e);
