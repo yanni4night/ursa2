@@ -61,6 +61,10 @@ def _addtimestamp(content,reg,base_dir,force_abspath=False):
             #应该仅在CSS内使用相对路径
             timestamp=utils.get_file_timestamp(os.path.join(base_dir,parsed_url.path))
 
+        #计算不到时间戳则忽略
+        if not timestamp:
+            continue
+
         parsed_url=urlparse(url,False)
         new_query=parsed_url.query
         if '' == new_query:
@@ -118,6 +122,6 @@ def all(content,base_dir='.'):
     return content
 
 if __name__ == '__main__':
-    sample="url(@static_prefix@/www/js/main/ls.css?t=*&ty=09&bn==56#hjk)"
+    sample="url(@static_prefix@/www/js/main/ls.css?o=*&ty=09&bn==56#hjk)"
     print sample
     print all_url(sample)
