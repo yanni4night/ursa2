@@ -50,6 +50,8 @@ def index(req,res):
 
     for e in tpls:
         e = re.sub(r'\.%s'%tpl_ext,'',e)
+        if C('ignore_parents') and e.endswith('parent'):
+            continue
         #分类输出
         if e.startswith(C('module_dir')):
             _module_tpls.append(e)
