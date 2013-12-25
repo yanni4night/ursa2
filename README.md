@@ -13,6 +13,7 @@ Feature
  - Web data simulation
  - JSON data auto combining
  - JS/CSS merge&optimize
+ - LESS auto translation
  - GET/POST(quirk) proxy
  - Intelligent timestamp
 
@@ -36,10 +37,17 @@ Usage
     $ ursa2 init
 
 ###start server
-    
      
      $ ursa2 start [port]
-     
+
+###view template list
+    
+open browser to http://[hostname]:[port]/
+
+###view static resource list
+
+open browser to http://[hostname]:[port]/s
+
 ###build project
 
     $ ursa2 build [target][--compress][--html]
