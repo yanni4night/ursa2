@@ -4,7 +4,7 @@
         "timestamp_name":"x",
         "compile_folder":"server",
         "css_folder":"",
-
+        "log_level":"debug",
         "protocol":"http",
         "server_port":8000,
         "js_ascii_only":true,
