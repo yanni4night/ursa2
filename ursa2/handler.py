@@ -135,7 +135,7 @@ def so(req,res):
         utils.writeJSON(json_path,json_obj)
         res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
     except ValueError, e:
-        res.send('<html><head><meta charset = "'+C('encoding')+'"/><title>JSON Error</title></head><body><pre>%s</pre><br/>is not a JSON,<a href = "%s.m">rewrite</a></body></html>'%(json_str,tpl_token))
+        res.send(render_file('json.html',{'json' : json_str,'tpl_token' : tpl_token} , noEnvironment = True))
     except Exception,e:
         log.error('[so]%s'%e)
         res.redirect('/%s.%s'%(tpl_token,C('preview_ext')))
