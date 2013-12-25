@@ -28,13 +28,14 @@ _template_dir = C('template_dir')
 
 jinjaenv = Environment(loader = FileSystemLoader(utils.abspath(_template_dir),  C('encoding') ), extensions = ["jinja2.ext.do"] , autoescape = True )
 build_jinjaenv = Environment( loader = FileSystemLoader( os.path.join( os.getcwd() , C('build_dir'), _template_dir) ,  C('encoding') ))
+mgr_jinjaenv = Environment( loader = FileSystemLoader( os.path.join(BASE_DIR,'tpl') ,  C('encoding') ))
 
 def render_file(filename,data = None,noEnvironment = False,build = False):
     '''
     渲染文件
     '''
     if noEnvironment:
-        body = Template(utils.readfile(filename))#这里应为绝对路径
+        body = mgr_jinjaenv.get_template(filename)#Template(utils.readfile(filename))#这里应为绝对路径
     else:
         if build:
             body = build_jinjaenv.get_template(filename)

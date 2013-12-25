@@ -61,7 +61,7 @@ def index(req,res):
         else:
             _tpls.append(e);
 
-    index_path = os.path.join(BASE_DIR,'tpl','index.html')
+    index_path ='index.html'# os.path.join(BASE_DIR,'tpl','index.html')
     html = render_file(index_path,{"tpls":_tpls,"module_tpls":_module_tpls,"common_tpls":_common_tpls},noEnvironment = True)
     res.send(html)
 
@@ -78,7 +78,7 @@ def s(req,res):
     csses =  utils.FileSearcher(r'\.(css|less)$',css_dir).search()
     jses =  utils.FileSearcher(r'\.js$',js_dir).search()
 
-    static_path = os.path.join(BASE_DIR,'tpl','static.html')
+    static_path = 'static.html'#os.path.join(BASE_DIR,'tpl','static.html')
     html = render_file(static_path,{"img":imgs,"css":csses,"js":jses,"img_dir":img_dir,"css_dir":css_dir,"js_dir":js_dir},noEnvironment = True)
     res.send(html)
 
@@ -118,7 +118,7 @@ def m(req,res):
         data = utils.readfile(json_path)
     except Exception, e:
         log.error('[m]%s:%s'%(json_path,e))
-    mgr_path = os.path.join(BASE_DIR,'tpl','mgr.html')
+    mgr_path = 'mgr.html'# os.path.join(BASE_DIR,'tpl','mgr.html')
     html = render_file(mgr_path,{"name":tpl_token,"data":data},noEnvironment = True)
     res.send(html)
 
