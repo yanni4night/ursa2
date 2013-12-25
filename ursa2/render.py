@@ -103,7 +103,7 @@ class TokenRender(object):
                 html = html_img(html)
                 html = all_url(html)
             html = replace(html)
-            if not re.match(r'[\s\S]*?<html[\s\S]+?<body',html,re.I):
+            if not build and not re.match(r'[\s\S]*?<html[\s\S]+?<body',html,re.I):
                 #sub template
                 css_deps = self.__getDepsCss(html)
 

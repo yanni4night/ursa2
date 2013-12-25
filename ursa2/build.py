@@ -284,7 +284,7 @@ class UrsaBuilder(object):
                 continue
             try:
                 tr = TokenRender(re.sub(r'\.%s$'%C('template_ext'),'',tpl))
-                html = tr.render(True)
+                html = tr.render( build = True)
                 target_dir= os.path.join(self._build_html_dir,os.path.dirname(tpl))
                 if not os.path.exists(target_dir):
                     os.makedirs(target_dir)

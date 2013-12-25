@@ -33,15 +33,16 @@ def _addtimestamp(content,reg,base_dir,force_abspath=False):
         url = it.group(3)
         end = content[it.end(1):]
         local_url = replace(url)
-        parsed_url = urlparse(local_url,False)
+        parsed_url = urlparse(local_url)
         parsed_query = parse_qs(parsed_url.query)
 
         #已经有时间戳的不再添加
         #带协议的不再添加
-        #具有模板语法的不予添加
-        if url.find('{{') >=0 or url.find('{%') >= 0:
+        if not local_url or not parsed_url.path:
             continue
-        elif not local_url or not parsed_url.path:
+        #具有模板语法的不予添加
+        elif parsed_url.path.find('{{') >=0 or parsed_url.path.find('{%') >= 0:
+            log.warn('twig syntax found in %s'%parsed_url.path)
             continue
         elif re.match(r'^\s*(about:|data:|#)',local_url):
             log.warn('%s is an invalid url'%local_url)
@@ -65,7 +66,7 @@ def _addtimestamp(content,reg,base_dir,force_abspath=False):
         if not timestamp:
             continue
 
-        parsed_url=urlparse(url,False)
+        parsed_url=urlparse(url)
         new_query=parsed_url.query
         if '' == new_query:
             new_query=t+"="+timestamp
@@ -122,6 +123,6 @@ def all(content,base_dir='.'):
     return content
 
 if __name__ == '__main__':
-    sample="url(@static_prefix@/www/js/main/ls.css?o=*&ty=09&bn==56#hjk)"
+    sample="url(/static/css/font.css?x={{key}}&ty=09&bn==56)"
     print sample
     print all_url(sample)
