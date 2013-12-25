@@ -110,6 +110,8 @@ class UrsaBuilder(object):
         if self._generate_html:
             log.info ('handling html...')
             self._html();
+        log.info ('replacing all token')
+        self._replace();
         log.info ('Time cost %s s.' % (time.time()-tmbegin) )
 
     @classmethod
@@ -266,6 +268,19 @@ class UrsaBuilder(object):
             utils.writefile(tpl,content)
 
     @classmethod
+    def _replace(self):
+        '''
+        替换所有文本的变量
+        '''
+        files = utils.FileSearcher(r'.+',self._build_dir).search()
+        for f in files:
+            f = os.path.join(self._build_dir,f)
+            if not utils.isBinary(f):
+                content = utils.readfile(f)
+                content = replace(content,self._target)
+                utils.writefile(f,content)
+
+    @classmethod
     def _html(self):
         '''
         generate html
@@ -299,4 +314,4 @@ class UrsaBuilder(object):
 
 if __name__ == '__main__':
     builder = UrsaBuilder(True,True,'online')
-    builder.build()
+    builder._replace()
