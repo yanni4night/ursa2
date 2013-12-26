@@ -27,7 +27,7 @@ import time
 from render import TokenRender,removeCssDepsDeclaration
 from exception import ConfigurationError,DirectoryError
 from replace import replace
-from timestamp import html_link,html_script,html_img,all_url
+from timestamp import html_link,html_script,html_img,all_url,all as allt
 
 RJS_PATH = os.path.join(BASE_DIR,'assets','r.js')
 RPL_PATH = os.path.join(BASE_DIR,'assets','rpl.js')
@@ -287,10 +287,11 @@ class UrsaBuilder(object):
             try:
                 content = utils.readfile(tpl)
                 #模板的静态资源相对目录应该写死为cwd，即资源路径应该始终是绝对路径
-                content = html_link(content,'.')
-                content = html_script(content,'.')
-                content = html_img(content,'.')
-                content = all_url(content,'.')
+                #content = html_link(content,'.')
+                #content = html_script(content,'.')
+                #content = html_img(content,'.')
+                #content = all_url(content,'.')
+                content = allt(content,'.')
                 content = replace(content,self._target)
                 content = removeCssDepsDeclaration(content)
                 utils.writefile(tpl,content)
@@ -315,7 +316,7 @@ class UrsaBuilder(object):
                     utils.writefile(f,content)
                 except Exception,e:
                     if self._force:
-                        log.error('[replace]%s'%e)
+                        log.error('[replace][%s]%s'%(f,e))
                     else:
                         raise e
 

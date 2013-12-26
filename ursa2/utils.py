@@ -26,7 +26,7 @@ from conf import C,log
 from exception import FileSizeOverflowError
 
 #根据MIME来判断是二进制文件的正则表达式
-BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword)'
+BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword|octet\-stream)'
 
 mimetypes.init()
 
@@ -35,8 +35,8 @@ def isBinary(fname):
     判断文件是否是二进制文件
     '''
     mime = mimetypes.guess_type(fname,False)
-    content_type = mime[0] or 'text/plain'
-    return True if re.match(BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I) else False
+    content_type = mime[0] or 'application/octet-stream'
+    return True if re.search(BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I) else False
 
 
 def isInt(v):
@@ -164,7 +164,7 @@ def get_file_timestamp(fpath):
         log.error('[TimeStamp]%s'%e)
     return ''
 
-def getDate(fmt="%Y%m%d%H%M%S"):
+def getDate(fmt = "%Y%m%d%H%M%S"):
     '''
     获取当前时间的格式化字符串
     '''
@@ -190,7 +190,7 @@ class FileSearcher(object):
     默认返回相对于初始目录的相对路径
     '''
     @classmethod
-    def __init__(self, pattern=r'.+', start_dir='.',relative=True,traverse=True):
+    def __init__(self, pattern = r'.+', start_dir = '.',relative = True,traverse = True):
         '''
         pattern:文件名的正则过滤表达式;
         start_dir:搜索目录;
@@ -199,9 +199,9 @@ class FileSearcher(object):
         '''
         self.regexp = re.compile(pattern)
         self.start_dir = start_dir
-        self.result=[]
-        self.relative=relative
-        self.traverse=traverse
+        self.result = []
+        self.relative = relative
+        self.traverse = traverse
     @classmethod
     def search(self):
         '''
@@ -222,8 +222,8 @@ class FileSearcher(object):
             fpath = os.path.join(directoryName, fname)
             if os.path.isfile(fpath) and self.regexp.findall(fname):
                 if self.relative:
-                    fpath=os.path.relpath(fpath,self.start_dir)
+                    fpath = os.path.relpath(fpath,self.start_dir)
                 self.result.append(fpath)
 
 if __name__ == '__main__':
-    print FileSearcher(r'.+','build/server',relative=False).search()
+    print isBinary('f.cur')#FileSearcher(r'.+','build/server',relative=False).search()

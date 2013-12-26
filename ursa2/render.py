@@ -19,7 +19,7 @@ import utils
 import os
 import re
 import json
-from timestamp import html_link,html_script,html_img,all_url
+from timestamp import html_link,html_script,html_img,all_url,all as allt
 from deps import DepsFinder
 from replace import replace
 from jinja2 import Template,Environment,FileSystemLoader,TemplateNotFound,TemplateSyntaxError
@@ -98,10 +98,11 @@ class TokenRender(object):
             tpl_path = self.__token + "." + C('template_ext')
             html = render_file( tpl_path,data,False,build)
             if C('server_add_timestamp'):
-                html = html_script(html)
-                html = html_link(html)
-                html = html_img(html)
-                html = all_url(html)
+                #html = html_script(html)
+                #html = html_link(html)
+                #html = html_img(html)
+                #html = all_url(html)
+                html = allt(html)
             html = replace(html)
             if not build and not re.match(r'[\s\S]*?<html[\s\S]+?<body',html,re.I):
                 #sub template
