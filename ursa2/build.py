@@ -53,11 +53,14 @@ class UrsaBuilder(object):
     generate html with json data
     '''
     @classmethod
-    def __init__(self,compress,html,target = None):
+    def __init__(self,compress,html,target = None,force = False):
         '''
         预先计算一些基础路径
         '''
         log.setLevel(logging.DEBUG)
+
+        self._force = force
+
         self._compress = compress
         self._generate_html = html
         self._target = target
@@ -145,8 +148,14 @@ class UrsaBuilder(object):
         '''
         all_less_files = utils.FileSearcher(r'\.less$',self._build_css_dir,relative = False).search()
         for less in all_less_files:
-            subprocess.call('lessc %s %s'%(less,re.sub(r"\.less",".css",less)),shell = True)
-            os.remove(less)
+            try:
+                subprocess.call('lessc %s %s'%(less,re.sub(r"\.less",".css",less)),shell = True)
+                os.remove(less)
+            except Exception,e:
+                if self._force:
+                    log.error('[less]%s'%e)
+                else:
+                    raise e
 
     @classmethod
     def _css(self):
@@ -167,10 +176,16 @@ class UrsaBuilder(object):
 
         #替换和加时间戳
         for dst in all_css_files:
-            content = utils.readfile(dst)
-            content = all_url(content,os.path.dirname(dst))
-            content = replace(content,self._target)
-            utils.writefile(dst,content)
+            try:
+                content = utils.readfile(dst)
+                content = all_url(content,os.path.dirname(dst))
+                content = replace(content,self._target)
+                utils.writefile(dst,content)
+            except Exception,e:
+                if self._force:
+                    log.error('[css]%s'%e)
+                else:
+                    raise e
 
         #仅对指定的CSS进行r.js合并
         css_modules = C('require_css_modules')
@@ -178,14 +193,20 @@ class UrsaBuilder(object):
             css_modules = ['main']
 
         for css in css_modules:
-            if not utils.isStr(css):
-                continue;
-            css = re.sub(r'\/*','',css)
-            if not css.endswith('.css'):
-                css += '.css'
-            css_realpath = os.path.join(self._build_css_dir,css)
-            self.build_css(css_realpath,css_realpath)
-            continue
+            try:
+                if not utils.isStr(css):
+                    continue;
+                css = re.sub(r'\/*','',css)
+                if not css.endswith('.css'):
+                    css += '.css'
+                css_realpath = os.path.join(self._build_css_dir,css)
+                self.build_css(css_realpath,css_realpath)
+                continue
+            except Exception,e:
+                if self._force:
+                    log.error('[less]%s'%e)
+                else:
+                    raise e
 
     @classmethod
     def build_css(self,src,dst):
@@ -211,13 +232,19 @@ class UrsaBuilder(object):
             js_modules = ['main']
 
         for js in js_modules:
-            if not utils.isStr(js):
-                continue;
-            js = re.sub(r'^\/+','',js)
-            if not js.endswith('.js'):
-                js += '.js'
-            js_realpath = os.path.join(self._build_js_dir,js)
-            self.build_js(js_realpath,js_realpath,self._build_js_dir)
+            try:
+                if not utils.isStr(js):
+                    continue;
+                js = re.sub(r'^\/+','',js)
+                if not js.endswith('.js'):
+                    js += '.js'
+                js_realpath = os.path.join(self._build_js_dir,js)
+                self.build_js(js_realpath,js_realpath,self._build_js_dir)
+            except Exception,e:
+                if self._force:
+                    log.error('[less]%s'%e)
+                else:
+                    raise e
 
     @classmethod
     def build_js(self,src,dst,base_dir):
@@ -257,15 +284,21 @@ class UrsaBuilder(object):
                     tpls.insert(0,f)
 
         for tpl in tpls:
-            content = utils.readfile(tpl)
-            #模板的静态资源相对目录应该写死为cwd，即资源路径应该始终是绝对路径
-            content = html_link(content,'.')
-            content = html_script(content,'.')
-            content = html_img(content,'.')
-            content = all_url(content,'.')
-            content = replace(content,self._target)
-            content = removeCssDepsDeclaration(content)
-            utils.writefile(tpl,content)
+            try:
+                content = utils.readfile(tpl)
+                #模板的静态资源相对目录应该写死为cwd，即资源路径应该始终是绝对路径
+                content = html_link(content,'.')
+                content = html_script(content,'.')
+                content = html_img(content,'.')
+                content = all_url(content,'.')
+                content = replace(content,self._target)
+                content = removeCssDepsDeclaration(content)
+                utils.writefile(tpl,content)
+            except Exception,e:
+                if self._force:
+                    log.error('[tpl]%s'%e)
+                else:
+                    raise e
 
     @classmethod
     def _replace(self):
@@ -276,9 +309,15 @@ class UrsaBuilder(object):
         for f in files:
             f = os.path.join(self._build_dir,f)
             if not utils.isBinary(f):
-                content = utils.readfile(f)
-                content = replace(content,self._target)
-                utils.writefile(f,content)
+                try:
+                    content = utils.readfile(f)
+                    content = replace(content,self._target)
+                    utils.writefile(f,content)
+                except Exception,e:
+                    if self._force:
+                        log.error('[replace]%s'%e)
+                    else:
+                        raise e
 
     @classmethod
     def _html(self):
@@ -306,7 +345,7 @@ class UrsaBuilder(object):
                 dst_file = re.sub(r'\.%s$'%C('template_ext'),'.html',os.path.join(self._build_html_dir,tpl))
                 utils.writefile(dst_file,html)
             except Exception,e:
-                if not C('html_force_output'):
+                if not C('html_force_output') and not self._force:
                     raise e
                 else:
                     log.error(e)

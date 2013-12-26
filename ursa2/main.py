@@ -43,14 +43,15 @@ def run():
     Usage:
         ursa2 init
         ursa2 start [<port>]
-        ursa2 build [<target>] [-ch]
+        ursa2 build [<target>] [-chf]
         ursa2 help
         ursa2 (-v | --version)
     
     Options:
-        -c --compress    compress js and css when building.
+        -c --compress        compress js and css when building.
         -h --html            creating HTML when building.
-        -v --version        show version.
+        -v --version         show version.
+        -f --force           force compile
     '''
     argv=docopt(run.__doc__,version=version)
     if argv.get('init'):
@@ -70,7 +71,7 @@ def run():
         server.run(argv.get('<port>'))
     elif argv.get('build'):
         build=__import__('build')
-        builder=build.UrsaBuilder(argv.get('--compress'),argv.get('--html'),argv.get('<target>'))
+        builder=build.UrsaBuilder(argv.get('--compress'),argv.get('--html'),argv.get('<target>'),argv.get('--force'))
         builder.build();
     elif argv.get('help'):
         print 'https://github.com/yanni4night/ursa2/wiki'
