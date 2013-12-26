@@ -80,7 +80,7 @@ class TokenRender(object):
                 json_data = json.loads(content)
                 data.update(json_data)
             except Exception, e:
-                log.warn('[getdata]%s:%s'%(json_filepath,e))
+                e#log.warn('[getdata]%s:%s'%(json_filepath,e))
         return data
 
     @classmethod
