@@ -29,9 +29,8 @@ def proxy(target_url,req,res):
 
     #二进制资源直接重定向
     parsed_url = urlparse(target_url)
-    #mime = mimetypes.guess_type(parsed_url.path,False)
-    #content_type = mime[0] or 'text/plain'
-    if utils.isBinary(parsed_url.path):#re.match( utils.BINARY_CONTENT_TYPE_KEYWORDS , content_type,re.IGNORECASE ):
+    
+    if utils.isBinary(parsed_url.path):
         return res.redirect(target_url)
 
     if 'GET' == req.method:
