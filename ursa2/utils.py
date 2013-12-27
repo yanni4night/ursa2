@@ -30,12 +30,16 @@ BINARY_CONTENT_TYPE_KEYWORDS=r'(image|video|flash|audio|powerpoint|msword|octet\
 
 mimetypes.init()
 
-def isBinary(fname):
+def isBinary(fname , strict=False):
     '''
     判断文件是否是二进制文件
     '''
     mime = mimetypes.guess_type(fname,False)
-    content_type = mime[0] or 'application/octet-stream'
+    content_type = mime[0]
+    if not content_type and strict:
+        return False
+    else:
+        content_type = content_type or 'application/octet-stream'
     return True if re.search(BINARY_CONTENT_TYPE_KEYWORDS,content_type,re.I) else False
 
 
@@ -226,4 +230,4 @@ class FileSearcher(object):
                 self.result.append(fpath)
 
 if __name__ == '__main__':
-    print isBinary('f.cur')#FileSearcher(r'.+','build/server',relative=False).search()
+    print isBinary('f.cur',True)
