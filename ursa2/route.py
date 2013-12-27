@@ -29,24 +29,20 @@ class Route(object):
         '''
         根据URL匹配规则路由请求到相应地处理器
         '''
-        path=urlparse(http_req_handler.path).path
-        handled=False
+        path = urlparse(http_req_handler.path).path
+        handled = False
 
         #代理支持
         if C('enable_proxy') and utils.isDict(C('proxy')):
             for reg,target in C('proxy').items():
-                if not utils.isStr(reg) or not utils.isStr(target):
-                    log.warn('%s:%s is an illegal proxy pair'%(reg,target))
-                    continue
-                if re.match(r'%s'%reg,http_req_handler.path):
-                    target_path=re.sub(r'%s'%reg,r'%s'%target,http_req_handler.path)
-                    return proxy(target_path,Request(http_req_handler),Response(http_req_handler))
-
+                target_path = proxy.get_proxy_url(http_req_handler.path,reg,target)
+                if target_path:
+                     return proxy(target_path,Request(http_req_handler),Response(http_req_handler))
 
         for h in self.handlers:
             if 'ALL' == h.get('method') or h.get('method') == http_req_handler.command and re.findall(h.get('pattern'),path):
-                handled=True
-                ret=(h.get('handler'))(Request(http_req_handler),Response(http_req_handler))
+                handled = True
+                ret = (h.get('handler'))(Request(http_req_handler),Response(http_req_handler))
                 if True == ret:
                     continue
                 else:

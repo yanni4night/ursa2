@@ -74,7 +74,7 @@ def s(req,res):
     js_dir = os.path.join(static_dir,C('js_dir'))
     css_dir = os.path.join(static_dir,C('css_dir'))
 
-    imgs = utils.FileSearcher(r'\.(png|bmp|gif|jpe?g|ico|cur)$',img_dir).search()
+    imgs = utils.FileSearcher(r'\.(png|bmp|gif|jpe?g|ico)$',img_dir).search()
     csses =  utils.FileSearcher(r'\.(css|less)$',css_dir).search()
     jses =  utils.FileSearcher(r'\.js$',js_dir).search()
 

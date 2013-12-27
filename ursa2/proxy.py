@@ -14,12 +14,42 @@
 
 import requests as R
 from urlparse import urlparse
-#import mimetypes
 import utils
 import re
 from conf import C,log
 
-#mimetypes.init()
+
+def get_proxy_url(req_path,reg,target):
+    '''
+    '''
+    if not utils.isStr(reg) or not utils.isStr(target):
+        log.warn('%s:%s is an illegal proxy pair'%(reg,target))
+        return None
+    if reg.startswith('regex:'):
+        #正则匹配
+        reg = reg[6:]
+        if re.match(r'%s'%reg,req_path):
+            target_path = re.sub(r'%s'%reg,r'%s'%target,req_path)
+            return target_path
+    elif reg.startswith('exact:'):
+        #精确匹配
+        reg = reg[6:]
+        if reg == req_path:
+            target_path = target
+            return target_path
+    else :
+        #变量输出
+        s = re.search('\$\{(.+?)\}' , target)
+        target_path= target
+        if s:
+            name = s.group(1)
+            pattern = re.sub( '\{.+?\}' , '(.+?)' , reg )
+            m = re.match(pattern, req_path )
+            if m:
+                path = m.group(1)
+                target_path = target_path.replace( '${'+name+'}' , path )
+        return target_path
+    return None
 
 def proxy(target_url,req,res):
     '''
@@ -42,6 +72,7 @@ def proxy(target_url,req,res):
         #通知远端服务器不要压缩
         if req.headers.get('accept-encoding'):
             del req.headers['accept-encoding']
+        log.info('proxy %s'%target_url)
         r = request(target_url,headers = req.headers)
         #本地服务器覆写Date和Server
         if r.headers.get('date'):
@@ -53,10 +84,14 @@ def proxy(target_url,req,res):
         log.error('[proxy]%s'%e)
         return res.send(code = 500,content = str(e))
 
-def main():
+def __test_content_type():
     r = R.get('http://www.w3.org/TR/css3-color/',data={'name':"yes"})
     print r.headers.get('Content-Type')
 
+def __test_get_proxy_url():
+    #print get_proxy_url('/search/xxx/1','regex:/search/(.+?)/(\d)','if you see this (\\1)(\\2)')
+    #print get_proxy_url('/search/xxx/2','exact:/search/xxx/2','if you see this')
+    print get_proxy_url('/search/xxx/3/2','/search/xxx/{num}/{k}','if you see this (${num})(${k})')
 
 if __name__ == '__main__':
-    main()
+    __test_get_proxy_url()
