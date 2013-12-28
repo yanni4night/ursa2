@@ -28,6 +28,7 @@ from render import TokenRender,render_file
 from replace import replace
 from timestamp import html_link,html_script,html_img,all_url
 from jinja2 import TemplateNotFound,TemplateSyntaxError
+import requests as R
 
 def _token(path):
     '''
@@ -61,8 +62,17 @@ def index(req,res):
         else:
             _tpls.append(e);
 
-    index_path ='index.html'# os.path.join(BASE_DIR,'tpl','index.html')
+    index_path ='index.html'
     html = render_file(index_path,{"tpls":_tpls,"module_tpls":_module_tpls,"common_tpls":_common_tpls},noEnvironment = True)
+    res.send(html)
+
+def help(req,res):
+    '''
+    加载帮助文件
+    '''
+    inner_path = 'help.html'
+    r = R.get('https://raw.github.com/yanni4night/ursa2/master/README.md')
+    html = render_file(inner_path,{'content':r.content},noEnvironment = True)
     res.send(html)
 
 def s(req,res):
