@@ -75,7 +75,7 @@ def help(req,res):
     html = render_file(inner_path,{'content':r.content},noEnvironment = True)
     res.send(html)
 
-def s(req,res):
+def rs(req,res):
     '''
     静态资源列表
     '''

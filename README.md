@@ -2,7 +2,10 @@ Ursa2
 =====
 Enhanced version of [ursa](https://github.com/sogou-ufo/ursa).
 
-ursa2 supports [JSON Auto Combining](https://github.com/yanni4night/ursa2/wiki/JSON-Auto-Combining) , [Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview) and more detail features,such as, supporting _url()_ in sub directory of css,which would bring bugs in previous,required data output in _http://origin/tpl.data_ url path,etc.
+ursa2 supports [JSON Auto Combining](https://github.com/yanni4night/ursa2/wiki/JSON-Auto-Combining) , 
+[Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview) 
+and more detail features,such as, supporting _url()_ in sub directory of css,
+which would bring bugs in previous,required data output in _http://origin/tpl.data_ url path,etc.
 
 
 Feature
@@ -46,7 +49,7 @@ open browser to http://[hostname]:[port]/
 
 ###view static resource list
 
-open browser to http://[hostname]:[port]/s
+open browser to http://[hostname]:[port]/rs
 
 ###build project
 

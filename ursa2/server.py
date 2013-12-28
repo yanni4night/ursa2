@@ -25,12 +25,12 @@ import os
 import socket
 from OpenSSL import SSL
 from SocketServer import BaseServer
-from handler import static,index,tpl,so,m,data,s,help
+from handler import static,index,tpl,so,m,data,rs,help
 
 ursa_router = Route()
 ursa_router.get(r'^/$' , index)
-ursa_router.get(r'^/s$' , s)
-ursa_router.get(r'^/h$' , help)
+ursa_router.get(r'^/rs$' , rs)
+ursa_router.get(r'^/help$' , help)
 ursa_router.get(r'\.%s$'%C('preview_ext') , tpl)
 ursa_router.post(r'\.so$' , so)
 ursa_router.get(r'\.m$' , m)
