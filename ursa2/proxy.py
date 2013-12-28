@@ -39,16 +39,16 @@ def get_proxy_url(req_path,reg,target):
             return target_path
     else :
         #变量输出
-        s = re.search('\$\{(.+?)\}' , target)
+        s = re.search('\$\{(.+)\}' , target)
         target_path= target
         if s:
             name = s.group(1)
-            pattern = re.sub( '\{.+?\}' , '(.+?)' , reg )
+            pattern = re.sub( '\{.+\}' , '(.+)' , reg )
             m = re.match(pattern, req_path )
             if m:
                 path = m.group(1)
                 target_path = target_path.replace( '${'+name+'}' , path )
-        return target_path
+                return target_path
     return None
 
 def proxy(target_url,req,res):
@@ -60,7 +60,7 @@ def proxy(target_url,req,res):
     #二进制资源直接重定向
     parsed_url = urlparse(target_url)
     
-    if utils.isBinary(parsed_url.path):
+    if utils.isBinary(parsed_url.path,strict = True):
         return res.redirect(target_url)
 
     if 'GET' == req.method:
@@ -72,26 +72,35 @@ def proxy(target_url,req,res):
         #通知远端服务器不要压缩
         if req.headers.get('accept-encoding'):
             del req.headers['accept-encoding']
-        log.info('proxy %s'%target_url)
+        if req.headers.get('host'):
+            del req.headers['host']
+        log.info('[proxy]requesting %s'%target_url)
+
         r = request(target_url,headers = req.headers)
         #本地服务器覆写Date和Server
         if r.headers.get('date'):
             del r.headers['date']
         if r.headers.get('server'):
             del r.headers['server']
+        if r.headers.get('transfer-encoding'):
+            del r.headers['transfer-encoding']
+
+        log.info('[proxy] status=%d'%r.status_code)
+
         return res.send(code = r.status_code,content = r.content or '',headers =  r.headers)
     except Exception, e:
         log.error('[proxy]%s'%e)
-        return res.send(code = 500,content = str(e))
+        return res.send(code = 500,content = '%s'%e)
 
-def __test_content_type():
-    r = R.get('http://www.w3.org/TR/css3-color/',data={'name':"yes"})
-    print r.headers.get('Content-Type')
+def __test_content_type(url = False):
+    r = R.get(url or 'http://www.sogou.com/web?query=k',headers={})
+    print r.content#.get('Content-Type')
 
 def __test_get_proxy_url():
     #print get_proxy_url('/search/xxx/1','regex:/search/(.+?)/(\d)','if you see this (\\1)(\\2)')
     #print get_proxy_url('/search/xxx/2','exact:/search/xxx/2','if you see this')
-    print get_proxy_url('/search/xxx/3/2','/search/xxx/{num}/{k}','if you see this (${num})(${k})')
+    print get_proxy_url('/search/xxx/3/2','/search/xxx/{m/d}','if you see this (${m/d})')
 
 if __name__ == '__main__':
-    __test_get_proxy_url()
+    __test_content_type()
+    __test_content_type('http://www.baidu.com')

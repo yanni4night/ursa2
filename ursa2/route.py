@@ -16,7 +16,7 @@ import re
 from conf import C,log
 from urlparse import urlparse
 import utils
-from proxy import proxy
+from proxy import proxy , get_proxy_url
 
 class Route(object):
     '''
@@ -35,8 +35,9 @@ class Route(object):
         #代理支持
         if C('enable_proxy') and utils.isDict(C('proxy')):
             for reg,target in C('proxy').items():
-                target_path = proxy.get_proxy_url(http_req_handler.path,reg,target)
+                target_path = get_proxy_url(http_req_handler.path,reg,target)
                 if target_path:
+                     log.info('[proxy](%s) to (%s)'%(http_req_handler.path,target_path))
                      return proxy(target_path,Request(http_req_handler),Response(http_req_handler))
 
         for h in self.handlers:
