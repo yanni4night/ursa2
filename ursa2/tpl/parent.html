@@ -2,29 +2,45 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>{%block title%}Welcome to Ursa2{%endblock%}</title>
+    <meta name="author" content="yanni4night@gmail.com"/>
+    <meta name="robots" content="nofollow"/>
+    <title>{%block title%}Ursa2 -- Front End Development{%endblock%}</title>
     <style type="text/css" media="screen">
-            *{ margin:0; padding:0; }
-            body{ background:#333; color:#fff; font-size:14px; line-height:1.3; font-family:sans-serif; }
-            .wrapper{ width:95%; margin: 20px auto; }
-            h1{ font-size:20px; }
-            table{ width: 100%; }
-            caption { font-size: 25px; height: 45px; line-height: 45px; }
-            th,td{ text-align: left; vertical-align: top; }
-            thead{border-bottom: 1px dashed #efefef;}
-            .line{ width: 100%; }
-            ul{ list-style: none; }
-            .tlist li{ margin:10px 0; }
-            .tlist a{ color:#fff; text-decoration:none;  }
-            .tlist a:first-child{background: url(data:image/gif;base64,R0lGODlhEAAQAOYAAMDA/7u7+QgICfT09V5hkHV4o2dtnmVqms7T/5ufwGlwomt0pW13qHJ8rnqDsG96rHSAsnN+sH2Jtn+OvIGVw4SbypCjy/z9/4eh0pOq0oqo2Yep3Iyu39nh7Y+z5djl9tvn9/j7/5S/8pK875G46vb6/5+ptOTx/7rd/8Df/8Ph/8nk/83m/8Pb80pSWtjr/9vt/0hOVImUn+Hw/9Hf7VpgZhMUFYGHje32//P5//X6/87n/67E2NHp/8rh9lljbGRtdYuXosnX5OHs9lWn7czk+Wx5hICPnOn1/+by/Nbh6icsMBIUFQUGBv7///////7+/v39/fz8/Pv7+/n5+ff39/Hx8e/v7+vr6+rq6unp6ejo6Ofn5+Tk5OHh4dfX18bGxsTExMHBwb29vbu7u7e3t7a2tqampqWlpZmZmY6OjoiIiIaGhoCAgFlZWVhYWCoqKiYmJgMDAwAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAHQALAAAAAAQABAAAAedgHSCg4SFgyIbiYobEFdThSNPUVNUVQMdEBmOhCRQT59OISAQRBZXhB5RoCE6HxCvYIQcnyEhOEhICAARZYQaF7a3SDAwLw29gxglObczM8U9D8iCFcxIzsQ9LAzTdBS42DA9KysL3RPXz+LkKgrdEifqPeMqKQbdDvI75CkoB90FAgocSEAMoS5izChcqFBMF0JTrmCZSHHiJjqBAAA7) left center no-repeat;padding-left: 1em;}
-            .tlist .title{ margin-right:20px; font-size:16px; }
-            .tlist .mgr{font-size:11px;}
-            footer{text-align: center;border-top: 1px solid #222;}
-
-             h1{font-size:20px;}
-            #data{width:700px;height:500px;background:#eee;}
-            #submit{ margin-left:40px; }
-            .desc{padding-bottom:10px;}
+/*common*/
+*{ margin:0; padding:0; }
+html,body{ background:#fff; color:#888686; font:18px/1.6 cursive,arial,sans-serif; }
+ul,ol,li{list-style: none;}
+a:link,a:visited,a:active{color: #888686;text-decoration: none;}
+a:hover{color: #333;}
+.p24{font-size: 24px;}
+.p18{font-size: 18px;}
+.p16{font-size: 16px;}
+.p14{font-size: 14px;}
+.p12{font-size: 12px;}
+.p9{font-size: 9px;}
+.fl{float: left;}
+.lh25{line-height: 25px;}
+.tc{text-align: center;}
+.hide{display: none !important;}
+.block{display: block;}
+.fz0{font-size: 0;}
+.w-fix { width: 96%; display: block; }
+.w-cen { margin: 0 auto; }
+.w-fix.w-cen{ margin-left:2%; }
+.w-fil { width: 100%; }
+.h-fil { height: 100%; }
+.w-haf { width: 50%; }
+.h-haf { height: 50%; }
+.w-wbg { background-color: #fff; }
+.t-ell { overflow: hidden; text-overflow:ellipsis;white-space: nowrap;}
+.c-fot { color:#000; }
+.c-fot:visited { color: #000; }
+.cf:after { display: block; visibility: hidden; clear: both; height: 0; content:""; font-size: 0; }
+header{position: fixed;left: 0;top: 0;height: 50px;line-height: 50px;background-color: rgba(200,200,200,0.7);font-size: 30px;border-top: 1px solid #ccc;}
+header .bo{margin-left: 1em;}
+header a{padding: 0 0.5em;}
+header a:hover,header a.on{background-color:rgba(245,245,245,1) ;}
+body > div.content{margin-top: 53px;}
         </style>
 </head>
 <body>

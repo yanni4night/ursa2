@@ -5,9 +5,11 @@ Tempalte List
 {%endblock%}
 
 {%block content%}
-    <div class="wrapper">
+    {%set subTitle='Templates'%}
+    {%set current='Templates'%}
+    {%include "header.html"%}
+    <div class="wrapper content">
         <table>
-            <caption>TEMPLATE LISTS</caption>
             <thead>
                 <tr>
                     <th>Main</th>
