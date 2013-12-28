@@ -15,6 +15,10 @@ from urlparse import urlparse,parse_qs
 from conf import log,C
 import utils
 import re
+import sys
+
+reload(sys) 
+sys.setdefaultencoding('utf-8')
 
 class Request(object):
     '''
@@ -94,7 +98,7 @@ class Response(object):
 
         if content is not None and not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,headers['Content-Type'],re.IGNORECASE):
             try:
-                content=content.encode(C('encoding'))
+                content=unicode(content).encode(C('encoding'),'ignore')
             except Exception, e:
                 log.error('[send]%s'%(e))
 
