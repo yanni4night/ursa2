@@ -5,10 +5,21 @@
     <meta name="author" content="yanni4night@gmail.com"/>
     <meta name="robots" content="nofollow"/>
     <title>{%block title%}Ursa2 -- Front End Development{%endblock%}</title>
+    <script>
+    var Selectors = {
+    cache: {},
+    store: function(selector, element) {
+        if(!this.cache[selector])
+            this.cache[selector]=[];
+        this.cache[selector].push(element);
+        element.runtimeStyle.behavior = "none";
+    }
+}
+</script>
     <style type="text/css" >
 /*common*/
 *{ margin:0; padding:0; }
-html,body{ background:#f5f5f5; color:#888686; font:18px/1.6 cursive,arial,sans-serif; }
+html,body{ background:#f5f5f5; color:#888686; font:18px/1.6 arial,sans-serif; }
 ul,ol,li{list-style: none;}
 a:link,a:visited,a:active{color: #888686;text-decoration: none;}
 a:hover{color: #333;}
@@ -36,25 +47,69 @@ a:hover{color: #333;}
 .c-fot { color:#000; }
 .c-fot:visited { color: #000; }
 .cf:after { display: block; visibility: hidden; clear: both; height: 0; content:""; font-size: 0; }
-.section{margin: 10px 0;}
-ul.tlist{margin:0 5px 0 2em;}
+.section{behavior: expression(Selectors.store(".section", this));}
+.bg{background: rgb(200,200,200);background: rgba(200,200,200,0.7);}
+ul.tlist{margin:0 5px 0 10px;}
 .tlist li{background: rgb(200,200,200);background: rgba(200,200,200,0.7);height: 40px;line-height: 40px;text-indent: 2em;font-size: 25px;border-bottom: 1px solid #ddc;}
-/* .tlist li:first-child{border-top-right-radius: 10px;border-top-left-radius: 10px;}
-.tlist li:last-child{border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;} */
 a.mgr{font-size: 18px;}
 
-.header{position: fixed;_position:absolute;left: 0;top: 0;height: 50px;line-height: 50px;background-color:#c8c8c8;background-color: rgba(200,200,200,0.7);font-size: 30px;border-top: 1px solid #ccc;}
+.header{position: fixed;_position:absolute;left: 0;top: 0;height: 50px;line-height: 50px;background-color:#c8c8c8;background-color: rgba(200,200,200,0.7);font-size: 30px;border-top: 1px solid #ccc;z-index: 1000;}
 .header .logo{width: 200px;}
 .header .bo{margin-left: 1em;}
 .header a{padding: 0 0.5em;}
 .header a:hover,.header a.on{background-color:#f5f5f5 ;background-color:rgba(245,245,245,1) ;}
-body > div.content{margin-top: 53px;}
-        </style>
+.menu{width:200px;padding: 10px;padding-right: 0;position: fixed;_position:absolute;top: 55px;left: 0;}
+.menu a{height: 40px;line-height: 40px;font-size: 25px;text-indent: 10px;border-bottom: 1px solid #ddc;behavior: expression(Selectors.store(".menu-a", this));}
+.canvas{margin-left: 210px;min-width: 960px;_width:960px;position: relative;top:55px;}
+</style>
 </head>
 <body>
     {% block content %}
-
     {% endblock %}
     <div class="footer block w-fil tc">&copy;ufo</div>
 </body>
+<script>
+
+    var bindFunc=function(ele,evt,func){
+        if(document.addEventListener){
+            ele.addEventListener(evt,func,false);
+        }else{
+            ele.attachEvent('on'+evt,func);
+        }
+    };
+
+    var $=function(selector){
+        if(document.querySelectorAll)
+            return document.querySelectorAll(selector);
+        else 
+            return Selectors.cache[selector.replace(/\s/g,'-')];
+    };
+
+    var preventEventDefault=function(e){
+        e.preventDefault&&e.preventDefault();
+        (undefined!==e.returnValue)&&(e.returnValue=false);
+    };
+
+    bindFunc(document,'click',function(e){
+        e=e||window.event;
+        var t=e.srcElement||e.target;
+        var menu=null;
+        if(menu=t.getAttribute('data-menu')){
+            preventEventDefault(e);
+            var sections = $('.section');
+            for(var i=0,len=sections.length;i<len;++i){
+                sections[i].style.display='none'
+            }
+            document.getElementById('section-'+menu).style.display='block';
+
+            var menuitems = $('.menu a');console.log(menuitems)
+            for(var i=0,len=menuitems.length;i<len;++i){
+                menuitems[i].style.color='';
+                menuitems[i].style.backgroundColor='';
+            }
+            t.style.color='#333';
+            t.style.backgroundColor='#f5f5f5';
+        }
+    });
+</script>
 </html>
