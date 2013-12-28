@@ -86,12 +86,13 @@ class Response(object):
         '''
         self.http_req_handler.send_response(code)
 
+        headers['connection'] = 'close'
         for k in headers.keys():
             self.http_req_handler.send_header(k,headers.get(k))
         if not headers.get('Content-Type'):
             headers['Content-Type']='text/html;charset='+C('encoding')
 
-        if content is not None and not re.match(r'(image|video|flash|audio|powerpoint|msword)',headers['Content-Type'],re.IGNORECASE):
+        if content is not None and not re.match(utils.BINARY_CONTENT_TYPE_KEYWORDS,headers['Content-Type'],re.IGNORECASE):
             try:
                 content=content.encode(C('encoding'))
             except Exception, e:
