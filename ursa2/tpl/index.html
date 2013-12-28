@@ -8,19 +8,9 @@ Tempalte List
     {%set subTitle='Templates'%}
     {%set current='Templates'%}
     {%include "header.html"%}
-    <div class="wrapper content">
-        <table>
-            <thead>
-                <tr>
-                    <th>Main</th>
-                    <th>MODULE</th>
-                    <th>COMMON</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <ul class="tlist">
+    <div class="wrapper content cf w-fil">
+        <div class="w-fix section">
+             <ul class="tlist">
                             {% for tpl in tpls %}
                             <li>
                                 <a class="title" href="{{tpl}}.ut">{{tpl}}</a>
@@ -29,9 +19,9 @@ Tempalte List
                             </li>
                             {% endfor %}
                         </ul>
-                    </td>
-                    <td>
-                        <ul class="tlist">
+        </div>
+        <div class="w-fix section">
+              <ul class="tlist">
                             {% for tpl in module_tpls %}
                             <li>
                                 <a class="title" href="{{tpl}}.ut">{{tpl}}</a>
@@ -40,9 +30,9 @@ Tempalte List
                             </li>
                             {% endfor %}
                         </ul>
-                    </td>
-                    <td>
-                        <ul class="tlist">
+        </div>
+        <div class="w-fix section">
+             <ul class="tlist">
                             {% for tpl in common_tpls %}
                             <li>
                                 <a class="title" href="{{tpl}}.ut">{{tpl}}</a>
@@ -51,9 +41,6 @@ Tempalte List
                             </li>
                             {% endfor %}
                         </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        </div>
     </div>
 {%endblock%}

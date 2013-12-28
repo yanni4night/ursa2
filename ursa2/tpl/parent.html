@@ -5,10 +5,10 @@
     <meta name="author" content="yanni4night@gmail.com"/>
     <meta name="robots" content="nofollow"/>
     <title>{%block title%}Ursa2 -- Front End Development{%endblock%}</title>
-    <style type="text/css" media="screen">
+    <style type="text/css" >
 /*common*/
 *{ margin:0; padding:0; }
-html,body{ background:#fff; color:#888686; font:18px/1.6 cursive,arial,sans-serif; }
+html,body{ background:#f5f5f5; color:#888686; font:18px/1.6 cursive,arial,sans-serif; }
 ul,ol,li{list-style: none;}
 a:link,a:visited,a:active{color: #888686;text-decoration: none;}
 a:hover{color: #333;}
@@ -36,10 +36,18 @@ a:hover{color: #333;}
 .c-fot { color:#000; }
 .c-fot:visited { color: #000; }
 .cf:after { display: block; visibility: hidden; clear: both; height: 0; content:""; font-size: 0; }
-header{position: fixed;left: 0;top: 0;height: 50px;line-height: 50px;background-color: rgba(200,200,200,0.7);font-size: 30px;border-top: 1px solid #ccc;}
-header .bo{margin-left: 1em;}
-header a{padding: 0 0.5em;}
-header a:hover,header a.on{background-color:rgba(245,245,245,1) ;}
+.section{margin: 10px 0;}
+ul.tlist{margin:0 5px 0 2em;}
+.tlist li{background: rgb(200,200,200);background: rgba(200,200,200,0.7);height: 40px;line-height: 40px;text-indent: 2em;font-size: 25px;border-bottom: 1px solid #ddc;}
+/* .tlist li:first-child{border-top-right-radius: 10px;border-top-left-radius: 10px;}
+.tlist li:last-child{border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;} */
+a.mgr{font-size: 18px;}
+
+.header{position: fixed;_position:absolute;left: 0;top: 0;height: 50px;line-height: 50px;background-color:#c8c8c8;background-color: rgba(200,200,200,0.7);font-size: 30px;border-top: 1px solid #ccc;}
+.header .logo{width: 200px;}
+.header .bo{margin-left: 1em;}
+.header a{padding: 0 0.5em;}
+.header a:hover,.header a.on{background-color:#f5f5f5 ;background-color:rgba(245,245,245,1) ;}
 body > div.content{margin-top: 53px;}
         </style>
 </head>
@@ -47,6 +55,6 @@ body > div.content{margin-top: 53px;}
     {% block content %}
 
     {% endblock %}
-    <footer>&copy;ufo</footer>
+    <div class="footer block w-fil tc">&copy;ufo</div>
 </body>
 </html>

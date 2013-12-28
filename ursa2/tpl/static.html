@@ -10,47 +10,28 @@ Static Resource List
     {%include "header.html"%}
 
 {%block content%}
-    <base target="_blank"/>
     <div class="wrapper content">
-        <table>
-            <thead>
-                <tr>
-                    <th>CSS</th>
-                    <th>JS</th>
-                    <th>IMAGES</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <ul class="tlist">
+
+        <div class="w-fix section"> <ul class="tlist">
                             {% for tpl in css %}
                             <li>
                                 <a class="title" href="/{{css_dir}}/{{tpl}}">{{tpl}}</a>
                             </li>
                             {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="tlist">
+                        </ul></div>
+        <div class="w-fix section"><ul class="tlist">
                             {% for tpl in js %}
                             <li>
                                 <a class="title" href="/{{js_dir}}/{{tpl}}">{{tpl}}</a>
                             </li>
                             {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="tlist">
+                        </ul></div>
+        <div class="w-fix section"> <ul class="tlist">
                             {% for tpl in img %}
                             <li>
                                 <a class="title" href="/{{img_dir}}/{{tpl}}">{{tpl}}</a>
                             </li>
                             {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </ul></div>
     </div>
 {%endblock%}
