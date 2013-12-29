@@ -15,23 +15,15 @@
 
 from setuptools import setup, find_packages
 from ursa2.__init__ import __version__ as version
-#import os
-
-# dirs = ['assets','tpl']
-
-# data_files = []
-# for d in dirs:
-#     for dirpath, dirnames , filenames in os.walk(d):
-#         data_files.append( [ dirpath , [ os.path.join(dirpath , f) for f in filenames ] ] )
 
 setup(
     name = "ursa2",
     version = version,
     packages = ['ursa2'],
-    #data_files = data_files,
     install_requires = ['docopt>=0.6.1','jinja2>2.6','requests>=2.0.0'],
     include_package_data = True,
     package_data = {},
+    long_description = open('README.md').read(),
     author = "Yanni Nightingale",
     author_email = "yanni4night@gmail.com",
     description = "Ursa2 is an enhanced version of ursa which is a powerful front web developing environment.",
