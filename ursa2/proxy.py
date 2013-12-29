@@ -6,7 +6,7 @@
  changelog
  2013-12-11[17:23:52]:created
 
- @info yinyong,osx-x64,Undefined,10.129.164.77,py,/Volumes/yinyong/ursa2/src
+ @info yinyong,osx-x64,UTF-8,10.129.164.77,py,/Volumes/yinyong/ursa2/src
  @author yanni4night@gmail.com
  @version 0.0.1
  @since 0.0.1
@@ -103,4 +103,4 @@ def __test_get_proxy_url():
 
 if __name__ == '__main__':
     __test_content_type()
-    __test_content_type('http://www.baidu.com')
+    __test_content_type('http://www.sogou.com')

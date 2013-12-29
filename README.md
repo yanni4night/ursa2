@@ -73,7 +73,8 @@ Documents
  - [Manifest.json](https://github.com/yanni4night/ursa2/wiki/manifest.json)
  - [Ursa2 Specification](https://github.com/yanni4night/ursa2/wiki/Ursa2-Specification)
  - [JSON Auto Combining](https://github.com/yanni4night/ursa2/wiki/JSON-Auto-Combining)
- - [Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview).
+ - [Sub Tpl Preview](https://github.com/yanni4night/ursa2/wiki/Sub-Tpl-Preview)
+ - [Upgrade Notes](https://github.com/yanni4night/ursa2/wiki/Upgrade-notes)
 
 Quirk
 =====

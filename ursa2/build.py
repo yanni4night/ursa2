@@ -287,10 +287,6 @@ class UrsaBuilder(object):
             try:
                 content = utils.readfile(tpl)
                 #模板的静态资源相对目录应该写死为cwd，即资源路径应该始终是绝对路径
-                #content = html_link(content,'.')
-                #content = html_script(content,'.')
-                #content = html_img(content,'.')
-                #content = all_url(content,'.')
                 content = allt(content,'.')
                 content = replace(content,self._target)
                 content = removeCssDepsDeclaration(content)

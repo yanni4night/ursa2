@@ -2,8 +2,12 @@
   * @see https://github.com/yanni4night/ursa2/wiki/manifest.json
   */
 {
-    "local":{},
-    "online":{}
+    "local":{
+        "static_prefix":"/"
+        },
+    "online":{
+        "static_prefix":"/"
+    }
     /*
     "encoding": "utf-8",
     "protocol": "http",
@@ -11,7 +15,7 @@
     "disable_deps_search": false,
     "enable_proxy": false,
     "server_port": 8000,
-    "log_level": "error",
+    "log_level": "debug",
     "timestamp_name": "t",
     "log_http_request": false,
     "template_dir": "template",
@@ -21,6 +25,7 @@
     "css_folder": "",
     "js_dir": "js",
     "js_folder": "",
+    "img_dir":"img",
     "compile_folder": "",
     "build_dir": "build",
     "html_dir": "html",
