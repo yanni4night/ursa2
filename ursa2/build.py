@@ -227,7 +227,10 @@ class UrsaBuilder(object):
         JS文件不同于CSS，其本身不能引用其它相对路径的静态资源，因此可以实现
         先合并再替换、加时间戳，无需预先处理所有js文件。
         '''
-        js_modules = C('require_js_modules') or C('require_modules')
+        js_modules = C('require_js_modules')
+        if not utils.isList(js_modules):
+            js_modules = C('require_modules')
+
         if not utils.isList(js_modules):
             js_modules = ['main']
 
