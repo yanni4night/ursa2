@@ -317,7 +317,7 @@ class UrsaBuilder(object):
                     if self._force:
                         log.error('[replace][%s]%s'%(f,e))
                     else:
-                        raise e
+                        e
 
     @classmethod
     def _html(self):
