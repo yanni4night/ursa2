@@ -53,57 +53,57 @@ def _addtimestamp(content,reg,base_dir,force_abspath=False):
         elif parsed_url.scheme  or local_url.startswith('//'):
             log.warn("%s has a scheme"%local_url)
             continue
-
+        
         if os.path.isabs(parsed_url.path) or force_abspath:
             #绝对路径，则以当前工程根目录为root
-            timestamp=utils.get_file_timestamp(utils.abspath(parsed_url.path))
+            timestamp = utils.get_file_timestamp(utils.abspath(base_dir + parsed_url.path))
         else:
             #相对目录，则此当前文件目录为root
             #应该仅在CSS内使用相对路径
-            timestamp=utils.get_file_timestamp(os.path.join(base_dir,parsed_url.path))
+            timestamp = utils.get_file_timestamp(os.path.join(base_dir,parsed_url.path))
 
         #计算不到时间戳则忽略
         if not timestamp:
             continue
 
-        parsed_url=urlparse(url)
-        new_query=parsed_url.query
+        parsed_url = urlparse(url)
+        new_query = parsed_url.query
         if '' == new_query:
-            new_query=t+"="+timestamp
+            new_query = t+"="+timestamp
         else:
             new_query+='&%s=%s'%(t,timestamp)
         if '' == parsed_url.fragment:
-            new_fragment=''
+            new_fragment = ''
         else:
-            new_fragment='#'+parsed_url.fragment
+            new_fragment = '#'+parsed_url.fragment
 
         if not parsed_url.scheme:
             new_scheme = ''
         else:
-            new_scheme=parsed_url.scheme+"://"
+            new_scheme = parsed_url.scheme+"://"
 
-        new_url=new_scheme+parsed_url.netloc+parsed_url.path+'?'+new_query+new_fragment
-        content=start+(it.group(2) or '')+new_url+(it.group(2) or '')+end
+        new_url = new_scheme + parsed_url.netloc + parsed_url.path + '?' + new_query + new_fragment
+        content = start + (it.group(2) or '') + new_url + (it.group(2) or '') + end
 
     return content
 
-def html_link(content,base_dir="."):
+def html_link(content,base_dir=".",force_abspath = True):
     '''
     向<html>中<link>元素添加时间戳
     '''
-    return _addtimestamp(content,r'<link.* href=(([\'"])(.*?\.css.*?)\2)',base_dir,force_abspath=True)
+    return _addtimestamp(content,r'<link.* href=(([\'"])(.*?\.css.*?)\2)',base_dir,force_abspath)
 
-def html_script(content,base_dir="."):
+def html_script(content,base_dir=".",force_abspath = True):
     '''
     向<html>中<script>元素添加时间戳
     '''
-    return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir,force_abspath=True)
+    return _addtimestamp(content,r'<script.* src=(([\'"])(.*?\.js.*?)\2)',base_dir,force_abspath)
 
-def html_img(content,base_dir='.'):
+def html_img(content,base_dir='.',force_abspath = True):
     '''
     向<html>中<img>元素添加时间戳
     '''
-    return _addtimestamp(content,r'<img.* src=(([\'"])(.*?\.(png|gif|jpe?g|bmp|ico).*?)\2)',base_dir,force_abspath=True)
+    return _addtimestamp(content,r'<img.* src=(([\'"])(.*?\.(png|gif|jpe?g|bmp|ico).*?)\2)',base_dir,force_abspath)
 
 def all_url(content,base_dir="."):
     '''
@@ -111,13 +111,13 @@ def all_url(content,base_dir="."):
     '''
     return _addtimestamp(content,r'url\((([\'"])?([\S]+?)\2?)\)',base_dir)
 
-def all(content,base_dir='.'):
+def all(content,base_dir='.',force_abspath=True):
     '''
     添加所有类型的时间戳
     '''
-    content=html_link(content,base_dir)
-    content=html_script(content,base_dir)
-    content=html_img(content,base_dir)
+    content=html_link(content,base_dir,force_abspath)
+    content=html_script(content,base_dir,force_abspath)
+    content=html_img(content,base_dir,force_abspath)
     content=all_url(content,base_dir)
 
     return content
